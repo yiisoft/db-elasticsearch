@@ -1,0 +1,32 @@
+{
+    "name": "yiisoft/yii-elasticsearch",
+    "description": "Yii Framework Elasticsearch Query and ActiveRecord",
+    "keywords": ["yii", "elasticsearch", "active-record", "search", "fulltext"],
+    "type": "library",
+    "license": "BSD-3-Clause",
+    "support": {
+        "issues": "https://github.com/yiisoft/yii-elasticsearch/issues",
+        "forum": "http://www.yiiframework.com/forum/",
+        "wiki": "http://www.yiiframework.com/wiki/",
+        "irc": "irc://irc.freenode.net/yii",
+        "source": "https://github.com/yiisoft/yii-elasticsearch"
+    },
+    "authors": [
+        {
+            "name": "Carsten Brandt",
+            "email": "mail@cebe.cc"
+        }
+    ],
+    "require": {
+        "yiisoft/core": "^1.0",
+        "ext-curl": "*"
+    },
+    "autoload": {
+        "psr-4": { "yii\\elasticsearch\\": "" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    }
+}

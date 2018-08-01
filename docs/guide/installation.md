@@ -1,0 +1,32 @@
+# Installation
+
+## Requirements
+
+Extension requires at least elasticsearch version 5.0.
+
+## Getting Composer package
+
+The preferred way to install this extension is through [composer](http://getcomposer.org/download/).
+
+```
+composer require --prefer-dist yiisoft/yii-elasticsearch
+```
+
+## Configuring application
+
+To use this extension, you have to configure the Connection class in your application configuration:
+
+```php
+return [
+    //....
+    'components' => [
+        'elasticsearch' => [
+            'class' => 'yii\elasticsearch\Connection',
+            'nodes' => [
+                ['http_address' => '127.0.0.1:9200'],
+                // configure more hosts if you have a cluster
+            ],
+        ],
+    ]
+];
+```
