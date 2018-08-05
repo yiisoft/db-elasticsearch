@@ -1,4 +1,10 @@
-# Yii Framework Elasticsearch Query and ActiveRecord
+<p align="center">
+    <a href="https://www.elastic.co/products/elasticsearch" target="_blank" rel="external">
+        <img src="https://static-www.elastic.co/assets/blt45b0886c90beceee/logo-elastic.svg" height="80px">
+    </a>
+    <h1 align="center">Yii Framework Elasticsearch Query and ActiveRecord</h1>
+    <br>
+</p>
 
 This extension provides the [elasticsearch](https://www.elastic.co/products/elasticsearch) integration for the [Yii framework](http://www.yiiframework.com).
 It includes basic querying/search support and also implements the `ActiveRecord` pattern that allows you to store active
