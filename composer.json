@@ -1,5 +1,5 @@
 {
-    "name": "yiisoft/yii-elasticsearch",
+    "name": "yiisoft/db-elasticsearch",
     "description": "Yii Framework Elasticsearch Query and ActiveRecord",
     "keywords": ["yii", "elasticsearch", "active-record", "search", "fulltext"],
     "type": "library",
