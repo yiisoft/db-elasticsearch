@@ -3,6 +3,7 @@ language: php
 php:
   - 7.1
   - 7.2
+  - 7.3
   - nightly
 
 services:
@@ -35,7 +36,7 @@ before_script:
     fi
 
 script:
-  - phpunit --verbose $PHPUNIT_FLAGS
+  - ./vendor/bin/phpunit --verbose $PHPUNIT_FLAGS
 
 after_script:
   - |
