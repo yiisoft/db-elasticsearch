@@ -6,7 +6,7 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace yiiunit\extensions\elasticsearch\data\ar;
+namespace yii\elasticsearch\tests\data\ar;
 
 /**
  * Class Animal
@@ -61,7 +61,7 @@ class Animal extends ActiveRecord
     }
 
     /**
-     * 
+     *
      * @param type $row
      * @return \yiiunit\data\ar\elasticsearch\Animal
      */

@@ -1,6 +1,6 @@
 <?php
 
-namespace yiiunit\extensions\elasticsearch;
+namespace yii\elasticsearch\tests;
 
 use yii\elasticsearch\Query;
 

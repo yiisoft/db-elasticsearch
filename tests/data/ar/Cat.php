@@ -6,7 +6,7 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace yiiunit\extensions\elasticsearch\data\ar;
+namespace yii\elasticsearch\tests\data\ar;
 
 /**
  * Class Cat
@@ -18,7 +18,7 @@ class Cat extends Animal
 {
 
     /**
-     * 
+     *
      * @param self $record
      * @param array $row
      */
