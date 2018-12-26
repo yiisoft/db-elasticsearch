@@ -1,6 +1,6 @@
 <?php
 
-namespace yiiunit\extensions\elasticsearch;
+namespace yii\elasticsearch\tests;
 
 use yii\di\Container;
 use yii\elasticsearch\Connection;
@@ -10,7 +10,7 @@ use Yii;
 /**
  * This is the base class for all yii framework unit tests.
  */
-abstract class TestCase extends \PHPUnit_Framework_TestCase
+abstract class TestCase extends \yii\tests\TestCase
 {
     public static $params;
 
@@ -38,37 +38,6 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     {
         parent::tearDown();
         $this->destroyApplication();
-    }
-
-    /**
-     * Populates Yii::$app with a new application
-     * The application will be destroyed on tearDown() automatically.
-     * @param array $config The application configuration, if needed
-     * @param string $appClass name of the application class to create
-     */
-    protected function mockApplication($config = [], $appClass = '\yii\console\Application')
-    {
-        new $appClass(ArrayHelper::merge([
-            'id' => 'testapp',
-            'basePath' => __DIR__,
-            'vendorPath' => dirname(__DIR__) . '/vendor',
-        ], $config));
-    }
-
-    protected function mockWebApplication($config = [], $appClass = '\yii\web\Application')
-    {
-        new $appClass(ArrayHelper::merge([
-            'id' => 'testapp',
-            'basePath' => __DIR__,
-            'vendorPath' => dirname(__DIR__) . '/vendor',
-            'components' => [
-                'request' => [
-                    'cookieValidationKey' => 'wefJDF8sfdsfSDefwqdxj9oq',
-                    'scriptFile' => __DIR__ .'/index.php',
-                    'scriptUrl' => '/index.php',
-                ],
-            ]
-        ], $config));
     }
 
     /**

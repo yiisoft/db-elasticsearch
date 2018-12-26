@@ -1,6 +1,6 @@
 <?php
 
-namespace yiiunit\extensions\elasticsearch\data\ar;
+namespace yii\elasticsearch\tests\data\ar;
 
 /**
  * Class Dog
@@ -12,7 +12,7 @@ class Dog extends Animal
 {
 
     /**
-     * 
+     *
      * @param self $record
      * @param array $row
      */

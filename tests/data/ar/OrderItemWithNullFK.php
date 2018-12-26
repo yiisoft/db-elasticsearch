@@ -1,6 +1,6 @@
 <?php
 
-namespace yiiunit\extensions\elasticsearch\data\ar;
+namespace yii\elasticsearch\tests\data\ar;
 
 /**
  * Class OrderItem

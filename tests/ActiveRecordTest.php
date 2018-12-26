@@ -1,21 +1,21 @@
 <?php
 
-namespace yiiunit\extensions\elasticsearch;
+namespace yii\elasticsearch\tests;
 
 use yii\base\Event;
 use yii\db\BaseActiveRecord;
 use yii\elasticsearch\Connection;
-use yiiunit\framework\ar\ActiveRecordTestTrait;
-use yiiunit\extensions\elasticsearch\data\ar\ActiveRecord;
-use yiiunit\extensions\elasticsearch\data\ar\Customer;
-use yiiunit\extensions\elasticsearch\data\ar\OrderItem;
-use yiiunit\extensions\elasticsearch\data\ar\Order;
-use yiiunit\extensions\elasticsearch\data\ar\Item;
-use yiiunit\extensions\elasticsearch\data\ar\OrderWithNullFK;
-use yiiunit\extensions\elasticsearch\data\ar\OrderItemWithNullFK;
-use yiiunit\extensions\elasticsearch\data\ar\Animal;
-use yiiunit\extensions\elasticsearch\data\ar\Dog;
-use yiiunit\extensions\elasticsearch\data\ar\Cat;
+use yii\activerecord\tests\unit\ActiveRecordTestTrait;
+use yii\elasticsearch\tests\data\ar\ActiveRecord;
+use yii\elasticsearch\tests\data\ar\Customer;
+use yii\elasticsearch\tests\data\ar\OrderItem;
+use yii\elasticsearch\tests\data\ar\Order;
+use yii\elasticsearch\tests\data\ar\Item;
+use yii\elasticsearch\tests\data\ar\OrderWithNullFK;
+use yii\elasticsearch\tests\data\ar\OrderItemWithNullFK;
+use yii\elasticsearch\tests\data\ar\Animal;
+use yii\elasticsearch\tests\data\ar\Dog;
+use yii\elasticsearch\tests\data\ar\Cat;
 
 /**
  * @group elasticsearch
@@ -190,7 +190,7 @@ class ActiveRecordTest extends TestCase
 
         (new Cat())->save(false);
         (new Dog())->save(false);
-        
+
         $db->createCommand()->flushIndex('yiitest');
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace yiiunit\extensions\elasticsearch;
+namespace yii\elasticsearch\tests;
 
 use yii\elasticsearch\ActiveDataProvider;
 use yii\elasticsearch\Connection;
@@ -88,4 +88,4 @@ class ActiveDataProviderTest extends TestCase
         $models = $provider->getModels();
         $this->assertEquals(1, count($models));
     }
-} 
+}
