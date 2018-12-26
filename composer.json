@@ -17,12 +17,25 @@
             "email": "mail@cebe.cc"
         }
     ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "require": {
-        "yiisoft/core": "^1.0",
+        "yiisoft/core": "^3.0@dev",
         "ext-curl": "*"
+    },
+    "require-dev": {
+        "yiisoft/di": "^3.0@dev",
+        "yiisoft/log": "^3.0@dev",
+        "yiisoft/cache": "^3.0@dev",
+        "yiisoft/active-record": "^3.0@dev",
+        "phpunit/phpunit": "^7.3",
+        "hiqdev/composer-config-plugin": "^1.0@dev"
     },
     "autoload": {
         "psr-4": { "yii\\elasticsearch\\": "" }
+    },
+    "autoload-dev": {
+        "psr-4": {"yii\\elasticsearch\\tests\\": "tests"}
     },
     "extra": {
         "branch-alias": {

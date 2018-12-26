@@ -3,7 +3,7 @@
  * @author Eugene Terentev <eugene@terentev.net>
  */
 
-namespace yiiunit\extensions\elasticsearch;
+namespace yii\elasticsearch\tests;
 
 use yii\elasticsearch\ElasticsearchTarget;
 use yii\elasticsearch\Query;
