@@ -8,8 +8,8 @@ use yii\di\Instance;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\helpers\VarDumper;
-use yii\log\Logger;
-use yii\log\Target;
+use Yii\Log\Logger;
+use Yii\Log\Target;
 
 /**
  * ElasticsearchTarget stores log messages in a elasticsearch index.
