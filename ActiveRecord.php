@@ -117,10 +117,10 @@ class ActiveRecord extends BaseActiveRecord
      */
     private static function filterCondition($condition)
     {
-        foreach($condition as $k => $v) {
+        foreach ($condition as $k => $v) {
             if (is_array($v)) {
                 $condition[$k] = array_values($v);
-                foreach($v as $vv) {
+                foreach ($v as $vv) {
                     if (is_array($vv)) {
                         throw new InvalidArgumentException('Nested arrays are not allowed in condition for findAll() and findOne().');
                     }
@@ -357,7 +357,7 @@ class ActiveRecord extends BaseActiveRecord
         if (isset($row['fields'])) {
             // reset fields in case it is scalar value
             $arrayAttributes = $record->arrayAttributes();
-            foreach($row['fields'] as $key => $value) {
+            foreach ($row['fields'] as $key => $value) {
                 if (!isset($arrayAttributes[$key]) && count($value) == 1) {
                     $row['fields'][$key] = reset($value);
                 }
@@ -566,7 +566,7 @@ class ActiveRecord extends BaseActiveRecord
                 $values,
                 $options
             );
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             // HTTP 409 is the response in case of failed optimistic locking
             // http://www.elastic.co/guide/en/elasticsearch/guide/current/optimistic-concurrency-control.html
             if (isset($e->errorInfo['responseCode']) && $e->errorInfo['responseCode'] == 409) {
@@ -775,7 +775,7 @@ class ActiveRecord extends BaseActiveRecord
                 $this->getOldPrimaryKey(false),
                 $options
             );
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             // HTTP 409 is the response in case of failed optimistic locking
             // http://www.elastic.co/guide/en/elasticsearch/guide/current/optimistic-concurrency-control.html
             if (isset($e->errorInfo['responseCode']) && $e->errorInfo['responseCode'] == 409) {

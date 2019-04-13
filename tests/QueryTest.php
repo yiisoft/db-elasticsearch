@@ -178,10 +178,10 @@ class QueryTest extends TestCase
         $this->assertEquals([null, null, null, null], $result);
         $result = $query->where(['name' => 'user15'])->scalar('name', $this->getConnection());
         $this->assertNull($result);
-
     }
 
-    public function testAndWhere() {
+    public function testAndWhere()
+    {
         $query = new Query;
         $query->where(1)
             ->andWhere(2)
@@ -191,7 +191,8 @@ class QueryTest extends TestCase
         $this->assertEquals($expected, $query->where);
     }
 
-    public function testOrWhere() {
+    public function testOrWhere()
+    {
         $query = new Query;
         $query->where(1)
             ->orWhere(2)

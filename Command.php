@@ -389,7 +389,7 @@ class Command extends Component
      */
     public function scroll($options = [])
     {
-       return $this->db->get(['_search', 'scroll'], $options);
+        return $this->db->get(['_search', 'scroll'], $options);
     }
 
     /**
@@ -400,7 +400,7 @@ class Command extends Component
      */
     public function clearScroll($options = [])
     {
-       return $this->db->delete(['_search', 'scroll'], $options);
+        return $this->db->delete(['_search', 'scroll'], $options);
     }
 
     /**
@@ -497,7 +497,7 @@ class Command extends Component
      */
 //    public function getFieldMapping($index, $type = '_all')
 //    {
-//		// TODO implement
+    //		// TODO implement
 //        return $this->db->put([$index, $type, '_mapping']);
 //    }
 
@@ -507,11 +507,11 @@ class Command extends Component
      * @return mixed
      * @see http://www.elastic.co/guide/en/elasticsearch/reference/current/indices-analyze.html
      */
-//	public function analyze($options, $index = null)
-//	{
-//		// TODO implement
-////		return $this->db->put([$index]);
-//	}
+    //	public function analyze($options, $index = null)
+    //	{
+    //		// TODO implement
+    ////		return $this->db->put([$index]);
+    //	}
 
     /**
      * @param $name
@@ -532,7 +532,6 @@ class Command extends Component
         ]);
 
         return $this->db->put(['_template', $name], [], $body);
-
     }
 
     /**
@@ -543,7 +542,6 @@ class Command extends Component
     public function deleteTemplate($name)
     {
         return $this->db->delete(['_template', $name]);
-
     }
 
     /**

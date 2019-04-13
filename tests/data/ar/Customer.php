@@ -83,7 +83,6 @@ class Customer extends ActiveRecord
                 "status" => ["type" => "integer", "store" => true],
             ]
         ]);
-
     }
 
     /**
