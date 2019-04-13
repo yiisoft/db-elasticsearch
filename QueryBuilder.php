@@ -73,7 +73,7 @@ class QueryBuilder extends BaseObject
         $whereQuery = $this->buildQueryFromWhere($query->where);
         if ($whereQuery) {
             $parts['query'] = $whereQuery;
-        } else if ($query->query) {
+        } elseif ($query->query) {
             $parts['query'] = $query->query;
         }
 
@@ -142,7 +142,8 @@ class QueryBuilder extends BaseObject
         return $orders;
     }
 
-    public function buildQueryFromWhere($condition) {
+    public function buildQueryFromWhere($condition)
+    {
         $where = $this->buildCondition($condition);
         if ($where) {
             $query = [
@@ -263,7 +264,7 @@ class QueryBuilder extends BaseObject
         $parts = [];
         if ($operator === 'and') {
             $clause = 'must';
-        } else if ($operator === 'or') {
+        } elseif ($operator === 'or') {
             $clause = 'should';
         } else {
             throw new InvalidParamException("Operator should be 'or' or 'and'");

@@ -16,7 +16,6 @@ namespace yii\elasticsearch\tests\data\ar;
  */
 class Animal extends ActiveRecord
 {
-
     public $does;
 
     public static function primaryKey()
@@ -70,5 +69,4 @@ class Animal extends ActiveRecord
         $class = $row['_source']['type'];
         return new $class;
     }
-
 }

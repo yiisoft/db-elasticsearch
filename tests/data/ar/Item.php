@@ -37,6 +37,5 @@ class Item extends ActiveRecord
                 ]
             ]
         ]);
-
     }
 }

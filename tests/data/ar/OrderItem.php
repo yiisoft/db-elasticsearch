@@ -47,6 +47,5 @@ class OrderItem extends ActiveRecord
                 ]
             ]
         ]);
-
     }
 }

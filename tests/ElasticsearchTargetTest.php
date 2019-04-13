@@ -68,6 +68,4 @@ class ElasticsearchTargetTest extends TestCase
 
         parent::tearDown();
     }
-
-
 }

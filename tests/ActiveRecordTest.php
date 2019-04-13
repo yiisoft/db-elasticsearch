@@ -22,7 +22,6 @@ use yii\elasticsearch\tests\data\ar\Cat;
  */
 class ActiveRecordTest extends TestCase
 {
-
     use ActiveRecordTestTrait;
 
     public function getCustomerClass()
@@ -100,8 +99,8 @@ class ActiveRecordTest extends TestCase
         $customer->setAttributes(['email' => 'user3@example.com', 'name' => 'user3', 'address' => 'address3', 'status' => 2], false);
         $customer->save(false);
 
-//		INSERT INTO category (name) VALUES ('Books');
-//		INSERT INTO category (name) VALUES ('Movies');
+        //		INSERT INTO category (name) VALUES ('Books');
+        //		INSERT INTO category (name) VALUES ('Movies');
 
         $item = new Item();
         $item->id = 1;
@@ -382,7 +381,7 @@ class ActiveRecordTest extends TestCase
         $this->assertEquals(2, $orderItem->oldPrimaryKey);
         $this->assertEquals(2, $orderItem->$pkName);
 
-//		$this->setExpectedException('yii\base\InvalidCallException');
+        //		$this->setExpectedException('yii\base\InvalidCallException');
         $orderItem->$pkName = 13;
         $this->assertEquals(13, $orderItem->primaryKey);
         $this->assertEquals(2, $orderItem->oldPrimaryKey);
@@ -502,8 +501,8 @@ class ActiveRecordTest extends TestCase
 
         // indexBy callable + asArray
         $customers = Customer::find()->indexBy(function ($customer) {
-                    return $customer->id . '-' . $customer->name;
-                })->storedFields('id', 'name')->all();
+            return $customer->id . '-' . $customer->name;
+        })->storedFields('id', 'name')->all();
         $this->assertEquals(3, count($customers));
         $this->assertTrue($customers['1-user1'] instanceof $customerClass);
         $this->assertTrue($customers['2-user2'] instanceof $customerClass);
@@ -549,8 +548,8 @@ class ActiveRecordTest extends TestCase
 
         // indexBy callable + asArray
         $customers = Customer::find()->indexBy(function ($customer) {
-                    return reset($customer['fields']['id']) . '-' . reset($customer['fields']['name']);
-                })->asArray()->storedFields('id', 'name')->all();
+            return reset($customer['fields']['id']) . '-' . reset($customer['fields']['name']);
+        })->asArray()->storedFields('id', 'name')->all();
         $this->assertEquals(3, count($customers));
         $this->assertArrayHasKey('id', $customers['1-user1']['fields']);
         $this->assertArrayHasKey('name', $customers['1-user1']['fields']);
@@ -596,8 +595,8 @@ class ActiveRecordTest extends TestCase
 
         // indexBy callable + asArray
         $customers = $customerClass::find()->indexBy(function ($customer) {
-                    return $customer['_source']['id'] . '-' . $customer['_source']['name'];
-                })->asArray()->all();
+            return $customer['_source']['id'] . '-' . $customer['_source']['name'];
+        })->asArray()->all();
         $this->assertEquals(3, count($customers));
         $this->assertArrayHasKey('id', $customers['1-user1']['_source']);
         $this->assertArrayHasKey('name', $customers['1-user1']['_source']);
@@ -973,7 +972,7 @@ class ActiveRecordTest extends TestCase
             $this->assertNull($result);
         } else {
             $this->assertNotNull($result);
-            foreach($expectedResult as $col => $value) {
+            foreach ($expectedResult as $col => $value) {
                 $this->assertEquals($value, $result->$col);
             }
         }

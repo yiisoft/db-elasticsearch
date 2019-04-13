@@ -584,7 +584,7 @@ class Connection extends Component
                 $decoded['error'] = preg_replace('/\b\w+?Exception\[/', "<span style=\"color: red;\">\\0</span>\n               ", $decoded['error']);
             }
             return $decoded;
-        } catch(InvalidParamException $e) {
+        } catch (InvalidParamException $e) {
             return $body;
         }
     }
