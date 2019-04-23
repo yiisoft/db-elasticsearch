@@ -4,7 +4,6 @@ namespace yii\elasticsearch\tests;
 
 use yii\di\Container;
 use yii\elasticsearch\Connection;
-use yii\helpers\ArrayHelper;
 use Yii;
 
 /**

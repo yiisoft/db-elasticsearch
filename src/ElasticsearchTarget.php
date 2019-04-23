@@ -3,13 +3,13 @@
 namespace yii\elasticsearch;
 
 use Yii;
-use yii\base\InvalidConfigException;
 use yii\di\Instance;
-use yii\helpers\ArrayHelper;
+use yii\exceptions\InvalidConfigException;
 use yii\helpers\Json;
 use yii\helpers\VarDumper;
 use Yii\Log\Logger;
 use Yii\Log\Target;
+use Yiisoft\Arrays\ArrayHelper;
 
 /**
  * ElasticsearchTarget stores log messages in a elasticsearch index.

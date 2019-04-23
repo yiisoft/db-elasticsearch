@@ -8,17 +8,16 @@
 namespace yii\elasticsearch;
 
 use Yii;
-use yii\base\InvalidArgumentException;
-use yii\base\InvalidCallException;
-use yii\base\InvalidConfigException;
-use yii\base\InvalidParamException;
-use yii\base\NotSupportedException;
 use yii\db\BaseActiveRecord;
 use yii\db\StaleObjectException;
-use yii\helpers\ArrayHelper;
-use yii\helpers\Inflector;
-use yii\helpers\Json;
-use yii\helpers\StringHelper;
+use yii\exceptions\InvalidArgumentException;
+use yii\exceptions\InvalidCallException;
+use yii\exceptions\InvalidConfigException;
+use yii\exceptions\InvalidParamException;
+use yii\exceptions\NotSupportedException;
+use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Helpers\InflectorHelper;
+use Yiisoft\Strings\StringHelper;
 
 /**
  * ActiveRecord is the base class for classes representing relational data in terms of objects.
@@ -330,7 +329,7 @@ class ActiveRecord extends BaseActiveRecord
      */
     public static function index()
     {
-        return Inflector::pluralize(Inflector::camel2id(StringHelper::basename(get_called_class()), '-'));
+        return InflectorHelper::pluralize(InflectorHelper::camel2id(StringHelper::basename(get_called_class()), '-'));
     }
 
     /**
@@ -338,7 +337,7 @@ class ActiveRecord extends BaseActiveRecord
      */
     public static function type()
     {
-        return Inflector::camel2id(StringHelper::basename(get_called_class()), '-');
+        return InflectorHelper::camel2id(StringHelper::basename(get_called_class()), '-');
     }
 
     /**

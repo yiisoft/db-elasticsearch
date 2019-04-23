@@ -9,7 +9,7 @@ namespace yii\elasticsearch;
 
 use Yii;
 use yii\base\Component;
-use yii\base\InvalidParamException;
+use yii\exceptions\InvalidParamException;
 use yii\db\QueryInterface;
 use yii\db\QueryTrait;
 

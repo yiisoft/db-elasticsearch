@@ -7,12 +7,12 @@
 
 namespace yii\elasticsearch;
 
-use yii\debug\Panel;
-use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
 use yii\helpers\Url;
 use Yii\Log\Logger;
-use yii\helpers\Html;
 use yii\web\View;
+use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Debug\Panel;
 
 /**
  * Debugger panel that collects and displays elasticsearch queries performed.
