@@ -7,12 +7,12 @@
 
 namespace yii\elasticsearch;
 
+use Yii;
 use yii\base\Action;
-use yii\base\NotSupportedException;
-use yii\helpers\ArrayHelper;
+use yii\exceptions\NotSupportedException;
 use yii\web\HttpException;
 use yii\web\Response;
-use Yii;
+use Yiisoft\Arrays\ArrayHelper;
 
 /**
  * Debug Action is used by [[DebugPanel]] to perform elasticsearch queries using ajax.
@@ -31,7 +31,7 @@ class DebugAction extends Action
      */
     public $panel;
     /**
-     * @var \yii\debug\controllers\DefaultController
+     * @var \Yiisoft\Debug\Controllers\DefaultController
      */
     public $controller;
 

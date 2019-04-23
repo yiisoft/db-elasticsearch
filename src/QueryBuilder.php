@@ -8,9 +8,8 @@
 namespace yii\elasticsearch;
 
 use yii\base\BaseObject;
-use yii\base\InvalidParamException;
-use yii\base\NotSupportedException;
-use yii\helpers\Json;
+use yii\exceptions\InvalidParamException;
+use yii\exceptions\NotSupportedException;
 
 /**
  * QueryBuilder builds an elasticsearch query based on the specification given as a [[Query]] object.
