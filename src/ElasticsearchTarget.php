@@ -7,8 +7,8 @@ use yii\di\Instance;
 use yii\exceptions\InvalidConfigException;
 use yii\helpers\Json;
 use yii\helpers\VarDumper;
-use Yii\Log\Logger;
-use Yii\Log\Target;
+use Yiisoft\Log\Logger;
+use Yiisoft\Log\Target;
 use Yiisoft\Arrays\ArrayHelper;
 
 /**
