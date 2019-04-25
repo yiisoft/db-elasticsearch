@@ -9,7 +9,7 @@ namespace yii\elasticsearch;
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use Yii\Log\Logger;
+use Yiisoft\Log\Logger;
 use yii\web\View;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Debug\Panel;

@@ -7,8 +7,8 @@ namespace yii\elasticsearch\tests;
 
 use yii\elasticsearch\ElasticsearchTarget;
 use yii\elasticsearch\Query;
-use Yii\Log\Dispatcher;
-use Yii\Log\Logger;
+use Yiisoft\Log\Dispatcher;
+use Yiisoft\Log\Logger;
 
 class ElasticsearchTargetTest extends TestCase
 {
