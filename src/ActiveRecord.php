@@ -16,7 +16,7 @@ use yii\exceptions\InvalidConfigException;
 use yii\exceptions\InvalidParamException;
 use yii\exceptions\NotSupportedException;
 use Yiisoft\Arrays\ArrayHelper;
-use Yiisoft\Helpers\InflectorHelper;
+use Yiisoft\Inflector\InflectorHelper;
 use Yiisoft\Strings\StringHelper;
 
 /**
