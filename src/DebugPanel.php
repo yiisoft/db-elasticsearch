@@ -12,7 +12,7 @@ use yii\helpers\Url;
 use Yiisoft\Log\Logger;
 use yii\web\View;
 use Yiisoft\Arrays\ArrayHelper;
-use Yiisoft\Debug\Panel;
+use Yiisoft\Yii\Debug\Panel;
 
 /**
  * Debugger panel that collects and displays elasticsearch queries performed.
