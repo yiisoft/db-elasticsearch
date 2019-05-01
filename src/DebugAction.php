@@ -31,7 +31,7 @@ class DebugAction extends Action
      */
     public $panel;
     /**
-     * @var \Yiisoft\Debug\Controllers\DefaultController
+     * @var \Yiisoft\Yii\Debug\Controllers\DefaultController
      */
     public $controller;
 
