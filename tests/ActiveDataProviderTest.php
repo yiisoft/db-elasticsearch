@@ -1,10 +1,10 @@
 <?php
 
-namespace yii\elasticsearch\tests;
+namespace Yiisoft\Db\ElasticSearch\Tests;
 
-use yii\elasticsearch\ActiveDataProvider;
-use yii\elasticsearch\Connection;
-use yii\elasticsearch\Query;
+use Yiisoft\Db\ElasticSearch\ActiveDataProvider;
+use Yiisoft\Db\ElasticSearch\Connection;
+use Yiisoft\Db\ElasticSearch\Query;
 use yiiunit\extensions\elasticsearch\data\ar\ActiveRecord;
 use yiiunit\extensions\elasticsearch\data\ar\Customer;
 

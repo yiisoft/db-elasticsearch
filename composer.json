@@ -35,10 +35,10 @@
         "hiqdev/composer-config-plugin": "^1.0@dev"
     },
     "autoload": {
-        "psr-4": { "yii\\elasticsearch\\": "src" }
+        "psr-4": { "Yiisoft\\Db\\ElasticSearch\\": "src" }
     },
     "autoload-dev": {
-        "psr-4": {"yii\\elasticsearch\\tests\\": "tests"}
+        "psr-4": {"Yiisoft\\Db\\ElasticSearch\\Tests\\": "tests"}
     },
     "extra": {
         "branch-alias": {

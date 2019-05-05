@@ -3,18 +3,18 @@ Utilisation des ActiveRecord
 
 Pour des informations générales sur l'utilisation d'ActiveRecord avec yii, référez-vous à cette section du [guide](https://github.com/yiisoft/yii2/blob/master/docs/guide/db-active-record.md).
 
-Afin de définir une classe ActiveRecord elasticsearch, votre classe doit étendre [[yii\elasticsearch\ActiveRecord]] et implémenter au moins la méthode [[yii\elasticsearch\ActiveRecord::attributes()|attributes()]] pour définir les attributes de votre enregistrement.
+Afin de définir une classe ActiveRecord elasticsearch, votre classe doit étendre [[Yiisoft\Db\ElasticSearch\ActiveRecord]] et implémenter au moins la méthode [[Yiisoft\Db\ElasticSearch\ActiveRecord::attributes()|attributes()]] pour définir les attributes de votre enregistrement.
 La gestion des clefs primaires est différente dans elasticsearch, étant donné que la clef primaire (le champ `_id` dans elasticsearch) ne fait pas partie des attributs par défaut. Il est cependant possible de définir un [mapping de path](http://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-id-field.html)
 pour que le champ `_id` fasse partie des attributs.
 Référez-vous à la [documentation elasticsearch](http://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-id-field.html) pour voir comment le définir.
-Le champ `_id` d'un document/enregistrement peut être accédé en utilisant [[yii\elasticsearch\ActiveRecord::getPrimaryKey()|getPrimaryKey()]] et
-[[yii\elasticsearch\ActiveRecord::setPrimaryKey()|setPrimaryKey()]].
-Lorsque le mapping de path est défini, le nom de l'attribut peut être défini en utilisant la méthode [[yii\elasticsearch\ActiveRecord::primaryKey()|primaryKey()]].
+Le champ `_id` d'un document/enregistrement peut être accédé en utilisant [[Yiisoft\Db\ElasticSearch\ActiveRecord::getPrimaryKey()|getPrimaryKey()]] et
+[[Yiisoft\Db\ElasticSearch\ActiveRecord::setPrimaryKey()|setPrimaryKey()]].
+Lorsque le mapping de path est défini, le nom de l'attribut peut être défini en utilisant la méthode [[Yiisoft\Db\ElasticSearch\ActiveRecord::primaryKey()|primaryKey()]].
 
 Voici un modèle d'exemple nommé `Customer`:
 
 ```php
-class Customer extends \yii\elasticsearch\ActiveRecord
+class Customer extends \Yiisoft\Db\ElasticSearch\ActiveRecord
 {
     /**
      * @return array the list of attributes for this record
@@ -43,7 +43,7 @@ class Customer extends \yii\elasticsearch\ActiveRecord
 }
 ```
 
-Vous pouvez surcharger [[yii\elasticsearch\ActiveRecord::index()|index()]] et [[yii\elasticsearch\ActiveRecord::type()|type()]] pour définir l'index et type que cet enregistrement représente.
+Vous pouvez surcharger [[Yiisoft\Db\ElasticSearch\ActiveRecord::index()|index()]] et [[Yiisoft\Db\ElasticSearch\ActiveRecord::type()|type()]] pour définir l'index et type que cet enregistrement représente.
 
 L'utilisation des ActiveRecord elasticsearch est très similaire à celle d'ActiveRecord pour les bases de données, et qui est décrite dans le 
 [guide](https://github.com/yiisoft/yii2/blob/master/docs/guide/active-record.md).
@@ -51,17 +51,17 @@ Elle supporte la même interface et les mêmes fonctionnalités, exceptions fait
 
 - Etant donné que elasticsearch ne supporte pas SQL, l'API de requêtes ne supporte pas `join()`, `groupBy()`, `having()` and `union()`.
   Les tris, limites, décallages et conditions sont tous supportés.
-- [[yii\elasticsearch\ActiveQuery::from()|from()]] ne sélectionne pas les tables, mais les
+- [[Yiisoft\Db\ElasticSearch\ActiveQuery::from()|from()]] ne sélectionne pas les tables, mais les
   [index](http://www.elastic.co/guide/en/elasticsearch/reference/current/glossary.html#glossary-index)
   et [type](http://www.elastic.co/guide/en/elasticsearch/reference/current/glossary.html#glossary-type) sur lesquels la requête sera exécutée.
-- `select()` a été remplacée par [[yii\elasticsearch\ActiveQuery::fields()|fields()]] qui fait globalement la même chose, le terme `fields` étant plus orienté vers la terminologie elasticsearch.
+- `select()` a été remplacée par [[Yiisoft\Db\ElasticSearch\ActiveQuery::fields()|fields()]] qui fait globalement la même chose, le terme `fields` étant plus orienté vers la terminologie elasticsearch.
   Cette méthode définit les champs à récupérer dans le document.
-- Les relations [[yii\elasticsearch\ActiveQuery::via()|via]] ne peuvent être définies via une table étant donné qu'il n'y a pas de tables dans elasticsearch. Vous pouvez uniquement définir des relations avec les autres enregistrements.
+- Les relations [[Yiisoft\Db\ElasticSearch\ActiveQuery::via()|via]] ne peuvent être définies via une table étant donné qu'il n'y a pas de tables dans elasticsearch. Vous pouvez uniquement définir des relations avec les autres enregistrements.
 - Etant donné qu'elasticsearch n'est pas uniquement fait pour le stockage des données, mais également pour les rechercher, le support de la recherche a été implémenté.
   Les méthodes
-  [[yii\elasticsearch\ActiveQuery::query()|query()]],
-  [[yii\elasticsearch\ActiveQuery::filter()|filter()]] et
-  [[yii\elasticsearch\ActiveQuery::addFacet()|addFacet()]] permettent de définir une requête elasticsearch.
+  [[Yiisoft\Db\ElasticSearch\ActiveQuery::query()|query()]],
+  [[Yiisoft\Db\ElasticSearch\ActiveQuery::filter()|filter()]] et
+  [[Yiisoft\Db\ElasticSearch\ActiveQuery::addFacet()|addFacet()]] permettent de définir une requête elasticsearch.
   Regardez l'exemple suivant pour comprendre leur fonctionnement et voir l'utilisation des [Query DSL](http://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html)
   pour composer les parties `query` et `filter`.
 - Il est aussi possible de définir des relations entre des ActiveRecord elasticsearch et des ActiveRecord normaux, et vice versa.

@@ -15,7 +15,7 @@ Yii 2 elasticsearch エクステンションは、yii のデバッグモジュ�
             'class' => 'yii\\debug\\Module',
             'panels' => [
                 'elasticsearch' => [
-                    'class' => 'yii\\elasticsearch\\DebugPanel',
+                    'class' => 'Yiisoft\\Db\\ElasticSearch\\DebugPanel',
                 ],
             ],
         ],

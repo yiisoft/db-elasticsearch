@@ -5,13 +5,13 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace yii\elasticsearch;
+namespace Yiisoft\Db\ElasticSearch;
 
 use Yii;
 use yii\base\Component;
 use yii\exceptions\InvalidParamException;
-use yii\db\QueryInterface;
-use yii\db\QueryTrait;
+use Yiisoft\Db\QueryInterface;
+use Yiisoft\Db\QueryTrait;
 
 /**
  * Query represents a query to the search API of elasticsearch.

@@ -1,8 +1,8 @@
 <?php
 
-namespace yii\elasticsearch\tests;
+namespace Yiisoft\Db\ElasticSearch\Tests;
 
-use yii\elasticsearch\Query;
+use Yiisoft\Db\ElasticSearch\Query;
 
 /**
  * @group elasticsearch

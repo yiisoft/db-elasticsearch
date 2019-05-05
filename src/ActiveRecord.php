@@ -5,11 +5,11 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace yii\elasticsearch;
+namespace Yiisoft\Db\ElasticSearch;
 
 use Yii;
-use yii\db\BaseActiveRecord;
-use yii\db\StaleObjectException;
+use Yiisoft\Db\BaseActiveRecord;
+use Yiisoft\Db\StaleObjectException;
 use yii\exceptions\InvalidArgumentException;
 use yii\exceptions\InvalidCallException;
 use yii\exceptions\InvalidConfigException;
@@ -33,7 +33,7 @@ use Yiisoft\Strings\StringHelper;
  * The following is an example model called `Customer`:
  *
  * ```php
- * class Customer extends \yii\elasticsearch\ActiveRecord
+ * class Customer extends \Yiisoft\Db\ElasticSearch\ActiveRecord
  * {
  *     public function attributes()
  *     {
@@ -283,7 +283,7 @@ class ActiveRecord extends BaseActiveRecord
      * for the `_id` field so that it is part of the `_source` and thus part of the [[attributes()|attributes]].
      *
      * Note that elasticsearch only supports _one_ attribute to be the primary key. However to match the signature
-     * of the [[\yii\db\ActiveRecordInterface|ActiveRecordInterface]] this methods returns an array instead of a
+     * of the [[\Yiisoft\Db\ActiveRecordInterface|ActiveRecordInterface]] this methods returns an array instead of a
      * single string.
      *
      * @return string[] array of primary key attributes. Only the first element of the array will be used.

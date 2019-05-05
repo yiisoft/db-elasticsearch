@@ -1,9 +1,9 @@
 <?php
 
-namespace yii\elasticsearch\tests\data\ar;
+namespace Yiisoft\Db\ElasticSearch\Tests\Data\ActiveRecord;
 
-use yii\elasticsearch\Command;
-use yii\elasticsearch\tests\ActiveRecordTest;
+use Yiisoft\Db\ElasticSearch\Command;
+use Yiisoft\Db\ElasticSearch\Tests\ActiveRecordTest;
 
 /**
  * Class Customer

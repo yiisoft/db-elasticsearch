@@ -1,9 +1,9 @@
 <?php
 
-namespace yii\elasticsearch\tests;
+namespace Yiisoft\Db\ElasticSearch\Tests;
 
-use yii\elasticsearch\Query;
-use yii\elasticsearch\QueryBuilder;
+use Yiisoft\Db\ElasticSearch\Query;
+use Yiisoft\Db\ElasticSearch\QueryBuilder;
 
 /**
  * @group elasticsearch

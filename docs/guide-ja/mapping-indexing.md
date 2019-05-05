@@ -8,7 +8,7 @@ ElasticSearch のマッピングを漸進的に更新することは常に可能
 どのようにすればそれが出来るかの一例を次に示します。
 
 ```php
-Class Book extends yii\elasticsearch\ActiveRecord
+Class Book extends Yiisoft\Db\ElasticSearch\ActiveRecord
 {
     // クラスのその他の属性とメソッド
     // ...

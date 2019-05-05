@@ -16,7 +16,7 @@ enabled, it is sufficient to just add the panels configuration):
             'class' => 'yii\\debug\\Module',
             'panels' => [
                 'elasticsearch' => [
-                    'class' => 'yii\\elasticsearch\\DebugPanel',
+                    'class' => 'Yiisoft\\Db\\ElasticSearch\\DebugPanel',
                 ],
             ],
         ],

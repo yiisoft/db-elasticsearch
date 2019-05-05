@@ -5,7 +5,7 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace yii\elasticsearch\tests\data\ar;
+namespace Yiisoft\Db\ElasticSearch\Tests\Data\ActiveRecord;
 
 /**
  * ActiveRecord is ...
@@ -13,12 +13,12 @@ namespace yii\elasticsearch\tests\data\ar;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class ActiveRecord extends \yii\elasticsearch\ActiveRecord
+class ActiveRecord extends \Yiisoft\Db\ElasticSearch\ActiveRecord
 {
     public static $db;
 
     /**
-     * @return \yii\elasticsearch\Connection
+     * @return \Yiisoft\Db\ElasticSearch\Connection
      */
     public static function getDb()
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace yii\elasticsearch\tests\data\ar;
+namespace Yiisoft\Db\ElasticSearch\Tests\Data\ActiveRecord;
 
 /**
  * Class OrderItem
