@@ -5,7 +5,7 @@ namespace yii\elasticsearch\tests;
 use yii\base\Event;
 use yii\db\BaseActiveRecord;
 use yii\elasticsearch\Connection;
-use yii\activerecord\tests\unit\ActiveRecordTestTrait;
+use Yiisoft\ActiveRecord\Tests\Unit\ActiveRecordTestTrait;
 use yii\elasticsearch\tests\data\ar\ActiveRecord;
 use yii\elasticsearch\tests\data\ar\Customer;
 use yii\elasticsearch\tests\data\ar\OrderItem;
