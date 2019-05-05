@@ -13,7 +13,7 @@ Ajoutez ce qui suit à la configuration de votre application pour l'activer (si 
             'class' => 'yii\\debug\\Module',
             'panels' => [
                 'elasticsearch' => [
-                    'class' => 'yii\\elasticsearch\\DebugPanel',
+                    'class' => 'Yiisoft\\Db\\ElasticSearch\\DebugPanel',
                 ],
             ],
         ],

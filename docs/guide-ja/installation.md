@@ -30,7 +30,7 @@ return [
     //....
     'components' => [
         'elasticsearch' => [
-            'class' => 'yii\elasticsearch\Connection',
+            'class' => 'Yiisoft\Db\ElasticSearch\Connection',
             'nodes' => [
                 ['http_address' => '127.0.0.1:9200'],
                 // クラスタを使用する場合は、さらにホストを構成する

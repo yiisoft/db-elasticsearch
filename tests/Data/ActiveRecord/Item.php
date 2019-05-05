@@ -1,8 +1,8 @@
 <?php
 
-namespace yii\elasticsearch\tests\data\ar;
+namespace Yiisoft\Db\ElasticSearch\Tests\Data\ActiveRecord;
 
-use yii\elasticsearch\Command;
+use Yiisoft\Db\ElasticSearch\Command;
 
 /**
  * Class Item

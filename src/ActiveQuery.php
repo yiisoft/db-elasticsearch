@@ -5,11 +5,11 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace yii\elasticsearch;
+namespace Yiisoft\Db\ElasticSearch;
 
-use yii\db\ActiveQueryInterface;
-use yii\db\ActiveQueryTrait;
-use yii\db\ActiveRelationTrait;
+use Yiisoft\Db\ActiveQueryInterface;
+use Yiisoft\Db\ActiveQueryTrait;
+use Yiisoft\Db\ActiveRelationTrait;
 
 /**
  * ActiveQuery represents a [[Query]] associated with an [[ActiveRecord]] class.

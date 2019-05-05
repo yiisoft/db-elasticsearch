@@ -5,7 +5,7 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace yii\elasticsearch;
+namespace Yiisoft\Db\ElasticSearch;
 
 use Yii;
 use yii\base\InvalidConfigException;
@@ -110,7 +110,7 @@ class ActiveFixture extends BaseActiveFixture
 
             try {
                 $response = $this->db->createCommand()->insert($this->index, $this->type, $row, $id, $options);
-            } catch (\yii\db\Exception $e) {
+            } catch (\Yiisoft\Db\Exception $e) {
                 throw new \yii\base\Exception("Failed to insert fixture data \"$alias\": " . $e->getMessage() . "\n" . print_r($e->errorInfo, true), $e->getCode(), $e);
             }
             if ($id === null) {

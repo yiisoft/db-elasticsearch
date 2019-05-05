@@ -1,21 +1,21 @@
 <?php
 
-namespace yii\elasticsearch\tests;
+namespace Yiisoft\Db\ElasticSearch\Tests;
 
 use yii\base\Event;
-use yii\db\BaseActiveRecord;
-use yii\elasticsearch\Connection;
+use Yiisoft\Db\BaseActiveRecord;
+use Yiisoft\Db\ElasticSearch\Connection;
 use Yiisoft\ActiveRecord\Tests\Unit\ActiveRecordTestTrait;
-use yii\elasticsearch\tests\data\ar\ActiveRecord;
-use yii\elasticsearch\tests\data\ar\Customer;
-use yii\elasticsearch\tests\data\ar\OrderItem;
-use yii\elasticsearch\tests\data\ar\Order;
-use yii\elasticsearch\tests\data\ar\Item;
-use yii\elasticsearch\tests\data\ar\OrderWithNullFK;
-use yii\elasticsearch\tests\data\ar\OrderItemWithNullFK;
-use yii\elasticsearch\tests\data\ar\Animal;
-use yii\elasticsearch\tests\data\ar\Dog;
-use yii\elasticsearch\tests\data\ar\Cat;
+use Yiisoft\Db\ElasticSearch\Tests\Data\ActiveRecord\ActiveRecord;
+use Yiisoft\Db\ElasticSearch\Tests\Data\ActiveRecord\Customer;
+use Yiisoft\Db\ElasticSearch\Tests\Data\ActiveRecord\OrderItem;
+use Yiisoft\Db\ElasticSearch\Tests\Data\ActiveRecord\Order;
+use Yiisoft\Db\ElasticSearch\Tests\Data\ActiveRecord\Item;
+use Yiisoft\Db\ElasticSearch\Tests\Data\ActiveRecord\OrderWithNullFK;
+use Yiisoft\Db\ElasticSearch\Tests\Data\ActiveRecord\OrderItemWithNullFK;
+use Yiisoft\Db\ElasticSearch\Tests\Data\ActiveRecord\Animal;
+use Yiisoft\Db\ElasticSearch\Tests\Data\ActiveRecord\Dog;
+use Yiisoft\Db\ElasticSearch\Tests\Data\ActiveRecord\Cat;
 
 /**
  * @group elasticsearch
@@ -570,7 +570,7 @@ class ActiveRecordTest extends TestCase
 
     public function testFindIndexByAsArray()
     {
-        /* @var $customerClass \yii\db\ActiveRecordInterface */
+        /* @var $customerClass \Yiisoft\Db\ActiveRecordInterface */
         $customerClass = $this->getCustomerClass();
 
         /* @var $this TestCase|ActiveRecordTestTrait */
@@ -646,7 +646,7 @@ class ActiveRecordTest extends TestCase
     public function testFindEmptyPkCondition()
     {
         /* @var $this TestCase|ActiveRecordTestTrait */
-        /* @var $orderItemClass \yii\db\ActiveRecordInterface */
+        /* @var $orderItemClass \Yiisoft\Db\ActiveRecordInterface */
         $orderItemClass = $this->getOrderItemClass();
         $orderItem = new $orderItemClass();
         $orderItem->setAttributes(['order_id' => 1, 'item_id' => 1, 'quantity' => 1, 'subtotal' => 30.0], false);
@@ -838,9 +838,9 @@ class ActiveRecordTest extends TestCase
      */
     public function testUnlinkAllAndConditionSetNull()
     {
-        /* @var $customerClass \yii\db\BaseActiveRecord */
+        /* @var $customerClass \Yiisoft\Db\BaseActiveRecord */
         $customerClass = $this->getCustomerClass();
-        /* @var $orderClass \yii\db\BaseActiveRecord */
+        /* @var $orderClass \Yiisoft\Db\BaseActiveRecord */
         $orderClass = $this->getOrderWithNullFKClass();
 
         // in this test all orders are owned by customer 1
@@ -859,9 +859,9 @@ class ActiveRecordTest extends TestCase
      */
     public function testUnlinkAllAndConditionDelete()
     {
-        /* @var $customerClass \yii\db\BaseActiveRecord */
+        /* @var $customerClass \Yiisoft\Db\BaseActiveRecord */
         $customerClass = $this->getCustomerClass();
-        /* @var $orderClass \yii\db\BaseActiveRecord */
+        /* @var $orderClass \Yiisoft\Db\BaseActiveRecord */
         $orderClass = $this->getOrderWithNullFKClass();
 
         // in this test all orders are owned by customer 1
@@ -886,7 +886,7 @@ class ActiveRecordTest extends TestCase
 
     public function testAttributeAccess()
     {
-        /* @var $customerClass \yii\db\ActiveRecordInterface */
+        /* @var $customerClass \Yiisoft\Db\ActiveRecordInterface */
         $customerClass = $this->getCustomerClass();
         $model = new $customerClass();
 
@@ -964,7 +964,7 @@ class ActiveRecordTest extends TestCase
      */
     public function testValueEscapingInFindByCondition($filterWithInjection, $expectedResult)
     {
-        /* @var $itemClass \yii\db\ActiveRecordInterface */
+        /* @var $itemClass \Yiisoft\Db\ActiveRecordInterface */
         $itemClass = $this->getItemClass();
 
         $result = $itemClass::findOne($filterWithInjection['id']);

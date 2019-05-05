@@ -5,11 +5,11 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace yii\elasticsearch;
+namespace Yiisoft\Db\ElasticSearch;
 
 use yii\base\InvalidCallException;
 use yii\base\InvalidConfigException;
-use yii\db\ActiveQueryInterface;
+use Yiisoft\Db\ActiveQueryInterface;
 
 /**
  * ActiveDataProvider is an enhanced version of [[\yii\data\ActiveDataProvider]] specific to the ElasticSearch.
@@ -135,7 +135,7 @@ class ActiveDataProvider extends \yii\data\ActiveDataProvider
 
             return $keys;
         } elseif ($this->query instanceof ActiveQueryInterface) {
-            /* @var $class \yii\db\ActiveRecord */
+            /* @var $class \Yiisoft\Db\ActiveRecord */
             $class = $this->query->modelClass;
             $pks = $class::primaryKey();
             if (count($pks) === 1) {

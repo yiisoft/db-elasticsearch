@@ -1,9 +1,9 @@
 <?php
 
-namespace yii\elasticsearch\tests;
+namespace Yiisoft\Db\ElasticSearch\Tests;
 
 use yii\di\Container;
-use yii\elasticsearch\Connection;
+use Yiisoft\Db\ElasticSearch\Connection;
 use Yii;
 
 /**

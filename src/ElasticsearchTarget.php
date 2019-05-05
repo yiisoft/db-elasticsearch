@@ -1,6 +1,6 @@
 <?php
 
-namespace yii\elasticsearch;
+namespace Yiisoft\Db\ElasticSearch;
 
 use Yii;
 use yii\di\Instance;

@@ -3,10 +3,10 @@
  * @author Eugene Terentev <eugene@terentev.net>
  */
 
-namespace yii\elasticsearch\tests;
+namespace Yiisoft\Db\ElasticSearch\Tests;
 
-use yii\elasticsearch\ElasticsearchTarget;
-use yii\elasticsearch\Query;
+use Yiisoft\Db\ElasticSearch\ElasticsearchTarget;
+use Yiisoft\Db\ElasticSearch\Query;
 use Yiisoft\Log\Dispatcher;
 use Yiisoft\Log\Logger;
 

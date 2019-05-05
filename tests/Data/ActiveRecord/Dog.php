@@ -1,20 +1,14 @@
 <?php
 
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
-namespace yii\elasticsearch\tests\data\ar;
+namespace Yiisoft\Db\ElasticSearch\Tests\Data\ActiveRecord;
 
 /**
- * Class Cat
+ * Class Dog
  *
  * @author Jose Lorente <jose.lorente.martin@gmail.com>
  * @since 2.0
  */
-class Cat extends Animal
+class Dog extends Animal
 {
 
     /**
@@ -26,6 +20,6 @@ class Cat extends Animal
     {
         parent::populateRecord($record, $row);
 
-        $record->does = 'meow';
+        $record->does = 'bark';
     }
 }

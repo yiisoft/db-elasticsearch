@@ -3,18 +3,18 @@
 
 Yii のアクティブレコードの使用方法に関する一般的な情報については、[ガイド](https://github.com/yiisoft/yii2/blob/master/docs/guide-ja/db-active-record.md) を参照してください。
 
-Elasticsearch のアクティブレコードを定義するためには、あなたのレコードクラスを [[yii\elasticsearch\ActiveRecord]] から拡張して、最低限、レコードの属性を定義するための [[yii\elasticsearch\ActiveRecord::attributes()|attributes()]] メソッドを実装する必要があります。
+Elasticsearch のアクティブレコードを定義するためには、あなたのレコードクラスを [[Yiisoft\Db\ElasticSearch\ActiveRecord]] から拡張して、最低限、レコードの属性を定義するための [[Yiisoft\Db\ElasticSearch\ActiveRecord::attributes()|attributes()]] メソッドを実装する必要があります。
 Elasticsearch ではプライマリキーの扱いが通常と異なります。
 というのは、プライマリキー (elasticsearch の用語では `_id` フィールド) が、デフォルトでは属性のうちに入らないからです。
 ただし、`_id` フィールドを属性に含めるための [パスマッピング](http://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-id-field.html) を定義することは出来ます。
 パスマッピングの定義の仕方については、[elasticsearch のドキュメント](http://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-id-field.html) を参照してください。
-document または record の `_id` フィールドは、[[yii\elasticsearch\ActiveRecord::getPrimaryKey()|getPrimaryKey()]] および [[yii\elasticsearch\ActiveRecord::setPrimaryKey()|setPrimaryKey()]] を使ってアクセスすることが出来ます。
-パスマッピングが定義されている場合は、[[yii\elasticsearch\ActiveRecord::primaryKey()|primaryKey()]] メソッドを使って属性の名前を定義することが出来ます。
+document または record の `_id` フィールドは、[[Yiisoft\Db\ElasticSearch\ActiveRecord::getPrimaryKey()|getPrimaryKey()]] および [[Yiisoft\Db\ElasticSearch\ActiveRecord::setPrimaryKey()|setPrimaryKey()]] を使ってアクセスすることが出来ます。
+パスマッピングが定義されている場合は、[[Yiisoft\Db\ElasticSearch\ActiveRecord::primaryKey()|primaryKey()]] メソッドを使って属性の名前を定義することが出来ます。
 
 以下は `Customer` と呼ばれるモデルの例です。
 
 ```php
-class Customer extends \yii\elasticsearch\ActiveRecord
+class Customer extends \Yiisoft\Db\ElasticSearch\ActiveRecord
 {
     /**
      * @return array このレコードの属性のリスト
@@ -44,21 +44,21 @@ class Customer extends \yii\elasticsearch\ActiveRecord
 }
 ```
 
-[[yii\elasticsearch\ActiveRecord::index()|index()]] と [[yii\elasticsearch\ActiveRecord::type()|type()]] をオーバーライドして、このレコードが表すインデックスとタイプを定義することが出来ます。
+[[Yiisoft\Db\ElasticSearch\ActiveRecord::index()|index()]] と [[Yiisoft\Db\ElasticSearch\ActiveRecord::type()|type()]] をオーバーライドして、このレコードが表すインデックスとタイプを定義することが出来ます。
 
 elasticsearch のアクティブレコードの一般的な使用方法は、[ガイド](https://github.com/yiisoft/yii2/blob/master/docs/guide-ja/active-record.md) で説明されたデータベースのアクティブレコードの場合と非常によく似ています。
 以下の制限と拡張 (*!*) があることを除けば、同じインターフェイスと機能をサポートしています。
 
 - elasticsearch は SQL をサポートしていないため、クエリの API は `join()`、`groupBy()`、`having()` および `union()` をサポートしません。
   並べ替え、リミット、オフセット、条件付き WHERE は、すべてサポートされています。
-- [[yii\elasticsearch\ActiveQuery::from()|from()]] はテーブルを選択しません。
+- [[Yiisoft\Db\ElasticSearch\ActiveQuery::from()|from()]] はテーブルを選択しません。
   そうではなく、クエリ対象の [インデックス](http://www.elastic.co/guide/en/elasticsearch/reference/current/glossary.html#glossary-index) と [タイプ](http://www.elastic.co/guide/en/elasticsearch/reference/current/glossary.html#glossary-type) を選択します。
-- `select()` は [[yii\elasticsearch\ActiveQuery::fields()|fields()]] に置き換えられています。
+- `select()` は [[Yiisoft\Db\ElasticSearch\ActiveQuery::fields()|fields()]] に置き換えられています。
   基本的には同じことをするものですが、`fields` の方が elasticsearch の用語として相応しいでしょう。
   ドキュメントから取得するフィールドを定義します。
-- Elasticsearch にはテーブルがありませんので、テーブルを通じての [[yii\elasticsearch\ActiveQuery::via()|via]] リレーションは定義することが出来ません。
+- Elasticsearch にはテーブルがありませんので、テーブルを通じての [[Yiisoft\Db\ElasticSearch\ActiveQuery::via()|via]] リレーションは定義することが出来ません。
 - Elasticsearch はデータストレージであると同時に検索エンジンでもありますので、当然ながら、レコードの検索に対するサポートが追加されています。
-  Elasticsearch のクエリを構成するための [[yii\elasticsearch\ActiveQuery::query()|query()]]、[[yii\elasticsearch\ActiveQuery::filter()|filter()]] そして [[yii\elasticsearch\ActiveQuery::addFacet()|addFacet()]] というメソッドがあります。
+  Elasticsearch のクエリを構成するための [[Yiisoft\Db\ElasticSearch\ActiveQuery::query()|query()]]、[[Yiisoft\Db\ElasticSearch\ActiveQuery::filter()|filter()]] そして [[Yiisoft\Db\ElasticSearch\ActiveQuery::addFacet()|addFacet()]] というメソッドがあります。
   これらがどのように働くかについて、下の使用例を見てください。
   また、`query` と `filter` の部分を構成する方法については、[クエリ DSL](http://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html) を参照してください。
 - Elasticsearch のアクティブレコードから通常のアクティブレコードクラスへのリレーションを定義することも可能です。また、その逆も可能です。

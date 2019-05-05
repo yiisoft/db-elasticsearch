@@ -5,7 +5,7 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace yii\elasticsearch;
+namespace Yiisoft\Db\ElasticSearch;
 
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -28,7 +28,7 @@ class DebugPanel extends Panel
     public function init()
     {
         $this->actions['elasticsearch-query'] = [
-            'class' => 'yii\\elasticsearch\\DebugAction',
+            'class' => 'Yiisoft\\Db\\ElasticSearch\\DebugAction',
             'panel' => $this,
             'db' => $this->db,
         ];
@@ -188,7 +188,7 @@ HTML;
     public function save()
     {
         $target = $this->module->logTarget;
-        $messages = $target->filterMessages($target->messages, Logger::LEVEL_PROFILE, ['yii\elasticsearch\Connection::httpRequest']);
+        $messages = $target->filterMessages($target->messages, Logger::LEVEL_PROFILE, ['Yiisoft\Db\ElasticSearch\Connection::httpRequest']);
 
         return ['messages' => $messages];
     }

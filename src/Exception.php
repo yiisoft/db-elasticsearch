@@ -5,7 +5,7 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace yii\elasticsearch;
+namespace Yiisoft\Db\ElasticSearch;
 
 /**
  * Exception represents an exception that is caused by elasticsearch-related operations.
@@ -13,7 +13,7 @@ namespace yii\elasticsearch;
  * @author Carsten Brandt <mail@cebe.cc>
  * @since 2.0
  */
-class Exception extends \yii\db\Exception
+class Exception extends \Yiisoft\Db\Exception
 {
     /**
      * @return string the user-friendly name of this exception
