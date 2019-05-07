@@ -16,7 +16,7 @@ use yii\exceptions\InvalidConfigException;
 use yii\exceptions\InvalidParamException;
 use yii\exceptions\NotSupportedException;
 use Yiisoft\Arrays\ArrayHelper;
-use Yiisoft\Inflector\InflectorHelper;
+use Yiisoft\Strings\Inflector;
 use Yiisoft\Strings\StringHelper;
 
 /**
@@ -329,7 +329,7 @@ class ActiveRecord extends BaseActiveRecord
      */
     public static function index()
     {
-        return InflectorHelper::pluralize(InflectorHelper::camel2id(StringHelper::basename(get_called_class()), '-'));
+        return Inflector::pluralize(Inflector::camel2id(StringHelper::basename(get_called_class()), '-'));
     }
 
     /**
@@ -337,7 +337,7 @@ class ActiveRecord extends BaseActiveRecord
      */
     public static function type()
     {
-        return InflectorHelper::camel2id(StringHelper::basename(get_called_class()), '-');
+        return Inflector::camel2id(StringHelper::basename(get_called_class()), '-');
     }
 
     /**
