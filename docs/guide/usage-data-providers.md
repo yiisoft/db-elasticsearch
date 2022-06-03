@@ -41,7 +41,8 @@ use Yiisoft\Db\ElasticSearch\ActiveDataProvider;
 use Yiisoft\Db\ElasticSearch\Query;
 
 $query = new Query();
-$query->from('yiitest', 'user')
+$query
+    ->from('yiitest', 'user')
     ->addAggregation('foo', 'terms', []);
 $provider = new ActiveDataProvider([
     'query' => $query,

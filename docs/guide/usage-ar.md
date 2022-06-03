@@ -32,7 +32,9 @@ class Customer extends \Yiisoft\Db\ElasticSearch\ActiveRecord
      */
     public function getOrders()
     {
-        return $this->hasMany(Order::className(), ['customer_id' => 'id'])->orderBy('id');
+        return $this
+            ->hasMany(Order::className(), ['customer_id' => 'id'])
+            ->orderBy('id');
     }
 
     /**
@@ -86,11 +88,17 @@ $customer->save();
 
 $customer = Customer::get(1); // get a record by pk
 $customers = Customer::mget([1,2,3]); // get multiple records by pk
-$customer = Customer::find()->where(['name' => 'test'])->one(); // find by query, note that you need to configure mapping for this field in order to find records properly
-$customers = Customer::find()->active()->all(); // find all by query (using the `active` scope)
+$customer = Customer::find()
+    ->where(['name' => 'test'])
+    ->one(); // find by query, note that you need to configure mapping for this field in order to find records properly
+$customers = Customer::find()
+    ->active()
+    ->all(); // find all by query (using the `active` scope)
 
 // http://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-match-query.html
-$result = Article::find()->query(["match" => ["title" => "yii"]])->all(); // articles whose title contains "yii"
+$result = Article::find()
+    ->query(["match" => ["title" => "yii"]])
+    ->all(); // articles whose title contains "yii"
 
 // http://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-flt-query.html
 $query = Article::find()->query([
@@ -139,19 +147,22 @@ class CustomerQuery extends ActiveQuery
 Now you can use these query components to assemble the resulting query and/or filter.
 
 ```php
-$customers = Customer::find()->filter([
-    CustomerQuery::registrationDateRange('2016-01-01', '2016-01-20'),
-])->query([
-    'bool' => [
-        'should' => [
-            CustomerQuery::name('John'),
-            CustomerQuery::address('London'),
+$customers = Customer::find()
+    ->filter([
+        CustomerQuery::registrationDateRange('2016-01-01', '2016-01-20'),
+    ])
+    ->query([
+        'bool' => [
+            'should' => [
+                CustomerQuery::name('John'),
+                CustomerQuery::address('London'),
+            ],
+            'must_not' => [
+                CustomerQuery::name('Jack'),
+            ],
         ],
-        'must_not' => [
-            CustomerQuery::name('Jack'),
-        ],
-    ],
-])->all();
+    ])
+    ->all();
 ```
 
 ## Aggregation
@@ -162,11 +173,13 @@ Using the previously defined `Customer` class, let's find out how many customers
 
 
 ```php
-$aggData = Customer::find()->addAggregation('customers_by_date', 'terms', [
-    'field' => 'registration_date',
-    'order' => ['_count' => 'desc'],
-    'size' => 10, //top 10 registration dates
-])->search(null, ['search_type' => 'count']);
+$aggData = Customer::find()
+    ->addAggregation('customers_by_date', 'terms', [
+        'field' => 'registration_date',
+        'order' => ['_count' => 'desc'],
+        'size' => 10, //top 10 registration dates
+    ])
+    ->search(null, ['search_type' => 'count']);
 
 ```                    
 

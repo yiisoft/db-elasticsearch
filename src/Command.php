@@ -339,7 +339,9 @@ class Command extends Component
      *          ],
      *      ]
      * ];
-     * $elasticQuery->createCommand()->updateAnalyzers('myindex', $setting);
+     * $elasticQuery
+     *      ->createCommand()
+     *      ->updateAnalyzers('myindex', $setting);
      * ~~~
      *
      * @param string $index

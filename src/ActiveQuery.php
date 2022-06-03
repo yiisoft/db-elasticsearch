@@ -43,7 +43,10 @@ use Yiisoft\Db\ActiveRelationTrait;
  * These options can be configured using methods of the same name. For example:
  *
  * ```php
- * $customers = Customer::find()->with('orders')->asArray()->all();
+ * $customers = Customer::find()
+ *     ->with('orders')
+ *     ->asArray()
+ *     ->all();
  * ```
  * > NOTE: elasticsearch limits the number of records returned to 10 records by default.
  * > If you expect to get more records you should specify limit explicitly.
@@ -149,7 +152,9 @@ class ActiveQuery extends Query implements ActiveQueryInterface
             $this->index = $modelClass::index();
             $this->type = $modelClass::type();
         }
-        $commandConfig = $db->getQueryBuilder()->build($this);
+        $commandConfig = $db
+            ->getQueryBuilder()
+            ->build($this);
 
         return $db->createCommand($commandConfig);
     }

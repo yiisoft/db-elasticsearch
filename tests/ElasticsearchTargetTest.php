@@ -22,7 +22,10 @@ class ElasticsearchTargetTest extends TestCase
 
         $logger->log('Test message', Logger::LEVEL_INFO, 'test-category');
         $logger->flush(true);
-        $this->getConnection()->createCommand()->refreshIndex($this->index);
+        $this
+            ->getConnection()
+            ->createCommand()
+            ->refreshIndex($this->index);
 
         $query = new Query();
         $query->from($this->index, $this->type);
@@ -40,7 +43,9 @@ class ElasticsearchTargetTest extends TestCase
     {
         parent::setUp();
 
-        $command = $this->getConnection()->createCommand();
+        $command = $this
+            ->getConnection()
+            ->createCommand();
 
         // delete index
         if ($command->indexExists($this->index)) {
@@ -63,7 +68,9 @@ class ElasticsearchTargetTest extends TestCase
 
     protected function tearDown()
     {
-        $command = $this->getConnection()->createCommand();
+        $command = $this
+            ->getConnection()
+            ->createCommand();
         $command->deleteIndex($this->index);
 
         parent::tearDown();

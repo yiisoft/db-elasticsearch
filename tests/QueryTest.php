@@ -13,7 +13,9 @@ class QueryTest extends TestCase
     {
         parent::setUp();
 
-        $command = $this->getConnection()->createCommand();
+        $command = $this
+            ->getConnection()
+            ->createCommand();
 
         // delete index
         if ($command->indexExists('yiitest')) {
@@ -92,7 +94,9 @@ class QueryTest extends TestCase
         $this->assertArrayHasKey('name', $result['_source']);
         $this->assertArrayHasKey('_id', $result);
 
-        $result = $query->where(['name' => 'user1'])->one($this->getConnection());
+        $result = $query
+            ->where(['name' => 'user1'])
+            ->one($this->getConnection());
         $this->assertEquals(3, count($result['_source']));
         $this->assertArrayHasKey('status', $result['_source']);
         $this->assertArrayHasKey('email', $result['_source']);
@@ -100,7 +104,9 @@ class QueryTest extends TestCase
         $this->assertArrayHasKey('_id', $result);
         $this->assertEquals(1, $result['_id']);
 
-        $result = $query->where(['name' => 'user15'])->one($this->getConnection());
+        $result = $query
+            ->where(['name' => 'user15'])
+            ->one($this->getConnection());
         $this->assertFalse($result);
     }
 
@@ -109,7 +115,9 @@ class QueryTest extends TestCase
         $query = new Query;
         $query->from('yiitest', 'user');
 
-        $results = $query->limit(100)->all($this->getConnection());
+        $results = $query
+            ->limit(100)
+            ->all($this->getConnection());
         $this->assertEquals(12, count($results));
         $result = reset($results);
         $this->assertEquals(3, count($result['_source']));
@@ -121,7 +129,9 @@ class QueryTest extends TestCase
         $query = new Query;
         $query->from('yiitest', 'user');
 
-        $results = $query->where(['name' => 'user1'])->all($this->getConnection());
+        $results = $query
+            ->where(['name' => 'user1'])
+            ->all($this->getConnection());
         $this->assertEquals(1, count($results));
         $result = reset($results);
         $this->assertEquals(3, count($result['_source']));
@@ -135,7 +145,10 @@ class QueryTest extends TestCase
         $query = new Query;
         $query->from('yiitest', 'user');
 
-        $results = $query->limit(100)->indexBy('name')->all($this->getConnection());
+        $results = $query
+            ->limit(100)
+            ->indexBy('name')
+            ->all($this->getConnection());
         $this->assertEquals(12, count($results));
         ksort($results);
         $this->assertEquals([
@@ -159,11 +172,17 @@ class QueryTest extends TestCase
         $query = new Query;
         $query->from('yiitest', 'user');
 
-        $result = $query->where(['name' => 'user1'])->scalar('name', $this->getConnection());
+        $result = $query
+            ->where(['name' => 'user1'])
+            ->scalar('name', $this->getConnection());
         $this->assertEquals('user1', $result);
-        $result = $query->where(['name' => 'user1'])->scalar('noname', $this->getConnection());
+        $result = $query
+            ->where(['name' => 'user1'])
+            ->scalar('noname', $this->getConnection());
         $this->assertNull($result);
-        $result = $query->where(['name' => 'user15'])->scalar('name', $this->getConnection());
+        $result = $query
+            ->where(['name' => 'user15'])
+            ->scalar('name', $this->getConnection());
         $this->assertNull($result);
     }
 
@@ -172,18 +191,24 @@ class QueryTest extends TestCase
         $query = new Query;
         $query->from('yiitest', 'user');
 
-        $result = $query->orderBy(['name' => SORT_ASC])->limit(4)->column('name', $this->getConnection());
+        $result = $query
+            ->orderBy(['name' => SORT_ASC])
+            ->limit(4)
+            ->column('name', $this->getConnection());
         $this->assertEquals(['user1', 'user2', 'user3', 'user4'], $result);
         $result = $query->column('noname', $this->getConnection());
         $this->assertEquals([null, null, null, null], $result);
-        $result = $query->where(['name' => 'user15'])->scalar('name', $this->getConnection());
+        $result = $query
+            ->where(['name' => 'user15'])
+            ->scalar('name', $this->getConnection());
         $this->assertNull($result);
     }
 
     public function testAndWhere()
     {
         $query = new Query;
-        $query->where(1)
+        $query
+            ->where(1)
             ->andWhere(2)
             ->andWhere(3);
 
@@ -194,7 +219,8 @@ class QueryTest extends TestCase
     public function testOrWhere()
     {
         $query = new Query;
-        $query->where(1)
+        $query
+            ->where(1)
             ->orWhere(2)
             ->orWhere(3);
 
@@ -292,7 +318,9 @@ class QueryTest extends TestCase
     public function testLimitOffset()
     {
         $query = new Query;
-        $query->limit(10)->offset(5);
+        $query
+            ->limit(10)
+            ->offset(5);
         $this->assertEquals(10, $query->limit);
         $this->assertEquals(5, $query->offset);
     }
@@ -338,7 +366,12 @@ class QueryTest extends TestCase
 
         //test each
         $query = new Query;
-        $query->from('yiitest', 'user')->limit(3)->orderBy(['name' => SORT_ASC])->indexBy('name')->options(['preference' => '_local']);
+        $query
+            ->from('yiitest', 'user')
+            ->limit(3)
+            ->orderBy(['name' => SORT_ASC])
+            ->indexBy('name')
+            ->options(['preference' => '_local']);
         //NOTE: preference -> _local has no influence on query result, everything's fine as long as query doesn't fail
 
         $result_keys = [];
@@ -356,7 +389,12 @@ class QueryTest extends TestCase
 
         //test batch
         $query = new Query;
-        $query->from('yiitest', 'user')->limit(3)->orderBy(['name' => SORT_ASC])->indexBy('name')->options(['preference' => '_local']);
+        $query
+            ->from('yiitest', 'user')
+            ->limit(3)
+            ->orderBy(['name' => SORT_ASC])
+            ->indexBy('name')
+            ->options(['preference' => '_local']);
         //NOTE: preference -> _local has no influence on query result, everything's fine as long as query doesn't fail
 
         $results = [];
@@ -372,7 +410,9 @@ class QueryTest extends TestCase
 
         //test scan (no ordering)
         $query = new Query;
-        $query->from('yiitest', 'user')->limit(3);
+        $query
+            ->from('yiitest', 'user')
+            ->limit(3);
 
         $results = [];
         foreach ($query->each('1m', $this->getConnection()) as $value) {

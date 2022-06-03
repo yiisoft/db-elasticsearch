@@ -59,7 +59,10 @@ class ActiveRecordTest extends TestCase
      */
     public function afterSave()
     {
-        $this->getConnection()->createCommand()->flushIndex('yiitest');
+        $this
+            ->getConnection()
+            ->createCommand()
+            ->flushIndex('yiitest');
     }
 
     public function setUp()
@@ -70,10 +73,16 @@ class ActiveRecordTest extends TestCase
         $db = ActiveRecord::$db = $this->getConnection();
 
         // delete index
-        if ($db->createCommand()->indexExists('yiitest')) {
-            $db->createCommand()->deleteIndex('yiitest');
+        if ($db
+            ->createCommand()
+            ->indexExists('yiitest')) {
+            $db
+                ->createCommand()
+                ->deleteIndex('yiitest');
         }
-        $db->createCommand()->createIndex('yiitest');
+        $db
+            ->createCommand()
+            ->createIndex('yiitest');
 
         $command = $db->createCommand();
         Customer::setUpMapping($command);
@@ -84,7 +93,9 @@ class ActiveRecordTest extends TestCase
         OrderItemWithNullFK::setUpMapping($command);
         Animal::setUpMapping($command);
 
-        $db->createCommand()->flushIndex('yiitest');
+        $db
+            ->createCommand()
+            ->flushIndex('yiitest');
 
         $customer = new Customer();
         $customer->id = 1;
@@ -190,7 +201,9 @@ class ActiveRecordTest extends TestCase
         (new Cat())->save(false);
         (new Dog())->save(false);
 
-        $db->createCommand()->flushIndex('yiitest');
+        $db
+            ->createCommand()
+            ->flushIndex('yiitest');
     }
 
     public function testSaveNoChanges()
@@ -206,7 +219,10 @@ class ActiveRecordTest extends TestCase
     public function testFindAsArray()
     {
         // asArray
-        $customer = Customer::find()->where(['id' => 2])->asArray()->one();
+        $customer = Customer::find()
+            ->where(['id' => 2])
+            ->asArray()
+            ->one();
         $this->assertEquals([
             'id' => 2,
             'email' => 'user2@example.com',
@@ -214,7 +230,7 @@ class ActiveRecordTest extends TestCase
             'address' => 'address2',
             'status' => 1,
 //            '_score' => 1.0
-                ], $customer['_source']);
+        ], $customer['_source']);
     }
 
     public function testSearch()
@@ -227,12 +243,16 @@ class ActiveRecordTest extends TestCase
         $this->assertTrue($customers['hits'][2] instanceof Customer);
 
         // limit vs. totalcount
-        $customers = Customer::find()->limit(2)->search()['hits'];
+        $customers = Customer::find()
+            ->limit(2)
+            ->search()['hits'];
         $this->assertEquals(3, $customers['total']);
         $this->assertEquals(2, count($customers['hits']));
 
         // asArray
-        $result = Customer::find()->asArray()->search()['hits'];
+        $result = Customer::find()
+            ->asArray()
+            ->search()['hits'];
         $this->assertEquals(3, $result['total']);
         $customers = $result['hits'];
         $this->assertEquals(3, count($customers));
@@ -254,7 +274,9 @@ class ActiveRecordTest extends TestCase
 
         // TODO test asArray() + fields() + indexBy()
         // find by attributes
-        $result = Customer::find()->where(['name' => 'user2'])->search()['hits'];
+        $result = Customer::find()
+            ->where(['name' => 'user2'])
+            ->search()['hits'];
         $customer = reset($result['hits']);
         $this->assertTrue($customer instanceof Customer);
         $this->assertEquals(2, $customer->id);
@@ -265,7 +287,9 @@ class ActiveRecordTest extends TestCase
     // TODO test aggregations
 //    public function testSearchFacets()
 //    {
-//        $result = Customer::find()->addAggregation('status_stats', ['field' => 'status'])->search();
+//        $result = Customer::find()
+->addAggregation('status_stats', ['field' => 'status'])
+->search();
 //        $this->assertArrayHasKey('facets', $result);
 //        $this->assertEquals(3, $result['facets']['status_stats']['count']);
 //        $this->assertEquals(4, $result['facets']['status_stats']['total']); // sum of values
@@ -309,14 +333,20 @@ class ActiveRecordTest extends TestCase
         $orders = $customer->orders;
         $this->assertEquals(2, count($orders));
 
-        $orders = $customer->getOrders()->where(['between', 'created_at', 1325334000, 1325400000])->all();
+        $orders = $customer
+            ->getOrders()
+            ->where(['between', 'created_at', 1325334000, 1325400000])
+            ->all();
         $this->assertEquals(1, count($orders));
         $this->assertEquals(2, $orders[0]->id);
     }
 
     public function testFindEagerViaRelation()
     {
-        $orders = Order::find()->with('items')->orderBy('created_at')->all();
+        $orders = Order::find()
+            ->with('items')
+            ->orderBy('created_at')
+            ->all();
         $this->assertEquals(3, count($orders));
         $order = $orders[0];
         $this->assertEquals(1, $order->id);
@@ -419,7 +449,8 @@ class ActiveRecordTest extends TestCase
                         'inline' => "doc['quantity'].value * doc['subtotal'].value",
                     ]
                 ]
-            ])->all();
+            ])
+            ->all();
         $this->assertNotEmpty($orderItems);
         foreach ($orderItems as $item) {
             $this->assertEquals($item->subtotal * $item->quantity, $item->total);
@@ -430,8 +461,10 @@ class ActiveRecordTest extends TestCase
     {
         /* @var $this TestCase|ActiveRecordTestTrait */
         // indexBy + asArray
-        $customers = Customer::find()->asArray()
-            ->storedFields(['id', 'name'])->all();
+        $customers = Customer::find()
+            ->asArray()
+            ->storedFields(['id', 'name'])
+            ->all();
         $this->assertEquals(3, count($customers));
         $this->assertArrayHasKey('id', $customers[0]['fields']);
         $this->assertArrayHasKey('name', $customers[0]['fields']);
@@ -454,7 +487,10 @@ class ActiveRecordTest extends TestCase
     {
         /* @var $this TestCase|ActiveRecordTestTrait */
         // indexBy + asArray
-        $customers = Customer::find()->asArray()->source(['id', 'name'])->all();
+        $customers = Customer::find()
+            ->asArray()
+            ->source(['id', 'name'])
+            ->all();
         $this->assertEquals(3, count($customers));
         $this->assertArrayHasKey('id', $customers[0]['_source']);
         $this->assertArrayHasKey('name', $customers[0]['_source']);
@@ -478,7 +514,10 @@ class ActiveRecordTest extends TestCase
         $customerClass = $this->getCustomerClass();
         /* @var $this TestCase|ActiveRecordTestTrait */
         // indexBy + asArray
-        $customers = Customer::find()->indexBy('name')->source('id', 'name')->all();
+        $customers = Customer::find()
+            ->indexBy('name')
+            ->source('id', 'name')
+            ->all();
         $this->assertEquals(3, count($customers));
         $this->assertTrue($customers['user1'] instanceof $customerClass);
         $this->assertTrue($customers['user2'] instanceof $customerClass);
@@ -500,9 +539,12 @@ class ActiveRecordTest extends TestCase
         $this->assertNull($customers['user3']->status);
 
         // indexBy callable + asArray
-        $customers = Customer::find()->indexBy(function ($customer) {
-            return $customer->id . '-' . $customer->name;
-        })->storedFields('id', 'name')->all();
+        $customers = Customer::find()
+            ->indexBy(function ($customer) {
+                return $customer->id . '-' . $customer->name;
+            })
+            ->storedFields('id', 'name')
+            ->all();
         $this->assertEquals(3, count($customers));
         $this->assertTrue($customers['1-user1'] instanceof $customerClass);
         $this->assertTrue($customers['2-user2'] instanceof $customerClass);
@@ -528,7 +570,11 @@ class ActiveRecordTest extends TestCase
     {
         /* @var $this TestCase|ActiveRecordTestTrait */
         // indexBy + asArray
-        $customers = Customer::find()->indexBy('name')->asArray()->storedFields('id', 'name')->all();
+        $customers = Customer::find()
+            ->indexBy('name')
+            ->asArray()
+            ->storedFields('id', 'name')
+            ->all();
         $this->assertEquals(3, count($customers));
         $this->assertArrayHasKey('id', $customers['user1']['fields']);
         $this->assertArrayHasKey('name', $customers['user1']['fields']);
@@ -547,9 +593,13 @@ class ActiveRecordTest extends TestCase
         $this->assertArrayNotHasKey('status', $customers['user3']['fields']);
 
         // indexBy callable + asArray
-        $customers = Customer::find()->indexBy(function ($customer) {
-            return reset($customer['fields']['id']) . '-' . reset($customer['fields']['name']);
-        })->asArray()->storedFields('id', 'name')->all();
+        $customers = Customer::find()
+            ->indexBy(function ($customer) {
+                return reset($customer['fields']['id']) . '-' . reset($customer['fields']['name']);
+            })
+            ->asArray()
+            ->storedFields('id', 'name')
+            ->all();
         $this->assertEquals(3, count($customers));
         $this->assertArrayHasKey('id', $customers['1-user1']['fields']);
         $this->assertArrayHasKey('name', $customers['1-user1']['fields']);
@@ -575,7 +625,10 @@ class ActiveRecordTest extends TestCase
 
         /* @var $this TestCase|ActiveRecordTestTrait */
         // indexBy + asArray
-        $customers = $customerClass::find()->asArray()->indexBy('name')->all();
+        $customers = $customerClass::find()
+            ->asArray()
+            ->indexBy('name')
+            ->all();
         $this->assertEquals(3, count($customers));
         $this->assertArrayHasKey('id', $customers['user1']['_source']);
         $this->assertArrayHasKey('name', $customers['user1']['_source']);
@@ -594,9 +647,12 @@ class ActiveRecordTest extends TestCase
         $this->assertArrayHasKey('status', $customers['user3']['_source']);
 
         // indexBy callable + asArray
-        $customers = $customerClass::find()->indexBy(function ($customer) {
-            return $customer['_source']['id'] . '-' . $customer['_source']['name'];
-        })->asArray()->all();
+        $customers = $customerClass::find()
+            ->indexBy(function ($customer) {
+                return $customer['_source']['id'] . '-' . $customer['_source']['name'];
+            })
+            ->asArray()
+            ->all();
         $this->assertEquals(3, count($customers));
         $this->assertArrayHasKey('id', $customers['1-user1']['_source']);
         $this->assertArrayHasKey('name', $customers['1-user1']['_source']);
@@ -637,7 +693,7 @@ class ActiveRecordTest extends TestCase
         $this->assertEquals([
             [$customerClass, false, 1, false],
             [$customerClass, false, 2, false],
-                ], $afterFindCalls);
+        ], $afterFindCalls);
         $afterFindCalls = [];
 
         Event::off(BaseActiveRecord::className(), BaseActiveRecord::EVENT_AFTER_FIND);
@@ -653,22 +709,34 @@ class ActiveRecordTest extends TestCase
         $orderItem->save(false);
         $this->afterSave();
 
-        $orderItems = $orderItemClass::find()->where(['_id' => [$orderItem->getPrimaryKey()]])->all();
+        $orderItems = $orderItemClass::find()
+            ->where(['_id' => [$orderItem->getPrimaryKey()]])
+            ->all();
         $this->assertEquals(1, count($orderItems));
 
-        $orderItems = $orderItemClass::find()->where(['_id' => []])->all();
+        $orderItems = $orderItemClass::find()
+            ->where(['_id' => []])
+            ->all();
         $this->assertEquals(0, count($orderItems));
 
-        $orderItems = $orderItemClass::find()->where(['_id' => null])->all();
+        $orderItems = $orderItemClass::find()
+            ->where(['_id' => null])
+            ->all();
         $this->assertEquals(0, count($orderItems));
 
-        $orderItems = $orderItemClass::find()->where(['IN', '_id', [$orderItem->getPrimaryKey()]])->all();
+        $orderItems = $orderItemClass::find()
+            ->where(['IN', '_id', [$orderItem->getPrimaryKey()]])
+            ->all();
         $this->assertEquals(1, count($orderItems));
 
-        $orderItems = $orderItemClass::find()->where(['IN', '_id', []])->all();
+        $orderItems = $orderItemClass::find()
+            ->where(['IN', '_id', []])
+            ->all();
         $this->assertEquals(0, count($orderItems));
 
-        $orderItems = $orderItemClass::find()->where(['IN', '_id', [null]])->all();
+        $orderItems = $orderItemClass::find()
+            ->where(['IN', '_id', [null]])
+            ->all();
         $this->assertEquals(0, count($orderItems));
     }
 
@@ -703,7 +771,10 @@ class ActiveRecordTest extends TestCase
     public function testArrayAttributeRelationEager()
     {
         /* @var $order Order */
-        $order = Order::find()->with('itemsByArrayValue')->where(['id' => 1])->one();
+        $order = Order::find()
+            ->with('itemsByArrayValue')
+            ->where(['id' => 1])
+            ->one();
         $this->assertTrue($order->isRelationPopulated('itemsByArrayValue'));
         $items = $order->itemsByArrayValue;
         $this->assertEquals(2, count($items));
@@ -713,7 +784,10 @@ class ActiveRecordTest extends TestCase
         $this->assertTrue($items[2] instanceof Item);
 
         /* @var $order Order */
-        $order = Order::find()->with('itemsByArrayValue')->where(['id' => 2])->one();
+        $order = Order::find()
+            ->with('itemsByArrayValue')
+            ->where(['id' => 2])
+            ->one();
         $this->assertTrue($order->isRelationPopulated('itemsByArrayValue'));
         $items = $order->itemsByArrayValue;
         $this->assertEquals(3, count($items));
@@ -728,7 +802,9 @@ class ActiveRecordTest extends TestCase
     public function testArrayAttributeRelationLink()
     {
         /* @var $order Order */
-        $order = Order::find()->where(['id' => 1])->one();
+        $order = Order::find()
+            ->where(['id' => 1])
+            ->one();
         $items = $order->itemsByArrayValue;
         $this->assertEquals(2, count($items));
         $this->assertTrue(isset($items[1]));
@@ -756,7 +832,9 @@ class ActiveRecordTest extends TestCase
     public function testArrayAttributeRelationUnLink()
     {
         /* @var $order Order */
-        $order = Order::find()->where(['id' => 1])->one();
+        $order = Order::find()
+            ->where(['id' => 1])
+            ->one();
         $items = $order->itemsByArrayValue;
         $this->assertEquals(2, count($items));
         $this->assertTrue(isset($items[1]));
@@ -785,7 +863,9 @@ class ActiveRecordTest extends TestCase
     public function testArrayAttributeRelationUnLinkBrokenArray()
     {
         /* @var $order Order */
-        $order = Order::find()->where(['id' => 1])->one();
+        $order = Order::find()
+            ->where(['id' => 1])
+            ->one();
 
         $itemIds = $order->itemsArray;
         $removeId = reset($itemIds);
@@ -810,7 +890,9 @@ class ActiveRecordTest extends TestCase
     public function testArrayAttributeRelationUnLinkAll()
     {
         /* @var $order Order */
-        $order = Order::find()->where(['id' => 1])->one();
+        $order = Order::find()
+            ->where(['id' => 1])
+            ->one();
         $items = $order->itemsByArrayValue;
         $this->assertEquals(2, count($items));
         $this->assertTrue(isset($items[1]));
@@ -877,10 +959,14 @@ class ActiveRecordTest extends TestCase
 
     public function testPopulateRecordCallWhenQueryingOnParentClass()
     {
-        $animal = Animal::find()->where(['type' => Dog::className()])->one();
+        $animal = Animal::find()
+            ->where(['type' => Dog::className()])
+            ->one();
         $this->assertEquals('bark', $animal->getDoes());
 
-        $animal = Animal::find()->where(['type' => Cat::className()])->one();
+        $animal = Animal::find()
+            ->where(['type' => Cat::className()])
+            ->one();
         $this->assertEquals('meow', $animal->getDoes());
     }
 

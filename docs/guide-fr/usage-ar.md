@@ -30,7 +30,9 @@ class Customer extends \Yiisoft\Db\ElasticSearch\ActiveRecord
      */
     public function getOrders()
     {
-        return $this->hasMany(Order::className(), ['customer_id' => 'id'])->orderBy('id');
+        return $this
+            ->hasMany(Order::className(), ['customer_id' => 'id'])
+            ->orderBy('id');
     }
 
     /**
@@ -80,11 +82,17 @@ $customer->save();
 
 $customer = Customer::get(1); // récupère un document par pk
 $customers = Customer::mget([1,2,3]); // récupère plusieurs documents par pk
-$customer = Customer::find()->where(['name' => 'test'])->one(); // récupère par requête, vous devez configurer le mapping de ce champ afin que la recherche fonctionne correctement
-$customers = Customer::find()->active()->all(); // récupère l'ensemble des documents en utilisant une requête (et le scope `active`)
+$customer = Customer::find()
+    ->where(['name' => 'test'])
+    ->one(); // récupère par requête, vous devez configurer le mapping de ce champ afin que la recherche fonctionne correctement
+$customers = Customer::find()
+    ->active()
+    ->all(); // récupère l'ensemble des documents en utilisant une requête (et le scope `active`)
 
 // http://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-match-query.html
-$result = Article::find()->query(["match" => ["title" => "yii"]])->all(); // articles dont le titre contient "yii"
+$result = Article::find()
+    ->query(["match" => ["title" => "yii"]])
+    ->all(); // articles dont le titre contient "yii"
 
 // http://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-flt-query.html
 $query = Article::find()->query([

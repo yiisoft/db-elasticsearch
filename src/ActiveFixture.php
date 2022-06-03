@@ -90,7 +90,9 @@ class ActiveFixture extends BaseActiveFixture
         $this->resetIndex();
         $this->data = [];
 
-        $mapping = $this->db->createCommand()->getMapping($this->index, $this->type);
+        $mapping = $this->db
+            ->createCommand()
+            ->getMapping($this->index, $this->type);
         if (isset($mapping[$this->index]['mappings'][$this->type]['_id']['path'])) {
             $idField = $mapping[$this->index]['mappings'][$this->type]['_id']['path'];
         } else {
@@ -109,7 +111,9 @@ class ActiveFixture extends BaseActiveFixture
             }
 
             try {
-                $response = $this->db->createCommand()->insert($this->index, $this->type, $row, $id, $options);
+                $response = $this->db
+                    ->createCommand()
+                    ->insert($this->index, $this->type, $row, $id, $options);
             } catch (\Yiisoft\Db\Exception $e) {
                 throw new \yii\base\Exception("Failed to insert fixture data \"$alias\": " . $e->getMessage() . "\n" . print_r($e->errorInfo, true), $e->getCode(), $e);
             }
@@ -119,7 +123,9 @@ class ActiveFixture extends BaseActiveFixture
             $this->data[$alias] = $row;
         }
         // ensure all data is flushed and immediately available in the test
-        $this->db->createCommand()->flushIndex($this->index);
+        $this->db
+            ->createCommand()
+            ->flushIndex($this->index);
     }
 
     /**
@@ -149,10 +155,12 @@ class ActiveFixture extends BaseActiveFixture
      */
     protected function resetIndex()
     {
-        $this->db->createCommand([
-            'index' => $this->index,
-            'type' => $this->type,
-            'queryParts' => ['query' => ['match_all' => new \stdClass()]],
-        ])->deleteByQuery();
+        $this->db
+            ->createCommand([
+                'index' => $this->index,
+                'type' => $this->type,
+                'queryParts' => ['query' => ['match_all' => new \stdClass()]],
+            ])
+            ->deleteByQuery();
     }
 }

@@ -39,24 +39,31 @@ class Order extends ActiveRecord
      */
     public function getItemsByArrayValue()
     {
-        return $this->hasMany(Item::className(), ['id' => 'itemsArray'])->indexBy('id');
+        return $this
+            ->hasMany(Item::className(), ['id' => 'itemsArray'])
+            ->indexBy('id');
     }
 
     public function getItems()
     {
-        return $this->hasMany(Item::className(), ['id' => 'item_id'])
-            ->via('orderItems')->orderBy('id');
+        return $this
+            ->hasMany(Item::className(), ['id' => 'item_id'])
+            ->via('orderItems')
+            ->orderBy('id');
     }
 
     public function getItemsIndexed()
     {
-        return $this->hasMany(Item::className(), ['id' => 'item_id'])
-            ->via('orderItems')->indexBy('id');
+        return $this
+            ->hasMany(Item::className(), ['id' => 'item_id'])
+            ->via('orderItems')
+            ->indexBy('id');
     }
 
     public function getItemsWithNullFK()
     {
-        return $this->hasMany(Item::className(), ['id' => 'item_id'])
+        return $this
+            ->hasMany(Item::className(), ['id' => 'item_id'])
             ->via('orderItemsWithNullFK');
     }
 
@@ -67,30 +74,36 @@ class Order extends ActiveRecord
 
     public function getItemsInOrder1()
     {
-        return $this->hasMany(Item::className(), ['id' => 'item_id'])
+        return $this
+            ->hasMany(Item::className(), ['id' => 'item_id'])
             ->via('orderItems', function ($q) {
                 $q->orderBy(['subtotal' => SORT_ASC]);
-            })->orderBy('name');
+            })
+            ->orderBy('name');
     }
 
     public function getItemsInOrder2()
     {
-        return $this->hasMany(Item::className(), ['id' => 'item_id'])
+        return $this
+            ->hasMany(Item::className(), ['id' => 'item_id'])
             ->via('orderItems', function ($q) {
                 $q->orderBy(['subtotal' => SORT_DESC]);
-            })->orderBy('name');
+            })
+            ->orderBy('name');
     }
 
     public function getBooks()
     {
-        return $this->hasMany(Item::className(), ['id' => 'item_id'])
+        return $this
+            ->hasMany(Item::className(), ['id' => 'item_id'])
             ->via('orderItems')
             ->where(['category_id' => 1]);
     }
 
     public function getBooksWithNullFK()
     {
-        return $this->hasMany(Item::className(), ['id' => 'item_id'])
+        return $this
+            ->hasMany(Item::className(), ['id' => 'item_id'])
             ->via('orderItemsWithNullFK')
             ->where(['category_id' => 1]);
     }

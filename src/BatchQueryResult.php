@@ -98,7 +98,9 @@ class BatchQueryResult extends BaseObject implements \Iterator
     public function reset()
     {
         if (isset($this->_lastScrollId)) {
-            $this->query->createCommand($this->db)->clearScroll(['scroll_id' => $this->_lastScrollId]);
+            $this->query
+                ->createCommand($this->db)
+                ->clearScroll(['scroll_id' => $this->_lastScrollId]);
         }
 
         $this->_batch = null;
@@ -165,10 +167,12 @@ class BatchQueryResult extends BaseObject implements \Iterator
             }
         } else {
             //subsequent queries - do scroll
-            $result = $this->query->createCommand($this->db)->scroll([
-                'scroll_id' => $this->_lastScrollId,
-                'scroll' => $this->scrollWindow,
-            ]);
+            $result = $this->query
+                ->createCommand($this->db)
+                ->scroll([
+                    'scroll_id' => $this->_lastScrollId,
+                    'scroll' => $this->scrollWindow,
+                ]);
         }
 
         //get last scroll id

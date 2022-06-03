@@ -94,7 +94,9 @@ class ActiveRecord extends BaseActiveRecord
         }
 
         $condition = static::filterCondition($condition);
-        return static::find()->andWhere($condition)->one();
+        return static::find()
+            ->andWhere($condition)
+            ->one();
     }
 
     /**
@@ -107,7 +109,9 @@ class ActiveRecord extends BaseActiveRecord
         }
 
         $condition = static::filterCondition($condition);
-        return static::find()->andWhere($condition)->all();
+        return static::find()
+            ->andWhere($condition)
+            ->all();
     }
 
     /**
@@ -461,13 +465,15 @@ class ActiveRecord extends BaseActiveRecord
             $options['op_type'] = isset($options['op_type']) ? $options['op_type'] : 'create';
         }
 
-        $response = static::getDb()->createCommand()->insert(
-            static::index(),
-            static::type(),
-            $values,
-            $this->getPrimaryKey(),
-            $options
-        );
+        $response = static::getDb()
+            ->createCommand()
+            ->insert(
+                static::index(),
+                static::type(),
+                $values,
+                $this->getPrimaryKey(),
+                $options
+            );
 
         $pk = static::primaryKey()[0];
         $this->$pk = $response['_id'];
@@ -558,13 +564,15 @@ class ActiveRecord extends BaseActiveRecord
         }
 
         try {
-            $result = static::getDb()->createCommand()->update(
-                static::index(),
-                static::type(),
-                $this->getOldPrimaryKey(false),
-                $values,
-                $options
-            );
+            $result = static::getDb()
+                ->createCommand()
+                ->update(
+                    static::index(),
+                    static::type(),
+                    $this->getOldPrimaryKey(false),
+                    $values,
+                    $options
+                );
         } catch (Exception $e) {
             // HTTP 409 is the response in case of failed optimistic locking
             // http://www.elastic.co/guide/en/elasticsearch/guide/current/optimistic-concurrency-control.html
@@ -610,7 +618,11 @@ class ActiveRecord extends BaseActiveRecord
             $primaryKeys = (array)$condition[$pkName];
         } else {
             //fetch only document metadata (no fields), 1000 documents per shard
-            $query = static::find()->where($condition)->asArray()->source(false)->limit(1000);
+            $query = static::find()
+                ->where($condition)
+                ->asArray()
+                ->source(false)
+                ->limit(1000);
             $primaryKeys = [];
             foreach ($query->each('1m') as $document) {
                 $primaryKeys[] = $document['_id'];
@@ -768,12 +780,14 @@ class ActiveRecord extends BaseActiveRecord
         }
 
         try {
-            $result = static::getDb()->createCommand()->delete(
-                static::index(),
-                static::type(),
-                $this->getOldPrimaryKey(false),
-                $options
-            );
+            $result = static::getDb()
+                ->createCommand()
+                ->delete(
+                    static::index(),
+                    static::type(),
+                    $this->getOldPrimaryKey(false),
+                    $options
+                );
         } catch (Exception $e) {
             // HTTP 409 is the response in case of failed optimistic locking
             // http://www.elastic.co/guide/en/elasticsearch/guide/current/optimistic-concurrency-control.html

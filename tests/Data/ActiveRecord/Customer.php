@@ -33,31 +33,39 @@ class Customer extends ActiveRecord
 
     public function getOrders()
     {
-        return $this->hasMany(Order::className(), ['customer_id' => 'id'])->orderBy('created_at');
+        return $this
+            ->hasMany(Order::className(), ['customer_id' => 'id'])
+            ->orderBy('created_at');
     }
 
     public function getExpensiveOrders()
     {
-        return $this->hasMany(Order::className(), ['customer_id' => 'id'])
+        return $this
+            ->hasMany(Order::className(), ['customer_id' => 'id'])
             ->where([ 'gte', 'total', 50 ])
             ->orderBy('id');
     }
 
     public function getExpensiveOrdersWithNullFK()
     {
-        return $this->hasMany(OrderWithNullFK::className(), ['customer_id' => 'id'])
+        return $this
+            ->hasMany(OrderWithNullFK::className(), ['customer_id' => 'id'])
             ->where([ 'gte', 'total', 50 ])
             ->orderBy('id');
     }
 
     public function getOrdersWithNullFK()
     {
-        return $this->hasMany(OrderWithNullFK::className(), ['customer_id' => 'id'])->orderBy('created_at');
+        return $this
+            ->hasMany(OrderWithNullFK::className(), ['customer_id' => 'id'])
+            ->orderBy('created_at');
     }
 
     public function getOrdersWithItems()
     {
-        return $this->hasMany(Order::className(), ['customer_id' => 'id'])->with('orderItems');
+        return $this
+            ->hasMany(Order::className(), ['customer_id' => 'id'])
+            ->with('orderItems');
     }
 
     public function afterSave($insert, $changedAttributes)

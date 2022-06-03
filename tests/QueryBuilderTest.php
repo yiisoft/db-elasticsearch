@@ -18,7 +18,9 @@ class QueryBuilderTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $command = $this->getConnection()->createCommand();
+        $command = $this
+            ->getConnection()
+            ->createCommand();
 
         // delete index
         if ($command->indexExists('yiitest')) {
@@ -33,7 +35,9 @@ class QueryBuilderTest extends TestCase
 
     private function prepareDbData()
     {
-        $command = $this->getConnection()->createCommand();
+        $command = $this
+            ->getConnection()
+            ->createCommand();
         $command->insert('yiitest', 'article', ['title' => 'I love yii!', 'weight' => 1, 'created_at' => '2010-01-10'], 1);
         $command->insert('yiitest', 'article', ['title' => 'Symfony2 is another framework', 'weight' => 2, 'created_at' => '2010-01-15'], 2);
         $command->insert('yiitest', 'article', ['title' => 'Yii2 out now!', 'weight' => 3, 'created_at' => '2010-01-20'], 3);

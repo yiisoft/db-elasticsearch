@@ -89,7 +89,9 @@ class ActiveDataProvider extends \yii\data\ActiveDataProvider
         if (($pagination = $this->getPagination()) !== false) {
             // pagination fails to validate page number, because total count is unknown at this stage
             $pagination->validatePage = false;
-            $query->limit($pagination->getLimit())->offset($pagination->getOffset());
+            $query
+                ->limit($pagination->getLimit())
+                ->offset($pagination->getOffset());
         }
         if (($sort = $this->getSort()) !== false) {
             $query->addOrderBy($sort->getOrders());

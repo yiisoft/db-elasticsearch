@@ -213,7 +213,9 @@ class Query extends Component implements QueryInterface
             $db = Yii::$app->get('elasticsearch');
         }
 
-        $commandConfig = $db->getQueryBuilder()->build($this);
+        $commandConfig = $db
+            ->getQueryBuilder()
+            ->build($this);
 
         return $db->createCommand($commandConfig);
     }
@@ -226,7 +228,9 @@ class Query extends Component implements QueryInterface
      */
     public function all($db = null)
     {
-        $result = $this->createCommand($db)->search();
+        $result = $this
+            ->createCommand($db)
+            ->search();
         if ($result === false) {
             throw new Exception('Elasticsearch search query failed.');
         }
@@ -273,7 +277,9 @@ class Query extends Component implements QueryInterface
      */
     public function one($db = null)
     {
-        $result = $this->createCommand($db)->search(['size' => 1]);
+        $result = $this
+            ->createCommand($db)
+            ->search(['size' => 1]);
         if ($result === false) {
             throw new Exception('Elasticsearch search query failed.');
         }
@@ -298,7 +304,9 @@ class Query extends Component implements QueryInterface
      */
     public function search($db = null, $options = [])
     {
-        $result = $this->createCommand($db)->search($options);
+        $result = $this
+            ->createCommand($db)
+            ->search($options);
         if ($result === false) {
             throw new Exception('Elasticsearch search query failed.');
         }
@@ -329,7 +337,9 @@ class Query extends Component implements QueryInterface
      */
     public function delete($db = null, $options = [])
     {
-        return $this->createCommand($db)->deleteByQuery($options);
+        return $this
+            ->createCommand($db)
+            ->deleteByQuery($options);
     }
 
     /**
@@ -398,7 +408,9 @@ class Query extends Component implements QueryInterface
     {
         // performing a query with return size of 0, is equal to getting result stats such as count
         // https://www.elastic.co/guide/en/elasticsearch/reference/5.6/breaking_50_search_changes.html#_literal_search_type_literal
-        $count = $this->createCommand($db)->search(['size' => 0])['hits']['total'];
+        $count = $this
+            ->createCommand($db)
+            ->search(['size' => 0])['hits']['total'];
         if ($count === false) {
             throw new Exception('Elasticsearch count query failed.');
         }

@@ -18,15 +18,23 @@ class ActiveDataProviderTest extends TestCase
         $db = ActiveRecord::$db = $this->getConnection();
 
         // delete index
-        if ($db->createCommand()->indexExists('yiitest')) {
-            $db->createCommand()->deleteIndex('yiitest');
+        if ($db
+            ->createCommand()
+            ->indexExists('yiitest')) {
+            $db
+                ->createCommand()
+                ->deleteIndex('yiitest');
         }
-        $db->createCommand()->createIndex('yiitest');
+        $db
+            ->createCommand()
+            ->createIndex('yiitest');
 
         $command = $db->createCommand();
         Customer::setUpMapping($command);
 
-        $db->createCommand()->flushIndex('yiitest');
+        $db
+            ->createCommand()
+            ->flushIndex('yiitest');
 
         $customer = new Customer();
         $customer->id = 1;
@@ -41,7 +49,9 @@ class ActiveDataProviderTest extends TestCase
         $customer->setAttributes(['email' => 'user3@example.com', 'name' => 'user3', 'address' => 'address3', 'status' => 1], false);
         $customer->save(false);
 
-        $db->createCommand()->flushIndex('yiitest');
+        $db
+            ->createCommand()
+            ->flushIndex('yiitest');
     }
 
     // Tests :
