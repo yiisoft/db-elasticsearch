@@ -288,8 +288,8 @@ class ActiveRecordTest extends TestCase
 //    public function testSearchFacets()
 //    {
 //        $result = Customer::find()
-->addAggregation('status_stats', ['field' => 'status'])
-->search();
+//        ->addAggregation('status_stats', ['field' => 'status'])
+//        ->search();
 //        $this->assertArrayHasKey('facets', $result);
 //        $this->assertEquals(3, $result['facets']['status_stats']['count']);
 //        $this->assertEquals(4, $result['facets']['status_stats']['total']); // sum of values
