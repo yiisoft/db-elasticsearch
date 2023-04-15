@@ -23,7 +23,7 @@ name: build
 
 jobs:
   tests:
-    name: PHP ${{ matrix.php-version }} / ES ${{ matrix.es-version }}
+    name: PHP ${{ matrix.php }} / ES ${{ matrix.es }}
     env:
       extensions: curl, mbstring, dom, intl
       key: cache-v1
@@ -63,7 +63,7 @@ jobs:
       - name: Install PHP with extensions.
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php-version }}
+          php-version: ${{ matrix.php }}
           extensions: ${{ env.extensions }}
           ini-values: date.timezone='UTC'
 
