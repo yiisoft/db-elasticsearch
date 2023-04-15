@@ -37,19 +37,12 @@ jobs:
           - 8.2
         es:
           - 8.7.0
-          - 7.17.9
+
     steps:
       - name: Service elastisearch.
-        if: matrix.es == '8.7.0'
         run: |
           docker network create somenetwork
           docker run -d --name elasticsearch --net somenetwork -p 9200:9200 -e "http.publish_host=127.0.0.1" -e "transport.host=127.0.0.1" -e "indices.id_field_data.enabled=true" -e "xpack.security.enabled=false" elasticsearch:${{ matrix.es }}
-
-      - name: Service elastisearch.
-        if: matrix.es == '7.17.9'
-        run: |
-          docker network create somenetwork
-          docker run -d --name elasticsearch --net somenetwork -p 9200:9200 -e "http.publish_host=127.0.0.1" -e "transport.host=127.0.0.1" elasticsearch:${{ matrix.es }}
 
       - name: Checkout.
         uses: actions/checkout@v3
@@ -76,4 +69,3 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage.xml
-
