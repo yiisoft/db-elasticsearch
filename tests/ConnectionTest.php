@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Elasticsearch\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Elasticsearch\BulkCommand;
 use Yiisoft\Elasticsearch\Connection;
 use Yiisoft\Elasticsearch\Tests\Support\Assert;
 use Yiisoft\Elasticsearch\Tests\Support\TestTrait;
