@@ -23,7 +23,7 @@ final class ElasticsearchConnectionTest extends TestCase
 
         $version = match ($db->getNodeValue('version')) {
             '8.7.0' => '8.7.0',
-            default => '7.17.0',
+            default => '7.17.9',
         };
 
         $this->assertTrue($db->isActive());

@@ -37,7 +37,7 @@ jobs:
           - 8.2
         es:
           - 8.7.0
-          - 7.17.0
+          - 7.17.9
     steps:
       - name: Service elastisearch.
         run: |
