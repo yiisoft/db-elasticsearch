@@ -21,10 +21,15 @@ final class ElasticsearchConnectionTest extends TestCase
 
         $db->open();
 
+        $version = match ($db->getNodeValue()) {
+            '8.1.3' => '8.1.3',
+            default => '7.17.0',
+        };
+
         $this->assertTrue($db->isActive());
         $this->assertNotEmpty($db->getNodeValue('name'));
         $this->assertSame('127.0.0.1', $db->getNodeValue('host'));
-        $this->assertSame('8.1.3', $db->getNodeValue('version'));
+        $this->assertSame($version, $db->getNodeValue('version'));
         $this->assertSame('127.0.0.1:9200', $db->getNodeValue('http_address'));
     }
 }

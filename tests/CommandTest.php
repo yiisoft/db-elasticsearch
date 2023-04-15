@@ -213,8 +213,8 @@ final class CommandTest extends TestCase
         $command->insert($index, 'test', ['name' => 'John Doe'], '1');
         $command->insert($index, 'test', ['name' => 'Jane Doe'], '2');
 
-        $this->assertSame(
-            [
+        $expected1 = match ($db->getNodeValue('version')) {
+            '8.1.3' => [
                 '_index' => 'get_test',
                 '_id' => '1',
                 '_version' => 1,
@@ -225,10 +225,22 @@ final class CommandTest extends TestCase
                     'name' => 'John Doe',
                 ],
             ],
-            $command->get($index, 'test', '1'),
-        );
-        $this->assertSame(
-            [
+            default => [
+                '_index' => 'get_test',
+                '_type' => '_doc',
+                '_id' => '1',
+                '_version' => 1,
+                '_seq_no' => 0,
+                '_primary_term' => 1,
+                'found' => true,
+                '_source' => [
+                    'name' => 'John Doe',
+                ],
+            ],
+        };
+
+        $expected2 = match ($db->getNodeValue('version')) {
+            '8.1.3' => [
                 '_index' => 'get_test',
                 '_id' => '2',
                 '_version' => 1,
@@ -239,8 +251,22 @@ final class CommandTest extends TestCase
                     'name' => 'Jane Doe',
                 ],
             ],
-            $command->get($index, 'test', '2'),
-        );
+            default => [
+                '_index' => 'get_test',
+                '_type' => '_doc',
+                '_id' => '2',
+                '_version' => 1,
+                '_seq_no' => 1,
+                '_primary_term' => 1,
+                'found' => true,
+                '_source' => [
+                    'name' => 'Jane Doe',
+                ],
+            ],
+        };
+
+        $this->assertSame($expected1, $command->get($index, 'test', '1'));
+        $this->assertSame($expected2, $command->get($index, 'test', '2'));
 
         $command->deleteIndex($index);
 
