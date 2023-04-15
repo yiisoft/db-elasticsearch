@@ -214,7 +214,7 @@ final class CommandTest extends TestCase
         $command->insert($index, 'test', ['name' => 'Jane Doe'], '2');
 
         $expected1 = match ($db->getNodeValue('version')) {
-            '8.1.3' => [
+            '8.7.0' => [
                 '_index' => 'get_test',
                 '_id' => '1',
                 '_version' => 1,
@@ -240,7 +240,7 @@ final class CommandTest extends TestCase
         };
 
         $expected2 = match ($db->getNodeValue('version')) {
-            '8.1.3' => [
+            '8.7.0' => [
                 '_index' => 'get_test',
                 '_id' => '2',
                 '_version' => 1,
