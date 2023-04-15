@@ -39,9 +39,6 @@ jobs:
         es:
           - 8.1.3
           - 7.14.0
-          - 7.7.0
-          - 6.8.9
-          - 5.6.16
 
     services:
       elasticsearch:
