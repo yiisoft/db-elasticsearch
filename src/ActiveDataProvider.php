@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -32,7 +34,6 @@ class ActiveDataProvider extends \yii\data\ActiveDataProvider
      */
     private $_queryResults;
 
-
     /**
      * @param array $results full query results
      */
@@ -58,14 +59,14 @@ class ActiveDataProvider extends \yii\data\ActiveDataProvider
     public function getAggregations()
     {
         $results = $this->getQueryResults();
-        return isset($results['aggregations']) ? $results['aggregations'] : [];
+        return $results['aggregations'] ?? [];
     }
 
     /**
      * Returns results of the specified aggregation.
      * @param string $name aggregation name.
-     * @return array aggregation results.
      * @throws InvalidCallException if requested aggregation does not present in query results.
+     * @return array aggregation results.
      */
     public function getAggregation($name)
     {
@@ -129,12 +130,13 @@ class ActiveDataProvider extends \yii\data\ActiveDataProvider
                 if (is_string($this->key)) {
                     $keys[] = $model[$this->key];
                 } else {
-                    $keys[] = call_user_func($this->key, $model);
+                    $keys[] = ($this->key)($model);
                 }
             }
 
             return $keys;
-        } elseif ($this->query instanceof ActiveQueryInterface) {
+        }
+        if ($this->query instanceof ActiveQueryInterface) {
             /* @var $class \Yiisoft\Db\ActiveRecord */
             $class = $this->query->modelClass;
             $pks = $class::primaryKey();
@@ -153,8 +155,7 @@ class ActiveDataProvider extends \yii\data\ActiveDataProvider
             }
 
             return $keys;
-        } else {
-            return array_keys($models);
         }
+        return array_keys($models);
     }
 }

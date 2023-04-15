@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -50,7 +52,7 @@ class BatchQueryResult extends BaseObject implements \Iterator
      */
     public $query;
     /**
-     * @var boolean whether to return a single row during each iteration.
+     * @var bool whether to return a single row during each iteration.
      * If false, a whole batch of rows will be returned in each iteration.
      */
     public $each = false;
@@ -67,7 +69,7 @@ class BatchQueryResult extends BaseObject implements \Iterator
      */
     private $_value;
     /**
-     * @var string|integer the key for the current iteration
+     * @var int|string the key for the current iteration
      */
     private $_key;
     /**
@@ -80,7 +82,6 @@ class BatchQueryResult extends BaseObject implements \Iterator
      * @var string internal ElasticSearch scroll id
      */
     private $_lastScrollId = null;
-
 
     /**
      * Destructor.
@@ -181,7 +182,7 @@ class BatchQueryResult extends BaseObject implements \Iterator
     /**
      * Returns the index of the current dataset.
      * This method is required by the interface [[\Iterator]].
-     * @return integer the index of the current row.
+     * @return int the index of the current row.
      */
     public function key()
     {
@@ -201,7 +202,7 @@ class BatchQueryResult extends BaseObject implements \Iterator
     /**
      * Returns whether there is a valid dataset at the current position.
      * This method is required by the interface [[\Iterator]].
-     * @return boolean whether there is a valid dataset at the current position.
+     * @return bool whether there is a valid dataset at the current position.
      */
     public function valid()
     {

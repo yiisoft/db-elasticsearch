@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -41,17 +43,17 @@ class Animal extends ActiveRecord
     {
         $command->setMapping(static::index(), static::type(), [
             static::type() => [
-                "properties" => [
-                    "type" => ["type" => "string", "index" => "not_analyzed"]
-                ]
-            ]
+                'properties' => [
+                    'type' => ['type' => 'string', 'index' => 'not_analyzed'],
+                ],
+            ],
         ]);
     }
 
     public function init()
     {
         parent::init();
-        $this->type = get_called_class();
+        $this->type = static::class;
     }
 
     public function getDoes()
@@ -60,13 +62,12 @@ class Animal extends ActiveRecord
     }
 
     /**
-     *
      * @param type $row
      * @return \yiiunit\data\ar\elasticsearch\Animal
      */
     public static function instantiate($row)
     {
         $class = $row['_source']['type'];
-        return new $class;
+        return new $class();
     }
 }

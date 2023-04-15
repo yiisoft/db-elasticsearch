@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Db\ElasticSearch\Tests\Data\ActiveRecord;
 
 use Yiisoft\Db\ElasticSearch\Command;
@@ -7,9 +9,9 @@ use Yiisoft\Db\ElasticSearch\Command;
 /**
  * Class Order
  *
- * @property integer $id
- * @property integer $customer_id
- * @property integer $created_at
+ * @property int $id
+ * @property int $customer_id
+ * @property int $created_at
  * @property string $total
  */
 class Order extends ActiveRecord
@@ -97,12 +99,11 @@ class Order extends ActiveRecord
 
     public function beforeSave($insert)
     {
-        if (parent::beforeSave($insert)) {
+        return (bool) (parent::beforeSave($insert))
             //			$this->created_at = time();
-            return true;
-        } else {
-            return false;
-        }
+
+
+         ;
     }
 
     /**
@@ -113,12 +114,12 @@ class Order extends ActiveRecord
     {
         $command->setMapping(static::index(), static::type(), [
             static::type() => [
-                "properties" => [
-                    "customer_id" => ["type" => "integer"],
-//					"created_at" => ["type" => "string", "index" => "not_analyzed"],
-                    "total" => ["type" => "integer"],
-                ]
-            ]
+                'properties' => [
+                    'customer_id' => ['type' => 'integer'],
+                    //					"created_at" => ["type" => "string", "index" => "not_analyzed"],
+                    'total' => ['type' => 'integer'],
+                ],
+            ],
         ]);
     }
 }

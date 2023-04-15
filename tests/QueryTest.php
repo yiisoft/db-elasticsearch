@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Db\ElasticSearch\Tests;
 
 use Yiisoft\Db\ElasticSearch\Query;
@@ -47,7 +49,7 @@ class QueryTest extends TestCase
 
     public function testFields()
     {
-        $query = new Query;
+        $query = new Query();
         $query->from('yiitest', 'user');
 
         $query->storedFields(['name', 'status']);
@@ -57,7 +59,7 @@ class QueryTest extends TestCase
         $this->assertEquals(['name', 'status'], $query->storedFields);
 
         $result = $query->one($this->getConnection());
-        $this->assertEquals(2, count($result['fields']));
+        $this->assertCount(2, $result['fields']);
         $this->assertArrayHasKey('status', $result['fields']);
         $this->assertArrayHasKey('name', $result['fields']);
         $this->assertArrayHasKey('_id', $result);
@@ -73,7 +75,7 @@ class QueryTest extends TestCase
         $this->assertNull($query->storedFields);
 
         $result = $query->one($this->getConnection());
-        $this->assertEquals(3, count($result['_source']));
+        $this->assertCount(3, $result['_source']);
         $this->assertArrayHasKey('status', $result['_source']);
         $this->assertArrayHasKey('email', $result['_source']);
         $this->assertArrayHasKey('name', $result['_source']);
@@ -82,18 +84,18 @@ class QueryTest extends TestCase
 
     public function testOne()
     {
-        $query = new Query;
+        $query = new Query();
         $query->from('yiitest', 'user');
 
         $result = $query->one($this->getConnection());
-        $this->assertEquals(3, count($result['_source']));
+        $this->assertCount(3, $result['_source']);
         $this->assertArrayHasKey('status', $result['_source']);
         $this->assertArrayHasKey('email', $result['_source']);
         $this->assertArrayHasKey('name', $result['_source']);
         $this->assertArrayHasKey('_id', $result);
 
         $result = $query->where(['name' => 'user1'])->one($this->getConnection());
-        $this->assertEquals(3, count($result['_source']));
+        $this->assertCount(3, $result['_source']);
         $this->assertArrayHasKey('status', $result['_source']);
         $this->assertArrayHasKey('email', $result['_source']);
         $this->assertArrayHasKey('name', $result['_source']);
@@ -106,25 +108,25 @@ class QueryTest extends TestCase
 
     public function testAll()
     {
-        $query = new Query;
+        $query = new Query();
         $query->from('yiitest', 'user');
 
         $results = $query->limit(100)->all($this->getConnection());
-        $this->assertEquals(12, count($results));
+        $this->assertCount(12, $results);
         $result = reset($results);
-        $this->assertEquals(3, count($result['_source']));
+        $this->assertCount(3, $result['_source']);
         $this->assertArrayHasKey('status', $result['_source']);
         $this->assertArrayHasKey('email', $result['_source']);
         $this->assertArrayHasKey('name', $result['_source']);
         $this->assertArrayHasKey('_id', $result);
 
-        $query = new Query;
+        $query = new Query();
         $query->from('yiitest', 'user');
 
         $results = $query->where(['name' => 'user1'])->all($this->getConnection());
-        $this->assertEquals(1, count($results));
+        $this->assertCount(1, $results);
         $result = reset($results);
-        $this->assertEquals(3, count($result['_source']));
+        $this->assertCount(3, $result['_source']);
         $this->assertArrayHasKey('status', $result['_source']);
         $this->assertArrayHasKey('email', $result['_source']);
         $this->assertArrayHasKey('name', $result['_source']);
@@ -132,11 +134,11 @@ class QueryTest extends TestCase
         $this->assertEquals(1, $result['_id']);
 
         // indexBy
-        $query = new Query;
+        $query = new Query();
         $query->from('yiitest', 'user');
 
         $results = $query->limit(100)->indexBy('name')->all($this->getConnection());
-        $this->assertEquals(12, count($results));
+        $this->assertCount(12, $results);
         ksort($results);
         $this->assertEquals([
             'user1',
@@ -150,13 +152,13 @@ class QueryTest extends TestCase
             'user9',
             'usera',
             'userb',
-            'userc'
+            'userc',
         ], array_keys($results));
     }
 
     public function testScalar()
     {
-        $query = new Query;
+        $query = new Query();
         $query->from('yiitest', 'user');
 
         $result = $query->where(['name' => 'user1'])->scalar('name', $this->getConnection());
@@ -169,7 +171,7 @@ class QueryTest extends TestCase
 
     public function testColumn()
     {
-        $query = new Query;
+        $query = new Query();
         $query->from('yiitest', 'user');
 
         $result = $query->orderBy(['name' => SORT_ASC])->limit(4)->column('name', $this->getConnection());
@@ -182,7 +184,7 @@ class QueryTest extends TestCase
 
     public function testAndWhere()
     {
-        $query = new Query;
+        $query = new Query();
         $query->where(1)
             ->andWhere(2)
             ->andWhere(3);
@@ -193,7 +195,7 @@ class QueryTest extends TestCase
 
     public function testOrWhere()
     {
-        $query = new Query;
+        $query = new Query();
         $query->where(1)
             ->orWhere(2)
             ->orWhere(3);
@@ -205,7 +207,7 @@ class QueryTest extends TestCase
     public function testFilterWhere()
     {
         // should work with hash format
-        $query = new Query;
+        $query = new Query();
         $query->filterWhere([
             'id' => 0,
             'title' => '   ',
@@ -220,7 +222,7 @@ class QueryTest extends TestCase
         $this->assertEquals(['id' => 0], $query->where);
 
         // should work with operator format
-        $query = new Query;
+        $query = new Query();
         $condition = ['like', 'name', 'Alex'];
         $query->filterWhere($condition);
         $this->assertEquals($condition, $query->where);
@@ -261,7 +263,7 @@ class QueryTest extends TestCase
             ['like', 'name', ''],
             ['like', 'title', ''],
             ['id' => 1],
-            ['not', ['like', 'name', '']]
+            ['not', ['like', 'name', '']],
         ]);
         $this->assertEquals(['and', ['id' => 1]], $query->where);
     }
@@ -272,7 +274,7 @@ class QueryTest extends TestCase
 
     public function testOrder()
     {
-        $query = new Query;
+        $query = new Query();
         $query->orderBy('team');
         $this->assertEquals(['team' => SORT_ASC], $query->orderBy);
 
@@ -291,7 +293,7 @@ class QueryTest extends TestCase
 
     public function testLimitOffset()
     {
-        $query = new Query;
+        $query = new Query();
         $query->limit(10)->offset(5);
         $this->assertEquals(10, $query->limit);
         $this->assertEquals(5, $query->offset);
@@ -337,7 +339,7 @@ class QueryTest extends TestCase
         ];
 
         //test each
-        $query = new Query;
+        $query = new Query();
         $query->from('yiitest', 'user')->limit(3)->orderBy(['name' => SORT_ASC])->indexBy('name')->options(['preference' => '_local']);
         //NOTE: preference -> _local has no influence on query result, everything's fine as long as query doesn't fail
 
@@ -348,14 +350,14 @@ class QueryTest extends TestCase
             $result_values[] = $value['_source']['email'];
         }
 
-        $this->assertEquals(12, count($result_keys));
+        $this->assertCount(12, $result_keys);
         $this->assertEquals($names, $result_keys);
 
-        $this->assertEquals(12, count($result_values));
+        $this->assertCount(12, $result_values);
         $this->assertEquals($emails, $result_values);
 
         //test batch
-        $query = new Query;
+        $query = new Query();
         $query->from('yiitest', 'user')->limit(3)->orderBy(['name' => SORT_ASC])->indexBy('name')->options(['preference' => '_local']);
         //NOTE: preference -> _local has no influence on query result, everything's fine as long as query doesn't fail
 
@@ -364,14 +366,14 @@ class QueryTest extends TestCase
             $results = $results + $batch;
         }
 
-        $this->assertEquals(12, count($results));
+        $this->assertCount(12, $results);
         $this->assertEquals($names, array_keys($results));
         foreach ($names as $id => $name) {
             $this->assertEquals($emails[$id], $results[$name]['_source']['email']);
         }
 
         //test scan (no ordering)
-        $query = new Query;
+        $query = new Query();
         $query->from('yiitest', 'user')->limit(3);
 
         $results = [];
@@ -379,7 +381,7 @@ class QueryTest extends TestCase
             $results[] = $value['_source']['name'];
         }
 
-        $this->assertEquals(12, count($results));
+        $this->assertCount(12, $results);
         sort($results);
         $this->assertEquals($names, $results);
     }
@@ -391,7 +393,7 @@ class QueryTest extends TestCase
     public function testPostFilter()
     {
         $postFilter = [
-            'term' => ['status' => 2]
+            'term' => ['status' => 2],
         ];
         $query = new Query();
         $query->from('yiitest', 'user');
@@ -411,8 +413,8 @@ class QueryTest extends TestCase
         $query->from('yiitest', 'user');
         $query->explain(true);
         $result = $query->search($this->getConnection());
-        $this->assertTrue(is_array($result['hits']['hits'][0]['_explanation']));
-        $this->assertTrue(array_key_exists('_explanation', $result['hits']['hits'][0]));
+        $this->assertIsArray($result['hits']['hits'][0]['_explanation']);
+        $this->assertArrayHasKey('_explanation', $result['hits']['hits'][0]);
     }
 
     /**
@@ -424,6 +426,6 @@ class QueryTest extends TestCase
         $query = new Query();
         $query->from('yiitest', 'user');
         $result = $query->search($this->getConnection());
-        $this->assertFalse(array_key_exists('_explanation', $result['hits']['hits'][0]));
+        $this->assertArrayNotHasKey('_explanation', $result['hits']['hits'][0]);
     }
 }

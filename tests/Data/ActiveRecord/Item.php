@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Db\ElasticSearch\Tests\Data\ActiveRecord;
 
 use Yiisoft\Db\ElasticSearch\Command;
@@ -7,9 +9,9 @@ use Yiisoft\Db\ElasticSearch\Command;
 /**
  * Class Item
  *
- * @property integer $id
+ * @property int $id
  * @property string $name
- * @property integer $category_id
+ * @property int $category_id
  */
 class Item extends ActiveRecord
 {
@@ -31,11 +33,11 @@ class Item extends ActiveRecord
     {
         $command->setMapping(static::index(), static::type(), [
             static::type() => [
-                "properties" => [
-                    "name" =>        ["type" => "keyword", "index" => "not_analyzed", "store" => true],
-                    "category_id" =>      ["type" => "integer"],
-                ]
-            ]
+                'properties' => [
+                    'name' => ['type' => 'keyword', 'index' => 'not_analyzed', 'store' => true],
+                    'category_id' => ['type' => 'integer'],
+                ],
+            ],
         ]);
     }
 }

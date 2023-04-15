@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -113,19 +115,19 @@ class Query extends Component implements QueryInterface
      */
     public $source;
     /**
-     * @var string|array The index to retrieve data from. This can be a string representing a single index
+     * @var array|string The index to retrieve data from. This can be a string representing a single index
      * or a an array of multiple indexes. If this is not set, indexes are being queried.
      * @see from()
      */
     public $index;
     /**
-     * @var string|array The type to retrieve data from. This can be a string representing a single type
+     * @var array|string The type to retrieve data from. This can be a string representing a single type
      * or a an array of multiple types. If this is not set, all types are being queried.
      * @see from()
      */
     public $type;
     /**
-     * @var integer A search timeout, bounding the search request to be executed within the specified time value
+     * @var int A search timeout, bounding the search request to be executed within the specified time value
      * and bail with the hits accumulated up to that point when expired. Defaults to no timeout.
      * @see timeout()
      * @see http://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-body.html#_parameters_5
@@ -142,7 +144,7 @@ class Query extends Component implements QueryInterface
      */
     public $filter;
     /**
-     * @var string|array The `post_filter` part of the search query for differentially filter search results and aggregations.
+     * @var array|string The `post_filter` part of the search query for differentially filter search results and aggregations.
      * @see https://www.elastic.co/guide/en/elasticsearch/guide/current/_post_filter.html
      * @since 2.0.5
      */
@@ -186,7 +188,6 @@ class Query extends Component implements QueryInterface
      * @since 2.0.5
      */
     public $explain;
-
 
     /**
      * @inheritdoc
@@ -256,7 +257,7 @@ class Query extends Component implements QueryInterface
                 if (is_string($this->indexBy)) {
                     $key = isset($row['fields'][$this->indexBy]) ? reset($row['fields'][$this->indexBy]) : $row['_source'][$this->indexBy];
                 } else {
-                    $key = call_user_func($this->indexBy, $row);
+                    $key = ($this->indexBy)($row);
                 }
             }
             $models[$key] = $row;
@@ -268,7 +269,7 @@ class Query extends Component implements QueryInterface
      * Executes the query and returns a single row of result.
      * @param Connection $db the database connection used to execute the query.
      * If this parameter is not given, the `elasticsearch` application component will be used.
-     * @return array|boolean the first row (in terms of an array) of the query result. False is returned if the query
+     * @return array|bool the first row (in terms of an array) of the query result. False is returned if the query
      * results in nothing.
      */
     public function one($db = null)
@@ -280,9 +281,7 @@ class Query extends Component implements QueryInterface
         if (empty($result['hits']['hits'])) {
             return false;
         }
-        $record = reset($result['hits']['hits']);
-
-        return $record;
+        return reset($result['hits']['hits']);
     }
 
     /**
@@ -306,9 +305,9 @@ class Query extends Component implements QueryInterface
             $rows = [];
             foreach ($result['hits']['hits'] as $key => $row) {
                 if (is_string($this->indexBy)) {
-                    $key = isset($row['fields'][$this->indexBy]) ? $row['fields'][$this->indexBy] : $row['_source'][$this->indexBy];
+                    $key = $row['fields'][$this->indexBy] ?? $row['_source'][$this->indexBy];
                 } else {
-                    $key = call_user_func($this->indexBy, $row);
+                    $key = ($this->indexBy)($row);
                 }
                 $rows[$key] = $row;
             }
@@ -347,9 +346,11 @@ class Query extends Component implements QueryInterface
         if ($record !== false) {
             if ($field === '_id') {
                 return $record['_id'];
-            } elseif (isset($record['_source'][$field])) {
+            }
+            if (isset($record['_source'][$field])) {
                 return $record['_source'][$field];
-            } elseif (isset($record['fields'][$field])) {
+            }
+            if (isset($record['fields'][$field])) {
                 return count($record['fields'][$field]) == 1 ? reset($record['fields'][$field]) : $record['fields'][$field];
             }
         }
@@ -392,7 +393,7 @@ class Query extends Component implements QueryInterface
      * @param string $q the COUNT expression. This parameter is ignored by this implementation.
      * @param Connection $db the database connection used to execute the query.
      * If this parameter is not given, the `elasticsearch` application component will be used.
-     * @return integer number of records
+     * @return int number of records
      */
     public function count($q = '*', $db = null)
     {
@@ -409,7 +410,7 @@ class Query extends Component implements QueryInterface
      * Returns a value indicating whether the query result contains any row of data.
      * @param Connection $db the database connection used to execute the query.
      * If this parameter is not given, the `elasticsearch` application component will be used.
-     * @return boolean whether the query result contains any row of data.
+     * @return bool whether the query result contains any row of data.
      */
     public function exists($db = null)
     {
@@ -446,7 +447,7 @@ class Query extends Component implements QueryInterface
      * Adds an aggregation to this query.
      * @param string $name the name of the aggregation
      * @param string $type the aggregation type. e.g. `terms`, `range`, `histogram`...
-     * @param string|array $options the configuration options for this aggregation. Can be an array or a json string.
+     * @param array|string $options the configuration options for this aggregation. Can be an array or a json string.
      * @return $this the query object itself
      * @see http://www.elastic.co/guide/en/elasticsearch/reference/1.x/search-aggregations.html
      */
@@ -464,7 +465,7 @@ class Query extends Component implements QueryInterface
      *
      * @param string $name the name of the aggregation
      * @param string $type the aggregation type. e.g. `terms`, `range`, `histogram`...
-     * @param string|array $options the configuration options for this aggregation. Can be an array or a json string.
+     * @param array|string $options the configuration options for this aggregation. Can be an array or a json string.
      * @return $this the query object itself
      * @see http://www.elastic.co/guide/en/elasticsearch/reference/1.x/search-aggregations.html
      */
@@ -477,7 +478,7 @@ class Query extends Component implements QueryInterface
      * Adds an aggregation to this query. Supports nested aggregations.
      * @param string $name the name of the aggregation
      * @param string $type the aggregation type. e.g. `terms`, `range`, `histogram`...
-     * @param string|array $options the configuration options for this aggregation. Can be an array or a json string.
+     * @param array|string $options the configuration options for this aggregation. Can be an array or a json string.
      * @return $this the query object itself
      * @see https://www.elastic.co/guide/en/elasticsearch/reference/2.3/search-aggregations.html
      */
@@ -486,10 +487,11 @@ class Query extends Component implements QueryInterface
         $this->aggregations[$name] = $options;
         return $this;
     }
+
     /**
      * Adds a suggester to this query.
      * @param string $name the name of the suggester
-     * @param string|array $definition the configuration options for this suggester. Can be an array or a json string.
+     * @param array|string $definition the configuration options for this suggester. Can be an array or a json string.
      * @return $this the query object itself
      * @see http://www.elastic.co/guide/en/elasticsearch/reference/current/search-suggesters.html
      */
@@ -581,9 +583,9 @@ class Query extends Component implements QueryInterface
 
     /**
      * Sets the index and type to retrieve documents from.
-     * @param string|array $index The index to retrieve data from. This can be a string representing a single index
+     * @param array|string $index The index to retrieve data from. This can be a string representing a single index
      * or a an array of multiple indexes. If this is `null` it means that all indexes are being queried.
-     * @param string|array $type The type to retrieve data from. This can be a string representing a single type
+     * @param array|string $type The type to retrieve data from. This can be a string representing a single type
      * or a an array of multiple types. If this is `null` it means that all types are being queried.
      * @return $this the query object itself
      * @see http://www.elastic.co/guide/en/elasticsearch/reference/current/search-search.html#search-multi-index-type
@@ -650,7 +652,7 @@ class Query extends Component implements QueryInterface
 
     /**
      * Sets the search timeout.
-     * @param integer $timeout A search timeout, bounding the search request to be executed within the specified time value
+     * @param int $timeout A search timeout, bounding the search request to be executed within the specified time value
      * and bail with the hits accumulated up to that point when expired. Defaults to no timeout.
      * @return $this the query object itself
      * @see http://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-body.html#_parameters_5
@@ -676,8 +678,8 @@ class Query extends Component implements QueryInterface
     /**
      * Sets the options to be passed to the command created by this query.
      * @param array $options the options to be set.
-     * @return $this the query object itself
      * @throws InvalidParamException if $options is not an array
+     * @return $this the query object itself
      * @see Command::$options
      * @since 2.0.4
      */
@@ -694,8 +696,8 @@ class Query extends Component implements QueryInterface
     /**
      * Adds more options, overwriting existing options.
      * @param array $options the options to be added.
-     * @return $this the query object itself
      * @throws InvalidParamException if $options is not an array
+     * @return $this the query object itself
      * @see options()
      * @since 2.0.4
      */
@@ -741,7 +743,7 @@ class Query extends Component implements QueryInterface
 
     /**
      * Set the `post_filter` part of the search query.
-     * @param string|array $filter
+     * @param array|string $filter
      * @return $this the query object itself
      * @see $postFilter
      * @since 2.0.5

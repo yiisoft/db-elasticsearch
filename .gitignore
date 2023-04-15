@@ -12,21 +12,19 @@ nbproject
 # windows thumbnail cache
 Thumbs.db
 
-# composer
-/vendor
-/composer.lock
-
-# composer itself is not needed
-composer.phar
-
 # Mac DS_Store Files
 .DS_Store
+
+# composer vendor dir
+/vendor
+# composer lock file
+/composer.lock
+# composer itself is not needed
+composer.phar
 
 # phpunit itself is not needed
 phpunit.phar
 # local phpunit config
 /phpunit.xml
-
-# local tests files
-/tests/ActiveRecordTestTrait.php
-/tests/data/config.local.php
+# phpunit cache
+.phpunit.result.cache

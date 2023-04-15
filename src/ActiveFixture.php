@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -7,7 +9,6 @@
 
 namespace Yiisoft\Db\ElasticSearch;
 
-use Yii;
 use yii\base\InvalidConfigException;
 use yii\test\BaseActiveFixture;
 
@@ -48,14 +49,13 @@ class ActiveFixture extends BaseActiveFixture
      */
     public $type;
     /**
-     * @var string|boolean the file path or path alias of the data file that contains the fixture data
+     * @var bool|string the file path or path alias of the data file that contains the fixture data
      * to be returned by [[getData()]]. If this is not set, it will default to `FixturePath/data/Index/Type.php`,
      * where `FixturePath` stands for the directory containing this fixture class, `Index` stands for the elasticsearch [[index]] name
      * and `Type` stands for the [[type]] associated with this fixture.
      * You can set this property to be false to prevent loading any data.
      */
     public $dataFile;
-
 
     /**
      * @inheritdoc
@@ -99,7 +99,7 @@ class ActiveFixture extends BaseActiveFixture
 
         foreach ($this->getData() as $alias => $row) {
             $options = [];
-            $id = isset($row[$idField]) ? $row[$idField] : null;
+            $id = $row[$idField] ?? null;
             if ($idField === '_id') {
                 unset($row[$idField]);
             }
@@ -138,9 +138,8 @@ class ActiveFixture extends BaseActiveFixture
             $class = new \ReflectionClass($this);
             $dataFile = dirname($class->getFileName()) . "/data/{$this->index}/{$this->type}.php";
             return is_file($dataFile) ? require($dataFile) : [];
-        } else {
-            return parent::getData();
         }
+        return parent::getData();
     }
 
     /**

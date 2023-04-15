@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Db\ElasticSearch\Tests;
 
 use Yiisoft\Db\ElasticSearch\ActiveDataProvider;
@@ -56,17 +58,17 @@ class ActiveDataProviderTest extends TestCase
             'db' => $this->getConnection(),
         ]);
         $models = $provider->getModels();
-        $this->assertEquals(3, count($models));
+        $this->assertCount(3, $models);
 
         $provider = new ActiveDataProvider([
             'query' => $query,
             'db' => $this->getConnection(),
             'pagination' => [
                 'pageSize' => 1,
-            ]
+            ],
         ]);
         $models = $provider->getModels();
-        $this->assertEquals(1, count($models));
+        $this->assertCount(1, $models);
     }
 
     public function testActiveQuery()
@@ -75,7 +77,7 @@ class ActiveDataProviderTest extends TestCase
             'query' => Customer::find(),
         ]);
         $models = $provider->getModels();
-        $this->assertEquals(3, count($models));
+        $this->assertCount(3, $models);
         $this->assertTrue($models[0] instanceof Customer);
         $this->assertTrue($models[1] instanceof Customer);
 
@@ -83,9 +85,9 @@ class ActiveDataProviderTest extends TestCase
             'query' => Customer::find(),
             'pagination' => [
                 'pageSize' => 1,
-            ]
+            ],
         ]);
         $models = $provider->getModels();
-        $this->assertEquals(1, count($models));
+        $this->assertCount(1, $models);
     }
 }

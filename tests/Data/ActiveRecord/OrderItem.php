@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Db\ElasticSearch\Tests\Data\ActiveRecord;
 
 use Yiisoft\Db\ElasticSearch\Command;
@@ -7,9 +9,9 @@ use Yiisoft\Db\ElasticSearch\Command;
 /**
  * Class OrderItem
  *
- * @property integer $order_id
- * @property integer $item_id
- * @property integer $quantity
+ * @property int $order_id
+ * @property int $item_id
+ * @property int $quantity
  * @property string $subtotal
  */
 class OrderItem extends ActiveRecord
@@ -39,13 +41,13 @@ class OrderItem extends ActiveRecord
     {
         $command->setMapping(static::index(), static::type(), [
             static::type() => [
-                "properties" => [
-                    "order_id" => ["type" => "integer"],
-                    "item_id"  => ["type" => "integer"],
-                    "quantity" => ["type" => "integer"],
-                    "subtotal" => ["type" => "integer"],
-                ]
-            ]
+                'properties' => [
+                    'order_id' => ['type' => 'integer'],
+                    'item_id' => ['type' => 'integer'],
+                    'quantity' => ['type' => 'integer'],
+                    'subtotal' => ['type' => 'integer'],
+                ],
+            ],
         ]);
     }
 }

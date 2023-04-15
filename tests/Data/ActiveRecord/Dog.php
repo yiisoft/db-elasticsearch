@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Db\ElasticSearch\Tests\Data\ActiveRecord;
 
 /**
@@ -10,9 +12,7 @@ namespace Yiisoft\Db\ElasticSearch\Tests\Data\ActiveRecord;
  */
 class Dog extends Animal
 {
-
     /**
-     *
      * @param self $record
      * @param array $row
      */

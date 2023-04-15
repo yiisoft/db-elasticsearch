@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -27,12 +29,12 @@ class Command extends Component
      */
     public $db;
     /**
-     * @var string|array the indexes to execute the query on. Defaults to null meaning all indexes
+     * @var array|string the indexes to execute the query on. Defaults to null meaning all indexes
      * @see http://www.elastic.co/guide/en/elasticsearch/reference/current/search-search.html#search-multi-index-type
      */
     public $index;
     /**
-     * @var string|array the types to execute the query on. Defaults to null meaning all types
+     * @var array|string the types to execute the query on. Defaults to null meaning all types
      */
     public $type;
     /**
@@ -43,7 +45,6 @@ class Command extends Component
      * @var array options to be appended to the query URL, such as "search_type" for search or "timeout" for delete
      */
     public $options = [];
-
 
     /**
      * Sends a request to the _search API and returns the result
@@ -96,7 +97,7 @@ class Command extends Component
 
     /**
      * Sends a request to the _suggest API and returns the result
-     * @param string|array $suggester the suggester body
+     * @param array|string $suggester the suggester body
      * @param array $options
      * @return mixed
      * @see http://www.elastic.co/guide/en/elasticsearch/reference/current/search-suggesters.html
@@ -111,7 +112,7 @@ class Command extends Component
         }
         $url = [
             $this->index !== null ? $this->index : '_all',
-            '_suggest'
+            '_suggest',
         ];
 
         return $this->db->post($url, array_merge($this->options, $options), $suggester);
@@ -121,7 +122,7 @@ class Command extends Component
      * Inserts a document into an index
      * @param string $index
      * @param string $type
-     * @param string|array $data json string or array of data to store
+     * @param array|string $data json string or array of data to store
      * @param null $id the documents id. If not specified Id will be automatically chosen
      * @param array $options
      * @return mixed
@@ -137,9 +138,8 @@ class Command extends Component
 
         if ($id !== null) {
             return $this->db->put([$index, $type, $id], $options, $body);
-        } else {
-            return $this->db->post([$index, $type], $options, $body);
         }
+        return $this->db->post([$index, $type], $options, $body);
     }
 
     /**
@@ -228,9 +228,9 @@ class Command extends Component
         $body = [
             'doc' => empty($data) ? new \stdClass() : $data,
         ];
-        if (isset($options["detect_noop"])) {
-            $body["detect_noop"] = $options["detect_noop"];
-            unset($options["detect_noop"]);
+        if (isset($options['detect_noop'])) {
+            $body['detect_noop'] = $options['detect_noop'];
+            unset($options['detect_noop']);
         }
 
         return $this->db->post([$index, $type, $id, '_update'], $options, Json::encode($body));
@@ -303,7 +303,7 @@ class Command extends Component
      * use [[updateAnalyzers()]] for it.
      *
      * @param string $index
-     * @param string|array $setting
+     * @param array|string $setting
      * @param array $options URL options
      * @return mixed
      * @see http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/indices-update-settings.html
@@ -343,7 +343,7 @@ class Command extends Component
      * ~~~
      *
      * @param string $index
-     * @param string|array $setting
+     * @param array|string $setting
      * @param array $options URL options
      * @return mixed
      * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-update-settings.html#update-settings-analysis
@@ -356,7 +356,7 @@ class Command extends Component
         $this->openIndex($index);
         return $result;
     }
-    
+
     // TODO http://www.elastic.co/guide/en/elasticsearch/reference/current/indices-get-settings.html
 
     // TODO http://www.elastic.co/guide/en/elasticsearch/reference/current/indices-warmers.html
@@ -462,7 +462,7 @@ class Command extends Component
     /**
      * @param string $index
      * @param string $type
-     * @param string|array $mapping
+     * @param array|string $mapping
      * @param array $options
      * @return mixed
      * @see http://www.elastic.co/guide/en/elasticsearch/reference/current/indices-put-mapping.html
@@ -518,7 +518,7 @@ class Command extends Component
      * @param $pattern
      * @param $settings
      * @param $mappings
-     * @param integer $order
+     * @param int $order
      * @return mixed
      * @see http://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates.html
      */
