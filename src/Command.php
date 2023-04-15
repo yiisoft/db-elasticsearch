@@ -17,12 +17,12 @@ use Yiisoft\Arrays\ArrayHelper;
 final class Command
 {
     /**
-     * @var string|array|null the indexes to execute the query on. Defaults to null meaning all indexes
+     * @var array|string|null the indexes to execute the query on. Defaults to null meaning all indexes
      * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/search-search.html#search-multi-index-type
      */
     public string|array|null $index = '';
     /**
-     * @var string|array|null the types to execute the query on. Defaults to null meaning all types
+     * @var array|string|null the types to execute the query on. Defaults to null meaning all types
      */
     public string|array|null $type = null;
     /**
@@ -186,9 +186,8 @@ final class Command
     {
         if ($this->db->getDslVersion() >= 7) {
             return $this->db->delete([$index, '_doc', $id], $options);
-        } else {
-            return $this->db->delete([$index, $type, $id], $options);
         }
+        return $this->db->delete([$index, $type, $id], $options);
     }
 
     /**
@@ -269,9 +268,8 @@ final class Command
     {
         if ($this->db->getDslVersion() >= 7) {
             return $this->db->head([$index, '_doc', $id]);
-        } else {
-            return $this->db->head([$index, $type, $id]);
         }
+        return $this->db->head([$index, $type, $id]);
     }
 
     /**
@@ -300,9 +298,8 @@ final class Command
     {
         if ($this->db->getDslVersion() >= 7) {
             return $this->db->get([$index, '_doc', $id], $options);
-        } else {
-            return $this->db->get([$index, $type, $id], $options);
         }
+        return $this->db->get([$index, $type, $id], $options);
     }
 
     /**
@@ -414,9 +411,8 @@ final class Command
     {
         if ($this->db->getDslVersion() >= 7) {
             return $this->db->get([$index, '_source', $id]);
-        } else {
-            return $this->db->get([$index, $type, $id]);
         }
+        return $this->db->get([$index, $type, $id]);
     }
 
     /**
@@ -448,7 +444,7 @@ final class Command
      *
      * @param string $index Index that the document belongs to.
      * @param string|null $type Type that the document belongs to.
-     * @param string|array $data Json string or array of data to store.
+     * @param array|string $data Json string or array of data to store.
      * @param string|null $id The documents id. If not specified Id will be automatically chosen
      * @param array $options URL options.
      *
@@ -470,16 +466,13 @@ final class Command
         if ($id !== null) {
             if ($this->db->getDslVersion() >= 7) {
                 return $this->db->put([$index, '_doc', $id], $options, $body);
-            } else {
-                return $this->db->put([$index, $type, $id], $options, $body);
             }
-        } else {
-            if ($this->db->getDslVersion() >= 7) {
-                return $this->db->post([$index, '_doc'], $options, $body);
-            } else {
-                return $this->db->post([$index, $type], $options, $body);
-            }
+            return $this->db->put([$index, $type, $id], $options, $body);
         }
+        if ($this->db->getDslVersion() >= 7) {
+            return $this->db->post([$index, '_doc'], $options, $body);
+        }
+        return $this->db->post([$index, $type], $options, $body);
     }
 
     /**
@@ -498,9 +491,8 @@ final class Command
 
         if ($this->db->getDslVersion() >= 7) {
             return $this->db->get([$index, '_mget'], $options, $body);
-        } else {
-            return $this->db->get([$index, $type, '_mget'], $options, $body);
         }
+        return $this->db->get([$index, $type, '_mget'], $options, $body);
     }
 
     /**
@@ -596,7 +588,7 @@ final class Command
      *
      * @param string $index Index that the document belongs to.
      * @param string|null $type Type that the document belongs to.
-     * @param string|array|null $mapping Json string or array of mapping to store.
+     * @param array|string|null $mapping Json string or array of mapping to store.
      * @param array $options URL options.
      *
      * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-put-mapping.html
@@ -617,7 +609,7 @@ final class Command
     /**
      * Sends a suggest request to the _search API and returns the result.
      *
-     * @param string|array $suggester The suggester body.
+     * @param array|string $suggester The suggester body.
      * @param array $options URL options.
      *
      * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/search-suggesters.html
@@ -633,7 +625,7 @@ final class Command
         $body = '{"suggest":' . $suggester . ',"size":0}';
         $url = [
             $this->index !== null ? $this->index : '_all',
-            '_search'
+            '_search',
         ];
 
         $result = $this->db->post($url, array_merge($this->options, $options), $body);
@@ -653,9 +645,8 @@ final class Command
     {
         if ($this->db->getDslVersion() >= 7) {
             return $this->db->head([$index, '_doc']);
-        } else {
-            return $this->db->head([$index, $type]);
         }
+        return $this->db->head([$index, $type]);
     }
 
     /**
@@ -664,7 +655,7 @@ final class Command
      * @param string $index Index that the document belongs to.
      * @param string|null $type Type that the document belongs to.
      * @param string $id The documents id.
-     * @param string|array $data Json string or array of data to store.
+     * @param array|string $data Json string or array of data to store.
      * @param array $options URL options.
      *
      * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html
@@ -675,16 +666,15 @@ final class Command
             'doc' => empty($data) ? new \stdClass() : $data,
         ];
 
-        if (isset($options["detect_noop"])) {
-            $body["detect_noop"] = $options["detect_noop"];
-            unset($options["detect_noop"]);
+        if (isset($options['detect_noop'])) {
+            $body['detect_noop'] = $options['detect_noop'];
+            unset($options['detect_noop']);
         }
 
         if ($this->db->getDslVersion() >= 7) {
             return $this->db->post([$index, '_update', $id], $options, Json::encode($body));
-        } else {
-            return $this->db->post([$index, $type, $id, '_update'], $options, Json::encode($body));
         }
+        return $this->db->post([$index, $type, $id, '_update'], $options, Json::encode($body));
     }
 
     /**
@@ -715,7 +705,7 @@ final class Command
      * ```
      *
      * @param string $index Index that the document belongs to.
-     * @param string|array $setting Json string or array of data to store.
+     * @param array|string $setting Json string or array of data to store.
      * @param array $options URL options.
      *
      * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-update-settings.html#update-settings-analysis
@@ -738,7 +728,7 @@ final class Command
      * made, use {@see updateAnalyzers()} for it.
      *
      * @param string $index Index that the document belongs to.
-     * @param string|array|null $setting Json string or array of data to store.
+     * @param array|string|null $setting Json string or array of data to store.
      * @param array $options URL options.
      *
      * @link http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/indices-update-settings.html

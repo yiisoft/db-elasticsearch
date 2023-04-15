@@ -236,7 +236,7 @@ final class CommandTest extends TestCase
                 '_primary_term' => 1,
                 'found' => true,
                 '_source' => [
-                    'name' => 'Jane Doe'
+                    'name' => 'Jane Doe',
                 ],
             ],
             $command->get($index, 'test', '2'),

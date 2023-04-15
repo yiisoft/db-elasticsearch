@@ -177,9 +177,8 @@ final class Connection implements LoggerAwareInterface, ProfilerAwareInterface
     /**
      * Creates a command for execution.
      *
-     * @return Command the DB command
-     *
      * @throws Exception
+     * @return Command the DB command
      */
     public function createCommand(): Command
     {
@@ -247,8 +246,8 @@ final class Connection implements LoggerAwareInterface, ProfilerAwareInterface
     /**
      * Return the cluster state.
      *
-     * @return Exception
      * @throws InvalidArgumentException
+     * @return Exception
      */
     public function getClusterState(): mixed
     {
@@ -346,7 +345,6 @@ final class Connection implements LoggerAwareInterface, ProfilerAwareInterface
         $this->timeOut = $timeOut;
         return $this;
     }
-
 
     /**
      * Populates {@see nodes} with the result of a cluster nodes request.
@@ -478,14 +476,14 @@ final class Connection implements LoggerAwareInterface, ProfilerAwareInterface
     /**
      * Performs DELETE HTTP request.
      *
-     * @param string|array $url URL.
+     * @param array|string $url URL.
      * @param array $options URL options.
      * @param string|null $body Request body.
      * @param bool $raw If response body has JSON and should be decoded.
      *
-     * @return mixed
      * @throws InvalidArgumentException
      * @throws Exception
+     * @return mixed
      */
     public function delete(string|array $url, array $options = [], string $body = null, bool $raw = false): mixed
     {
@@ -496,7 +494,7 @@ final class Connection implements LoggerAwareInterface, ProfilerAwareInterface
     /**
      * Creates URL.
      *
-     * @param string|array $path URL path.
+     * @param array|string $path URL path.
      * @param array $options URL options.
      */
     private function createUrl(string|array $path, array $options = []): array
@@ -546,12 +544,12 @@ final class Connection implements LoggerAwareInterface, ProfilerAwareInterface
      * Performs HTTP request.
      *
      * @param string $method The method name.
-     * @param string|array $url Request URL.
+     * @param array|string $url Request URL.
      * @param string|null $requestBody Request body.
      * @param bool $raw If response body has JSON and should be decoded.
      *
-     * @return mixed
      * @throws InvalidArgumentException
+     * @return mixed
      */
     protected function httpRequest(
         string $method,
@@ -567,16 +565,16 @@ final class Connection implements LoggerAwareInterface, ProfilerAwareInterface
         $body = '';
 
         $options = [
-            CURLOPT_USERAGENT      => 'Yii Framework 3.0' . ' ' . __CLASS__,
+            CURLOPT_USERAGENT => 'Yii Framework 3.0' . ' ' . __CLASS__,
             CURLOPT_RETURNTRANSFER => false,
-            CURLOPT_HEADER         => false,
+            CURLOPT_HEADER => false,
             // http://www.php.net/manual/en/function.curl-setopt.php#82418
-            CURLOPT_HTTPHEADER     => [
+            CURLOPT_HTTPHEADER => [
                 'Expect:',
                 'Content-Type: application/json',
             ],
 
-            CURLOPT_WRITEFUNCTION  => function (CurlHandle $curl, string $data) use (&$body): int {
+            CURLOPT_WRITEFUNCTION => function (CurlHandle $curl, string $data) use (&$body): int {
                 $body .= $data;
 
                 return mb_strlen($data, '8bit');
@@ -594,8 +592,8 @@ final class Connection implements LoggerAwareInterface, ProfilerAwareInterface
 
                 return mb_strlen($data, '8bit');
             },
-            CURLOPT_CUSTOMREQUEST  => $method,
-            CURLOPT_FORBID_REUSE   => false,
+            CURLOPT_CUSTOMREQUEST => $method,
+            CURLOPT_FORBID_REUSE => false,
         ];
 
         foreach ($this->curlOptions as $key => $value) {

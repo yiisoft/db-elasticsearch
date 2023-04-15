@@ -59,7 +59,7 @@ final class CommandProvider
                     $index => [
                         'aliases' => [
                             $alias => $filter,
-                        ]
+                        ],
                     ],
                 ],
                 $filter,
@@ -90,7 +90,7 @@ final class CommandProvider
                         ],
                     ],
                 ],
-                $differentRouting
+                $differentRouting,
             ],
             [
                 $index,
@@ -100,7 +100,7 @@ final class CommandProvider
                 [
                     $index => [
                         'aliases' => [
-                            $alias => array_merge($filter, $singleExpectedRouting)
+                            $alias => array_merge($filter, $singleExpectedRouting),
                         ],
                     ],
                 ],
@@ -114,12 +114,12 @@ final class CommandProvider
                 [
                     $index => [
                         'aliases' => [
-                            $alias => array_merge($filter, $differentRouting)
+                            $alias => array_merge($filter, $differentRouting),
                         ],
                     ],
                 ],
                 array_merge($filter, $differentRouting),
-            ]
+            ],
         ];
     }
 }
