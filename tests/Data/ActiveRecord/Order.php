@@ -99,11 +99,11 @@ class Order extends ActiveRecord
 
     public function beforeSave($insert)
     {
-        return (bool) (parent::beforeSave($insert))
+        return (bool) parent::beforeSave($insert)
             //			$this->created_at = time();
 
 
-         ;
+        ;
     }
 
     /**

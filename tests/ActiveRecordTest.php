@@ -806,7 +806,6 @@ class ActiveRecordTest extends TestCase
         $this->assertFalse(isset($items[$removeId]));
     }
 
-
     public function testArrayAttributeRelationUnLinkAll()
     {
         $this->expectException(\yii\base\NotSupportedException::class);
@@ -835,7 +834,6 @@ class ActiveRecordTest extends TestCase
         // not supported by elasticsearch
     }
 
-
     public function testUnlinkAllAndConditionSetNull()
     {
         $this->expectException(\yii\base\NotSupportedException::class);
@@ -855,7 +853,6 @@ class ActiveRecordTest extends TestCase
         $this->assertEquals(3, $orderClass::find()->count());
         $customer->unlinkAll('expensiveOrdersWithNullFK');
     }
-
 
     public function testUnlinkAllAndConditionDelete()
     {

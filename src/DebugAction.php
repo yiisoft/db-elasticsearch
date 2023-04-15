@@ -64,15 +64,15 @@ class DebugAction extends Action
         $time = microtime(true);
         switch ($method) {
             case 'GET': $result = $db->get($url, $options, $body, true);
-            break;
+                break;
             case 'POST': $result = $db->post($url, $options, $body, true);
-            break;
+                break;
             case 'PUT': $result = $db->put($url, $options, $body, true);
-            break;
+                break;
             case 'DELETE': $result = $db->delete($url, $options, $body, true);
-            break;
+                break;
             case 'HEAD': $result = $db->head($url, $options, $body);
-            break;
+                break;
             default:
                 throw new NotSupportedException("Request method '$method' is not supported by elasticsearch.");
         }
