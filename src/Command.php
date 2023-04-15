@@ -170,7 +170,6 @@ final class Command
         ]);
 
         return $this->db->put(['_template', $name], [], $body);
-
     }
 
     /**
