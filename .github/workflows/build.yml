@@ -48,8 +48,8 @@ jobs:
         env:
           http.publish_host: 127.0.0.1
           transport.host: 127.0.0.1
-          xpack.security.enabled: false
-          indices.id_field_data.enabled: true
+          xpack.security.enabled: "false"
+          indices.id_field_data.enabled: "true"
         options: >-
           --health-cmd "curl http://localhost:9200/_cluster/health"
           --health-interval 10s
@@ -71,4 +71,12 @@ jobs:
         run: composer update --prefer-dist --no-interaction --no-progress --optimize-autoloader
 
       - name: Run tests with phpunit.
-        run: vendor/bin/phpunit
+        run: vendor/bin/phpunit --coverage-clover=coverage.xml --colors=always
+
+      - name: Upload coverage to Codecov.
+        if: matrix.php == '8.1'
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage.xml
+
