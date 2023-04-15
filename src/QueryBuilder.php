@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -23,7 +25,6 @@ class QueryBuilder extends BaseObject
      * @var Connection the database connection.
      */
     public $db;
-
 
     /**
      * Constructor.
@@ -145,21 +146,19 @@ class QueryBuilder extends BaseObject
     {
         $where = $this->buildCondition($condition);
         if ($where) {
-            $query = [
+            return [
                 'constant_score' => [
                     'filter' => $where,
                 ],
             ];
-            return $query;
-        } else {
-            return null;
         }
+        return null;
     }
 
     /**
      * Parses the condition specification and generates the corresponding SQL expression.
      *
-     * @param string|array $condition the condition specification. Please refer to [[Query::where()]] on how to specify a condition.
+     * @param array|string $condition the condition specification. Please refer to [[Query::where()]] on how to specify a condition.
      * @throws \yii\base\InvalidParamException if unknown operator is used in query
      * @throws \yii\base\NotSupportedException if string conditions are used in where
      * @return string the generated SQL expression
@@ -201,11 +200,9 @@ class QueryBuilder extends BaseObject
                 array_shift($condition);
 
                 return $this->$method($operator, $condition);
-            } else {
-                throw new InvalidParamException('Found unknown operator in query: ' . $operator);
             }
+            throw new InvalidParamException('Found unknown operator in query: ' . $operator);
         } else { // hash format: 'column1' => 'value1', 'column2' => 'value2', ...
-
             return $this->buildHashCondition($condition);
         }
     }
@@ -281,11 +278,10 @@ class QueryBuilder extends BaseObject
             return [
                 'bool' => [
                     $clause => $parts,
-                ]
+                ],
             ];
-        } else {
-            return null;
         }
+        return null;
     }
 
     private function buildBetweenCondition($operator, $operands)
@@ -294,13 +290,13 @@ class QueryBuilder extends BaseObject
             throw new InvalidParamException("Operator '$operator' requires three operands.");
         }
 
-        list($column, $value1, $value2) = $operands;
+        [$column, $value1, $value2] = $operands;
         if ($column === '_id') {
             throw new NotSupportedException('Between condition is not supported for the _id field.');
         }
         $filter = ['range' => [$column => ['gte' => $value1, 'lte' => $value2]]];
         if ($operator === 'not between') {
-            $filter = ['bool' => ['must_not'=>$filter]];
+            $filter = ['bool' => ['must_not' => $filter]];
         }
 
         return $filter;
@@ -312,7 +308,7 @@ class QueryBuilder extends BaseObject
             throw new InvalidParamException("Operator '$operator' requires array of two operands: column and values");
         }
 
-        list($column, $values) = $operands;
+        [$column, $values] = $operands;
 
         $values = (array)$values;
 
@@ -322,13 +318,14 @@ class QueryBuilder extends BaseObject
 
         if (count($column) > 1) {
             return $this->buildCompositeInCondition($operator, $column, $values);
-        } elseif (is_array($column)) {
+        }
+        if (is_array($column)) {
             $column = reset($column);
         }
         $canBeNull = false;
         foreach ($values as $i => $value) {
             if (is_array($value)) {
-                $values[$i] = $value = isset($value[$column]) ? $value[$column] : null;
+                $values[$i] = $value = $value[$column] ?? null;
             }
             if ($value === null) {
                 $canBeNull = true;
@@ -345,7 +342,7 @@ class QueryBuilder extends BaseObject
                         'bool' => [
                             'should' => [
                                 $filter,
-                                'bool' => ['must_not' => ['exists' => ['field'=>$column]]],
+                                'bool' => ['must_not' => ['exists' => ['field' => $column]]],
                             ],
                         ],
                     ];
@@ -357,8 +354,8 @@ class QueryBuilder extends BaseObject
                     'bool' => [
                         'must_not' => [
                             'exists' => [ 'field' => $column ],
-                        ]
-                    ]
+                        ],
+                    ],
                 ];
             } else {
                 $filter = [ 'terms' => [$column => array_values($values)] ];
@@ -367,7 +364,7 @@ class QueryBuilder extends BaseObject
                         'bool' => [
                             'should' => [
                                 $filter,
-                                'bool' => ['must_not' => ['exists' => ['field'=>$column]]],
+                                'bool' => ['must_not' => ['exists' => ['field' => $column]]],
                             ],
                         ],
                     ];
@@ -399,7 +396,7 @@ class QueryBuilder extends BaseObject
             throw new InvalidParamException("Operator '$operator' requires two operands.");
         }
 
-        list($column, $value) = $operands;
+        [$column, $value] = $operands;
         if ($column === '_id') {
             $column = '_uid';
         }
@@ -420,15 +417,13 @@ class QueryBuilder extends BaseObject
             throw new InvalidParamException("Operator '$operator' is not implemented.");
         }
 
-        $filter = [
+        return [
             'range' => [
                 $column => [
-                    $range_operator => $value
-                ]
-            ]
+                    $range_operator => $value,
+                ],
+            ],
         ];
-
-        return $filter;
     }
 
     protected function buildCompositeInCondition($operator, $columns, $values)

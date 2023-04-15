@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This is the configuration file for the Yii2 ElasticSearch unit tests.
  * You can override configuration values by creating a `config.local.php` file

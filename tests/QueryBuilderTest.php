@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Db\ElasticSearch\Tests;
 
 use Yiisoft\Db\ElasticSearch\Query;
@@ -49,10 +51,10 @@ class QueryBuilderTest extends TestCase
         $query = new Query();
         $query->query = $queryParts;
         $build = $queryBuilder->build($query);
-        $this->assertTrue(array_key_exists('queryParts', $build));
-        $this->assertTrue(array_key_exists('query', $build['queryParts']));
+        $this->assertArrayHasKey('queryParts', $build);
+        $this->assertArrayHasKey('query', $build['queryParts']);
         $this->assertSame($queryParts, $build['queryParts']['query']);
-        $this->assertFalse(array_key_exists('match_all', $build['queryParts']), 'Match all should not be set');
+        $this->assertArrayNotHasKey('match_all', $build['queryParts'], 'Match all should not be set');
     }
 
     /**
@@ -63,9 +65,9 @@ class QueryBuilderTest extends TestCase
         $postFilter = [
             'bool' => [
                 'must' => [
-                    ['term' => ['title' => 'yii test']]
-                ]
-            ]
+                    ['term' => ['title' => 'yii test']],
+                ],
+            ],
         ];
         $queryBuilder = new QueryBuilder($this->getConnection());
         $query = new Query();
@@ -94,7 +96,7 @@ class QueryBuilderTest extends TestCase
                     [
                         'script_score' => [
                             'script' => "doc['weight'].getValue()",
-                        ]
+                        ],
                     ],
                 ],
             ],
@@ -121,12 +123,12 @@ class QueryBuilderTest extends TestCase
     public function testMltSearch()
     {
         $queryParts = [
-            "more_like_this" => [
-                "fields" => ["title"],
-                "like_text" => "Mention YII now",
-                "min_term_freq" => 1,
-                "min_doc_freq" => 1,
-            ]
+            'more_like_this' => [
+                'fields' => ['title'],
+                'like_text' => 'Mention YII now',
+                'min_term_freq' => 1,
+                'min_doc_freq' => 1,
+            ],
         ];
         $query = new Query();
         $query->from('yiitest', 'article');
@@ -201,7 +203,7 @@ class QueryBuilderTest extends TestCase
             'yii test',
             'nonexistent',
         ];
-        $result = (new Query)
+        $result = (new Query())
             ->from('yiitest', 'article')
             ->where([ 'not', [ 'in', 'title.keyword', $titles ] ])
             ->search($this->getConnection());
@@ -215,7 +217,7 @@ class QueryBuilderTest extends TestCase
             'yii test',
             'nonexistent',
         ];
-        $result = (new Query)
+        $result = (new Query())
             ->from('yiitest', 'article')
             ->where([ 'in', 'title.keyword', $titles ])
             ->search($this->getConnection());
@@ -233,9 +235,9 @@ class QueryBuilderTest extends TestCase
         $expected = [
             'bool' => [
                 'must_not' => [
-                    'bool' => [ 'must' => [ ['term'=>['title'=>'xyz']] ] ],
+                    'bool' => [ 'must' => [ ['term' => ['title' => 'xyz']] ] ],
                 ],
-            ]
+            ],
         ];
         $result = $this->invokeMethod($qb, 'buildNotCondition', ['not',$operands]);
         $this->assertEquals($expected, $result);
@@ -251,7 +253,7 @@ class QueryBuilderTest extends TestCase
         ];
         $result = $this->invokeMethod($qb, 'buildInCondition', [
             'in',
-            ['foo',['bar1','bar2']]
+            ['foo',['bar1','bar2']],
         ]);
         $this->assertEquals($expected, $result);
     }

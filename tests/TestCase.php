@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Db\ElasticSearch\Tests;
 
 use yii\di\Container;
@@ -13,7 +15,6 @@ abstract class TestCase extends \yii\tests\TestCase
 {
     public static $params;
 
-
     /**
      * Returns a test configuration param from /data/config.php
      * @param  string $name params name
@@ -26,7 +27,7 @@ abstract class TestCase extends \yii\tests\TestCase
             static::$params = require(__DIR__ . '/data/config.php');
         }
 
-        return isset(static::$params[$name]) ? static::$params[$name] : $default;
+        return static::$params[$name] ?? $default;
     }
 
     /**
@@ -60,7 +61,7 @@ abstract class TestCase extends \yii\tests\TestCase
     }
 
     /**
-     * @param  boolean    $reset whether to clean up the test database
+     * @param  bool    $reset whether to clean up the test database
      * @return Connection
      */
     public function getConnection($reset = true)

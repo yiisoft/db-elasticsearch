@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -17,7 +19,7 @@ use yii\helpers\Json;
  * elasticsearch Connection is used to connect to an elasticsearch cluster version 0.20 or higher
  *
  * @property string $driverName Name of the DB driver. This property is read-only.
- * @property boolean $isActive Whether the DB connection is established. This property is read-only.
+ * @property bool $isActive Whether the DB connection is established. This property is read-only.
  * @property QueryBuilder $queryBuilder This property is read-only.
  *
  * @author Carsten Brandt <mail@cebe.cc>
@@ -28,10 +30,10 @@ class Connection extends Component
     /**
      * @event Event an event that is triggered after a DB connection is established
      */
-    const EVENT_AFTER_OPEN = 'afterOpen';
+    public const EVENT_AFTER_OPEN = 'afterOpen';
 
     /**
-     * @var boolean whether to autodetect available cluster nodes on [[open()]]
+     * @var bool whether to autodetect available cluster nodes on [[open()]]
      */
     public $autodetectCluster = true;
     /**
@@ -101,7 +103,6 @@ class Connection extends Component
      */
     private $_curl;
 
-
     public function init()
     {
         foreach ($this->nodes as &$node) {
@@ -130,7 +131,7 @@ class Connection extends Component
 
     /**
      * Returns a value indicating whether the DB connection is established.
-     * @return boolean whether the DB connection is established
+     * @return bool whether the DB connection is established
      */
     public function getIsActive()
     {
@@ -169,7 +170,7 @@ class Connection extends Component
     {
         $node = reset($this->nodes);
         $host = $node['http_address'];
-        $protocol = isset($node['protocol']) ? $node['protocol'] : $this->defaultProtocol;
+        $protocol = $node['protocol'] ?? $this->defaultProtocol;
         if (strncmp($host, 'inet[/', 6) === 0) {
             $host = substr($host, 6, -1);
         }
@@ -256,9 +257,7 @@ class Connection extends Component
     {
         $this->open();
         $config['db'] = $this;
-        $command = new Command($config);
-
-        return $command;
+        return new Command($config);
     }
 
     /**
@@ -271,9 +270,7 @@ class Connection extends Component
     {
         $this->open();
         $config['db'] = $this;
-        $command = new BulkCommand($config);
-
-        return $command;
+        return new BulkCommand($config);
     }
 
     /**
@@ -288,13 +285,13 @@ class Connection extends Component
     /**
      * Performs GET HTTP request
      *
-     * @param string|array $url URL
+     * @param array|string $url URL
      * @param array $options URL options
      * @param string $body request body
-     * @param boolean $raw if response body contains JSON and should be decoded
-     * @return mixed response
+     * @param bool $raw if response body contains JSON and should be decoded
      * @throws Exception
      * @throws InvalidConfigException
+     * @return mixed response
      */
     public function get($url, $options = [], $body = null, $raw = false)
     {
@@ -305,12 +302,12 @@ class Connection extends Component
     /**
      * Performs HEAD HTTP request
      *
-     * @param string|array $url URL
+     * @param array|string $url URL
      * @param array $options URL options
      * @param string $body request body
-     * @return mixed response
      * @throws Exception
      * @throws InvalidConfigException
+     * @return mixed response
      */
     public function head($url, $options = [], $body = null)
     {
@@ -321,13 +318,13 @@ class Connection extends Component
     /**
      * Performs POST HTTP request
      *
-     * @param string|array $url URL
+     * @param array|string $url URL
      * @param array $options URL options
      * @param string $body request body
-     * @param boolean $raw if response body contains JSON and should be decoded
-     * @return mixed response
+     * @param bool $raw if response body contains JSON and should be decoded
      * @throws Exception
      * @throws InvalidConfigException
+     * @return mixed response
      */
     public function post($url, $options = [], $body = null, $raw = false)
     {
@@ -338,13 +335,13 @@ class Connection extends Component
     /**
      * Performs PUT HTTP request
      *
-     * @param string|array $url URL
+     * @param array|string $url URL
      * @param array $options URL options
      * @param string $body request body
-     * @param boolean $raw if response body contains JSON and should be decoded
-     * @return mixed response
+     * @param bool $raw if response body contains JSON and should be decoded
      * @throws Exception
      * @throws InvalidConfigException
+     * @return mixed response
      */
     public function put($url, $options = [], $body = null, $raw = false)
     {
@@ -355,13 +352,13 @@ class Connection extends Component
     /**
      * Performs DELETE HTTP request
      *
-     * @param string|array $url URL
+     * @param array|string $url URL
      * @param array $options URL options
      * @param string $body request body
-     * @param boolean $raw if response body contains JSON and should be decoded
-     * @return mixed response
+     * @param bool $raw if response body contains JSON and should be decoded
      * @throws Exception
      * @throws InvalidConfigException
+     * @return mixed response
      */
     public function delete($url, $options = [], $body = null, $raw = false)
     {
@@ -372,7 +369,7 @@ class Connection extends Component
     /**
      * Creates URL
      *
-     * @param string|array $path path
+     * @param array|string $path path
      * @param array $options URL options
      * @return array
      */
@@ -393,7 +390,7 @@ class Connection extends Component
         }
 
         $node = $this->nodes[$this->activeNode];
-        $protocol = isset($node['protocol']) ? $node['protocol'] : $this->defaultProtocol;
+        $protocol = $node['protocol'] ?? $this->defaultProtocol;
         $host = $node['http_address'];
 
         return [$protocol, $host, $url];
@@ -405,10 +402,10 @@ class Connection extends Component
      * @param string $method method name
      * @param string $url URL
      * @param string $requestBody request body
-     * @param boolean $raw if response body contains JSON and should be decoded
-     * @return mixed if request failed
+     * @param bool $raw if response body contains JSON and should be decoded
      * @throws Exception if request failed
      * @throws InvalidConfigException
+     * @return mixed if request failed
      */
     protected function httpRequest($method, $url, $requestBody = null, $raw = false)
     {
@@ -420,16 +417,16 @@ class Connection extends Component
         $body = '';
 
         $options = [
-            CURLOPT_USERAGENT      => 'Yii Framework ' . Yii::getVersion() . ' ' . __CLASS__,
+            CURLOPT_USERAGENT => 'Yii Framework ' . Yii::getVersion() . ' ' . __CLASS__,
             CURLOPT_RETURNTRANSFER => false,
-            CURLOPT_HEADER         => false,
+            CURLOPT_HEADER => false,
             // http://www.php.net/manual/en/function.curl-setopt.php#82418
-            CURLOPT_HTTPHEADER     => [
+            CURLOPT_HTTPHEADER => [
                 'Expect:',
                 'Content-Type: application/json',
             ],
 
-            CURLOPT_WRITEFUNCTION  => function ($curl, $data) use (&$body) {
+            CURLOPT_WRITEFUNCTION => function ($curl, $data) use (&$body) {
                 $body .= $data;
                 return mb_strlen($data, '8bit');
             },
@@ -444,12 +441,12 @@ class Connection extends Component
                 }
                 return mb_strlen($data, '8bit');
             },
-            CURLOPT_CUSTOMREQUEST  => $method,
-            CURLOPT_FORBID_REUSE   => false,
+            CURLOPT_CUSTOMREQUEST => $method,
+            CURLOPT_FORBID_REUSE => false,
         ];
 
         if (!empty($this->auth) || isset($this->nodes[$this->activeNode]['auth']) && $this->nodes[$this->activeNode]['auth'] !== false) {
-            $auth = isset($this->nodes[$this->activeNode]['auth']) ? $this->nodes[$this->activeNode]['auth'] : $this->auth;
+            $auth = $this->nodes[$this->activeNode]['auth'] ?? $this->auth;
             if (empty($auth['username'])) {
                 throw new InvalidConfigException('Username is required to use authentication');
             }
@@ -478,7 +475,7 @@ class Connection extends Component
         }
 
         if (is_array($url)) {
-            list($protocol, $host, $q) = $url;
+            [$protocol, $host, $q] = $url;
             if (strncmp($host, 'inet[', 5) == 0) {
                 $host = substr($host, 5, -1);
                 if (($pos = strpos($host, '/')) !== false) {
@@ -518,29 +515,28 @@ class Connection extends Component
         if ($responseCode >= 200 && $responseCode < 300) {
             if ($method === 'HEAD') {
                 return true;
-            } else {
-                if (isset($headers['content-length']) && ($len = mb_strlen($body, '8bit')) < $headers['content-length']) {
-                    throw new Exception("Incomplete data received from elasticsearch: $len < {$headers['content-length']}", [
-                        'requestMethod' => $method,
-                        'requestUrl' => $url,
-                        'requestBody' => $requestBody,
-                        'responseCode' => $responseCode,
-                        'responseHeaders' => $headers,
-                        'responseBody' => $body,
-                    ]);
-                }
-                if (isset($headers['content-type']) && (!strncmp($headers['content-type'], 'application/json', 16) || !strncmp($headers['content-type'], 'text/plain', 10))) {
-                    return $raw ? $body : Json::decode($body);
-                }
-                throw new Exception('Unsupported data received from elasticsearch: ' . $headers['content-type'], [
+            }
+            if (isset($headers['content-length']) && ($len = mb_strlen($body, '8bit')) < $headers['content-length']) {
+                throw new Exception("Incomplete data received from elasticsearch: $len < {$headers['content-length']}", [
                     'requestMethod' => $method,
                     'requestUrl' => $url,
                     'requestBody' => $requestBody,
                     'responseCode' => $responseCode,
                     'responseHeaders' => $headers,
-                    'responseBody' => $this->decodeErrorBody($body),
+                    'responseBody' => $body,
                 ]);
             }
+            if (isset($headers['content-type']) && (!strncmp($headers['content-type'], 'application/json', 16) || !strncmp($headers['content-type'], 'text/plain', 10))) {
+                return $raw ? $body : Json::decode($body);
+            }
+            throw new Exception('Unsupported data received from elasticsearch: ' . $headers['content-type'], [
+                'requestMethod' => $method,
+                'requestUrl' => $url,
+                'requestBody' => $requestBody,
+                'responseCode' => $responseCode,
+                'responseHeaders' => $headers,
+                'responseBody' => $this->decodeErrorBody($body),
+            ]);
         } elseif ($responseCode == 404) {
             return false;
         } else {

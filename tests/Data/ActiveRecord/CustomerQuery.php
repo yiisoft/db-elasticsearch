@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Db\ElasticSearch\Tests\Data\ActiveRecord;
 
 use Yiisoft\Db\ElasticSearch\ActiveQuery;

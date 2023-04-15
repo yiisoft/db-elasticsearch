@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Db\ElasticSearch;
 
-use Yii;
 use yii\di\Instance;
 use yii\exceptions\InvalidConfigException;
 use yii\helpers\Json;
@@ -28,7 +29,7 @@ class ElasticsearchTarget extends Target
      */
     public $type = 'log';
     /**
-     * @var Connection|array|string the elasticsearch connection object or the application component ID
+     * @var array|Connection|string the elasticsearch connection object or the application component ID
      * of the elasticsearch connection.
      */
     public $db = 'elasticsearch';
@@ -37,23 +38,22 @@ class ElasticsearchTarget extends Target
      */
     public $options = [];
     /**
-     * @var boolean If true, context will be logged as a separate message after all other messages.
+     * @var bool If true, context will be logged as a separate message after all other messages.
      */
     public $logContext = true;
     /**
-     * @var boolean If true, context will be included in every message.
+     * @var bool If true, context will be included in every message.
      * This is convenient if you log application errors and analyze them with tools like Kibana.
      */
     public $includeContext = false;
     /**
-     * @var boolean If true, context message will cached once it's been created. Makes sense to use with [[includeContext]].
+     * @var bool If true, context message will cached once it's been created. Makes sense to use with [[includeContext]].
      */
     public $cacheContext = false;
     /**
      * @var string Context message cache (can be used multiple times if context is appended to every message)
      */
     protected $_contextMessage = null;
-
 
     /**
      * This method will initialize the [[elasticsearch]] property to make sure it refers to a valid Elasticsearch connection.
@@ -97,7 +97,7 @@ class ElasticsearchTarget extends Target
      * Depending on the [[includeContext]] attribute, a context message will be either created or ignored.
      * @param array $messages log messages to be processed. See [[Logger::messages]] for the structure
      * of each message.
-     * @param boolean $final whether this method is called at the end of the current application
+     * @param bool $final whether this method is called at the end of the current application
      */
     public function collect($messages, $final)
     {
@@ -128,7 +128,7 @@ class ElasticsearchTarget extends Target
      */
     public function prepareMessage($message)
     {
-        list($text, $level, $category, $timestamp) = $message;
+        [$text, $level, $category, $timestamp] = $message;
 
         $result = [
             'category' => $category,
@@ -159,13 +159,11 @@ class ElasticsearchTarget extends Target
             $result['context'] = $this->getContextMessage();
         }
 
-        $message = implode("\n", [
+        return implode("\n", [
             Json::encode([
-                'index' => new \stdClass()
+                'index' => new \stdClass(),
             ]),
-            Json::encode($result)
+            Json::encode($result),
         ]);
-
-        return $message;
     }
 }

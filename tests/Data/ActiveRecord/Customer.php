@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Db\ElasticSearch\Tests\Data\ActiveRecord;
 
 use Yiisoft\Db\ElasticSearch\Command;
@@ -8,16 +10,16 @@ use Yiisoft\Db\ElasticSearch\Tests\ActiveRecordTest;
 /**
  * Class Customer
  *
- * @property integer $id
+ * @property int $id
  * @property string $name
  * @property string $email
  * @property string $address
- * @property integer $status
+ * @property int $status
  */
 class Customer extends ActiveRecord
 {
-    const STATUS_ACTIVE = 1;
-    const STATUS_INACTIVE = 2;
+    public const STATUS_ACTIVE = 1;
+    public const STATUS_INACTIVE = 2;
 
     public $status2;
 
@@ -70,18 +72,18 @@ class Customer extends ActiveRecord
     /**
      * sets up the index for this record
      * @param Command $command
-     * @param boolean $statusIsBoolean
+     * @param bool $statusIsBoolean
      */
     public static function setUpMapping($command)
     {
         $command->setMapping(static::index(), static::type(), [
-            "properties" => [
-                "id" => ["type"=>"integer", "store" => true],
-                "name" => ["type" => "keyword", "index" => "not_analyzed", "store" => true],
-                "email" => ["type" => "keyword", "index" => "not_analyzed", "store" => true],
-                "address" => ["type" => "text", "index" => "analyzed"],
-                "status" => ["type" => "integer", "store" => true],
-            ]
+            'properties' => [
+                'id' => ['type' => 'integer', 'store' => true],
+                'name' => ['type' => 'keyword', 'index' => 'not_analyzed', 'store' => true],
+                'email' => ['type' => 'keyword', 'index' => 'not_analyzed', 'store' => true],
+                'address' => ['type' => 'text', 'index' => 'analyzed'],
+                'status' => ['type' => 'integer', 'store' => true],
+            ],
         ]);
     }
 
@@ -91,6 +93,6 @@ class Customer extends ActiveRecord
      */
     public static function find()
     {
-        return new CustomerQuery(get_called_class());
+        return new CustomerQuery(static::class);
     }
 }

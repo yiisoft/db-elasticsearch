@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -82,8 +84,7 @@ class ActiveQuery extends Query implements ActiveQueryInterface
     /**
      * @event Event an event that is triggered when the query is initialized via [[init()]].
      */
-    const EVENT_INIT = 'init';
-
+    public const EVENT_INIT = 'init';
 
     /**
      * Constructor.
@@ -121,7 +122,7 @@ class ActiveQuery extends Query implements ActiveQueryInterface
             if (is_array($this->via)) {
                 // via relation
                 /* @var $viaQuery ActiveQuery */
-                list($viaName, $viaQuery) = $this->via;
+                [$viaName, $viaQuery] = $this->via;
                 if ($viaQuery->multiple) {
                     $viaModels = $viaQuery->all();
                     $this->primaryModel->populateRelation($viaName, $viaModels);
@@ -168,7 +169,7 @@ class ActiveQuery extends Query implements ActiveQueryInterface
     /**
      * Converts found rows into model instances
      * @param array $rows
-     * @return array|ActiveRecord[]
+     * @return ActiveRecord[]|array
      * @since 2.0.4
      */
     private function createModels($rows)
@@ -182,7 +183,7 @@ class ActiveQuery extends Query implements ActiveQueryInterface
                 if (is_string($this->indexBy)) {
                     $key = isset($row['fields'][$this->indexBy]) ? reset($row['fields'][$this->indexBy]) : $row['_source'][$this->indexBy];
                 } else {
-                    $key = call_user_func($this->indexBy, $row);
+                    $key = ($this->indexBy)($row);
                 }
                 $models[$key] = $row;
             }
@@ -204,7 +205,7 @@ class ActiveQuery extends Query implements ActiveQueryInterface
                     if (is_string($this->indexBy)) {
                         $key = $model->{$this->indexBy};
                     } else {
-                        $key = call_user_func($this->indexBy, $model);
+                        $key = ($this->indexBy)($model);
                     }
                     $models[$key] = $model;
                 }
@@ -266,20 +267,19 @@ class ActiveQuery extends Query implements ActiveQueryInterface
 //                $model = $models[0];
 //            }
             return $result;
-        } else {
-            /* @var $class ActiveRecord */
-            $class = $this->modelClass;
-            $model = $class::instantiate($result);
-            $class = get_class($model);
-            $class::populateRecord($model, $result);
-            if (!empty($this->with)) {
-                $models = [$model];
-                $this->findWith($this->with, $models);
-                $model = $models[0];
-            }
-            $model->afterFind();
-            return $model;
         }
+        /* @var $class ActiveRecord */
+        $class = $this->modelClass;
+        $model = $class::instantiate($result);
+        $class = get_class($model);
+        $class::populateRecord($model, $result);
+        if (!empty($this->with)) {
+            $models = [$model];
+            $this->findWith($this->with, $models);
+            $model = $models[0];
+        }
+        $model->afterFind();
+        return $model;
     }
 
     /**
