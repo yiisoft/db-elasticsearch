@@ -941,7 +941,7 @@ final class CommandTest extends TestCase
                         '_source' => [
                             'name' => 'Jane Doe',
                         ],
-                    ]
+                    ],
                 ],
             ],
             $result,
@@ -1080,8 +1080,8 @@ final class CommandTest extends TestCase
                         'offset' => 0,
                         'length' => 4,
                         'options' => [],
-                    ]
-                ]
+                    ],
+                ],
             ],
             $result,
         );
