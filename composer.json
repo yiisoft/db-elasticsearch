@@ -1,43 +1,52 @@
 {
     "name": "yiisoft/db-elasticsearch",
-    "description": "Yii Framework Elasticsearch Query and ActiveRecord",
-    "keywords": ["yii", "elasticsearch", "active-record", "search", "fulltext"],
+    "description": "Elasticsearch integration and ActiveRecord for the Yii framework",
+    "keywords": [
+        "yii2",
+        "elasticsearch",
+        "active-record",
+        "search",
+        "fulltext"
+    ],
     "type": "library",
     "license": "BSD-3-Clause",
     "support": {
-        "issues": "https://github.com/yiisoft/yii-elasticsearch/issues",
+        "issues": "https://github.com/yiisoft/yii2-elasticsearch/issues",
         "forum": "http://www.yiiframework.com/forum/",
         "wiki": "http://www.yiiframework.com/wiki/",
         "irc": "irc://irc.freenode.net/yii",
-        "source": "https://github.com/yiisoft/yii-elasticsearch"
+        "source": "https://github.com/yiisoft/yii2-elasticsearch"
     },
-    "authors": [
-        {
-            "name": "Carsten Brandt",
-            "email": "mail@cebe.cc"
-        }
-    ],
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "require": {
-        "yiisoft/arrays": "^3.0@dev",
-        "yiisoft/di": "^3.0@dev",
-        "yiisoft/strings": "^3.0@dev",
-        "yiisoft/yii-core": "^3.0@dev",
-        "ext-curl": "*"
+        "php": "^8.1",
+        "ext-curl": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "paragonie/random_compat": ">=1",
+        "psr/log": "^2.0|^3.0",
+        "yiisoft/arrays": "^3.0",
+        "yiisoft/json": "^1.0"
     },
     "require-dev": {
-        "yiisoft/log": "^3.0@dev",
-        "yiisoft/cache": "^3.0@dev",
-        "yiisoft/active-record": "^3.0@dev",
-        "phpunit/phpunit": "^9.0",
-        "hiqdev/composer-config-plugin": "^1.0@dev"
+        "maglnet/composer-require-checker": "^4.2",
+        "phpunit/phpunit": "^9.6|^10.0",
+        "rector/rector": "^0.15",
+        "vimeo/psalm": "^4.8|^5.8"
     },
     "autoload": {
-        "psr-4": { "Yiisoft\\Db\\ElasticSearch\\": "src" }
+        "psr-4": {
+            "Yiisoft\\Elasticsearch\\": "src"
+        }
     },
     "autoload-dev": {
-        "psr-4": {"Yiisoft\\Db\\ElasticSearch\\Tests\\": "tests"}
+        "psr-4": {
+            "Yiisoft\\Elasticsearch\\Tests\\": "tests"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true
+        }
     },
     "extra": {
         "branch-alias": {
