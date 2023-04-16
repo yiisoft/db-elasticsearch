@@ -151,6 +151,107 @@ final class CommandTest extends TestCase
         $db->close();
     }
 
+    public function testClearIndexCache(): void
+    {
+        $db = $this->getConnection();
+        $command = $db->createCommand();
+
+        $index = 'cache_test';
+
+        if ($command->indexExists($index)) {
+            $command->deleteIndex($index);
+        }
+
+        $command->createIndex($index);
+
+        $this->assertSame(
+            ['_shards' => ['total' => 2, 'successful' => 1, 'failed' => 0]],
+            $command->clearIndexCache($index),
+        );
+
+        $command->deleteIndex($index);
+
+        $db->close();
+    }
+
+    public function testClearScroll(): void
+    {
+        $db = $this->getConnection();
+        $command = $db->createCommand();
+
+        $index = 'scroll_test';
+
+        if ($command->indexExists($index)) {
+            $command->deleteIndex($index);
+        }
+
+        $command->createIndex($index);
+        $scroll = $command->search('_all', options: ['scroll' => '1m']);
+
+        $this->assertSame(
+            ['succeeded' => true, 'num_freed' => 5],
+            $command->clearScroll(['scroll_id' => $scroll['_scroll_id']]),
+        );
+
+        $command->deleteIndex($index);
+
+        $db->close();
+    }
+
+    public function testCloseIndex(): void
+    {
+        $db = $this->getConnection();
+        $command = $db->createCommand();
+
+        $index = 'close_test';
+
+        if ($command->indexExists($index)) {
+            $command->deleteIndex($index);
+        }
+
+        $command->createIndex($index);
+
+        $this->assertSame(
+            [
+                'acknowledged' => true,
+                'shards_acknowledged' => true,
+                'indices' => [
+                    'close_test' => [
+                        'closed' => true,
+                    ],
+                ],
+            ],
+            $command->closeIndex($index),
+        );
+
+        $command->deleteIndex($index);
+
+        $db->close();
+    }
+
+    public function testCreateIndexTemplate(): void
+    {
+        $db = $this->getConnection();
+        $command = $db->createCommand();
+
+        $template = 'test_template';
+
+        $this->assertSame(
+            ['acknowledged' => true],
+            $command->createIndexTemplate(
+                $template,
+                ['t*'],
+                ['number_of_shards' => 1, 'number_of_replicas' => 0],
+                ['_source' => ['enabled' => false]],
+                options: ['priority' => 1]
+            ),
+        );
+
+        $command->deleteIndexTemplate($template);
+
+        $db->close();
+    }
+
     public function testDelete(): void
     {
         $db = $this->getConnection();
@@ -163,12 +264,27 @@ final class CommandTest extends TestCase
         }
 
         $command->createIndex($index);
-        $command->insert($index, 'test', ['name' => 'John Doe'], '1');
-        $command->insert($index, 'test', ['name' => 'Jane Doe'], '2');
+        $command->insert($index, ['name' => 'John Doe'], '1');
+        $command->insert($index, ['name' => 'Jane Doe'], '2');
 
-        $command->delete($index, 'test', '2');
+        $this->assertSame(
+            [
+                '_index' => 'delete_test',
+                '_id' => '2',
+                '_version' => 2,
+                'result' => 'deleted',
+                '_shards' => [
+                    'total' => 2,
+                    'successful' => 1,
+                    'failed' => 0,
+                ],
+                '_seq_no' => 2,
+                '_primary_term' => 1,
+            ],
+            $command->delete($index, '2'),
+        );
 
-        $this->assertFalse($command->exists($index, 'test', '2'));
+        $this->assertFalse($command->exists($index, '2'));
 
         $command->deleteIndex($index);
 
@@ -187,11 +303,36 @@ final class CommandTest extends TestCase
         }
 
         $command->createIndex($index);
-        $command->insert($index, 'test', ['name' => 'John Doe'], '1');
-        $command->insert($index, 'test', ['name' => 'Jane Doe'], '2');
+        $command->insert($index, ['name' => 'John Doe'], '1');
+        $command->insert($index, ['name' => 'Jane Doe'], '2');
 
-        $this->assertTrue($command->exists($index, 'test', '1'));
-        $this->assertFalse($command->exists($index, 'test', '5'));
+        $this->assertTrue($command->exists($index, '1'));
+        $this->assertFalse($command->exists($index, '5'));
+
+        $command->deleteIndex($index);
+
+        $db->close();
+    }
+
+    public function testFlushIndex(): void
+    {
+        $db = $this->getConnection();
+        $command = $db->createCommand();
+
+        $index = 'flush_test';
+
+        if ($command->indexExists($index)) {
+            $command->deleteIndex($index);
+        }
+
+        $command->createIndex($index);
+        $command->insert($index, ['name' => 'John Doe'], '1');
+        $command->insert($index, ['name' => 'Jane Doe'], '2');
+
+        $this->assertSame(
+            ['_shards' => ['total' => 2, 'successful' => 1, 'failed' => 0]],
+            $command->flushIndex($index),
+        );
 
         $command->deleteIndex($index);
 
@@ -210,8 +351,8 @@ final class CommandTest extends TestCase
         }
 
         $command->createIndex($index);
-        $command->insert($index, 'test', ['name' => 'John Doe'], '1');
-        $command->insert($index, 'test', ['name' => 'Jane Doe'], '2');
+        $command->insert($index, ['name' => 'John Doe'], '1');
+        $command->insert($index, ['name' => 'Jane Doe'], '2');
 
         $this->assertSame(
             [
@@ -225,7 +366,7 @@ final class CommandTest extends TestCase
                     'name' => 'John Doe',
                 ],
             ],
-            $command->get($index, 'test', '1'),
+            $command->get($index, '1'),
         );
         $this->assertSame(
             [
@@ -239,7 +380,7 @@ final class CommandTest extends TestCase
                     'name' => 'Jane Doe',
                 ],
             ],
-            $command->get($index, 'test', '2'),
+            $command->get($index, '2'),
         );
 
         $command->deleteIndex($index);
@@ -254,6 +395,43 @@ final class CommandTest extends TestCase
 
         $expectedResult = [];
         $actualResult = $command->getAliasInfo();
+
+        $this->assertSame($expectedResult, $actualResult);
+
+        $db->close();
+    }
+
+    /**
+     * @dataProvider \Yiisoft\Elasticsearch\Tests\Provider\CommandProvider::dataForGetAliasInfo
+     */
+    public function testGetAliasInfoSingleAliasIsSetReturnsInfoForAlias(
+        string $index,
+        string $type,
+        array $mapping,
+        string $alias,
+        array $expectedResult,
+        array $aliasParameters
+    ): void {
+        $db = $this->getConnection();
+        $command = $db->createCommand();
+
+        if ($command->indexExists($index)) {
+            $command->deleteIndex($index);
+        }
+
+        $command->createIndex($index);
+
+        if ($mapping) {
+            $command->setMapping($index, $mapping, $type);
+        }
+
+        $command->addAlias($index, $alias, $aliasParameters);
+        $actualResult = $command->getAliasInfo();
+        $command->deleteIndex($index);
+
+        // order is not guaranteed
+        sort($expectedResult);
+        sort($actualResult);
 
         $this->assertSame($expectedResult, $actualResult);
 
@@ -297,43 +475,6 @@ final class CommandTest extends TestCase
         $expectedResult = [];
 
         $actualResult = $command->getIndexAliases($index);
-
-        $this->assertSame($expectedResult, $actualResult);
-
-        $db->close();
-    }
-
-    /**
-     * @dataProvider \Yiisoft\Elasticsearch\Tests\Provider\CommandProvider::dataForGetAliasInfo
-     */
-    public function testGetAliasInfoSingleAliasIsSetReturnsInfoForAlias(
-        string $index,
-        string $type,
-        array $mapping,
-        string $alias,
-        array $expectedResult,
-        array $aliasParameters
-    ): void {
-        $db = $this->getConnection();
-        $command = $db->createCommand();
-
-        if ($command->indexExists($index)) {
-            $command->deleteIndex($index);
-        }
-
-        $command->createIndex($index);
-
-        if ($mapping) {
-            $command->setMapping($index, $type, $mapping);
-        }
-
-        $command->addAlias($index, $alias, $aliasParameters);
-        $actualResult = $command->getAliasInfo();
-        $command->deleteIndex($index);
-
-        // order is not guaranteed
-        sort($expectedResult);
-        sort($actualResult);
 
         $this->assertSame($expectedResult, $actualResult);
 
@@ -527,6 +668,113 @@ final class CommandTest extends TestCase
         $db->close();
     }
 
+    public function testGetIndexRecoveryStats(): void
+    {
+        $db = $this->getConnection();
+        $command = $db->createCommand();
+
+        $this->assertSame(
+            [
+                'command-test' => [
+                    'shards' => [
+                        0 => [
+                            'id' => 0,
+                            'type' => 'EXISTING_STORE',
+                            'stage' => 'DONE',
+                            'primary' => true,
+                            'start_time_in_millis' => 1681650957903,
+                            'stop_time_in_millis' => 1681650957924,
+                            'total_time_in_millis' => 20,
+                            'source' => [
+                                'bootstrap_new_history_uuid' => false,
+                            ],
+                            'target' => [
+                                'id' => 'EQWC5q1-Qkm28v04QVZqlQ',
+                                'host' => '127.0.0.1',
+                                'transport_address' => '127.0.0.1:9300',
+                                'ip' => '127.0.0.1',
+                                'name' => '32a7c3b4e828',
+                            ],
+                            'index' => [
+                                'size' => [
+                                    'total_in_bytes' => 225,
+                                    'reused_in_bytes' => 225,
+                                    'recovered_in_bytes' => 0,
+                                    'recovered_from_snapshot_in_bytes' => 0,
+                                    'percent' => '100.0%',
+                                ],
+                                'files' => [
+                                    'total' => 1,
+                                    'reused' => 1,
+                                    'recovered' => 0,
+                                    'percent' => '100.0%',
+                                ],
+                                'total_time_in_millis' => 0,
+                                'source_throttle_time_in_millis' => 0,
+                                'target_throttle_time_in_millis' => 0,
+                            ],
+                            'translog' => [
+                                'recovered' => 0,
+                                'total' => 0,
+                                'percent' => '100.0%',
+                                'total_on_start' => 0,
+                                'total_time_in_millis' => 13,
+                            ],
+                            'verify_index' => [
+                                'check_index_time_in_millis' => 0,
+                                'total_time_in_millis' => 0,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            $command->getIndexRecoveryStats('command-test'),
+        );
+    }
+
+    public function testGetMapping(): void
+    {
+        $db = $this->getConnection();
+        $command = $db->createCommand();
+
+        $index = 'mapping_test';
+
+        if ($command->indexExists($index)) {
+            $command->deleteIndex($index);
+        }
+
+        $command->createIndex($index);
+        $command->setMapping(
+            $index,
+            [
+                'properties' => [
+                    'name' => [
+                        'type' => 'text',
+                    ],
+                ],
+            ],
+        );
+
+        $this->assertSame(
+            [
+                'mapping_test' => [
+                    'mappings' => [
+                        'properties' => [
+                            'name' => [
+                                'type' => 'text',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            $command->getMapping($index),
+        );
+
+        $command->deleteIndex($index);
+
+        $db->close();
+    }
+
     public function testGetSource(): void
     {
         $db = $this->getConnection();
@@ -539,18 +787,70 @@ final class CommandTest extends TestCase
         }
 
         $command->createIndex($index);
-        $command->insert($index, 'test', ['name' => 'John Doe'], '1');
-        $command->insert($index, 'test', ['name' => 'Jane Doe'], '2');
+        $command->insert($index, ['name' => 'John Doe'], '1');
+        $command->insert($index, ['name' => 'Jane Doe'], '2');
 
         $this->assertSame([
             'name' => 'John Doe',
-        ], $command->getSource($index, 'test', '1'));
+        ], $command->getSource($index, '1'));
 
         $this->assertSame([
             'name' => 'Jane Doe',
-        ], $command->getSource($index, 'test', '2'));
+        ], $command->getSource($index, '2'));
 
         $command->deleteIndex($index);
+
+        $db->close();
+    }
+
+    public function testGetTemplate(): void
+    {
+        $db = $this->getConnection();
+        $command = $db->createCommand();
+
+        $template = 'template_test_get';
+
+        $command->createIndexTemplate(
+            $template,
+            ['template_*'],
+            ['number_of_shards' => 1, 'number_of_replicas' => 0],
+            ['_source' => ['enabled' => false]],
+            options: ['priority' => 2]
+        );
+
+        $this->assertSame(
+            [
+                'index_templates' => [
+                    0 => [
+                        'name' => 'template_test_get',
+                        'index_template' => [
+                            'index_patterns' => [
+                                0 => 'template_*',
+                            ],
+                            'template' => [
+                                'settings' => [
+                                    'index' => [
+                                        'number_of_shards' => '1',
+                                        'number_of_replicas' => '0',
+                                    ],
+                                ],
+                                'mappings' => [
+                                    '_source' => [
+                                        'enabled' => false,
+                                    ],
+                                ],
+                                'aliases' => [],
+                            ],
+                            'composed_of' => [],
+                            'priority' => 2,
+                        ],
+                    ],
+                ],
+            ],
+            $command->getIndexTemplate($template),
+        );
+
+        $command->deleteIndexTemplate($template);
 
         $db->close();
     }
@@ -567,11 +867,11 @@ final class CommandTest extends TestCase
         }
 
         $command->createIndex($index);
-        $command->insert($index, 'test', ['name' => 'John Doe'], '1');
-        $command->insert($index, 'test', ['name' => 'Jane Doe'], '2');
+        $command->insert($index, ['name' => 'John Doe'], '1');
+        $command->insert($index, ['name' => 'Jane Doe'], '2');
 
-        $this->assertTrue($command->exists($index, 'test', '1'));
-        $this->assertTrue($command->exists($index, 'test', '2'));
+        $this->assertTrue($command->exists($index, '1'));
+        $this->assertTrue($command->exists($index, '2'));
 
         $command->deleteIndex($index);
 
@@ -611,12 +911,41 @@ final class CommandTest extends TestCase
         }
 
         $command->createIndex($index);
-        $command->insert($index, 'test', ['name' => 'John Doe'], '1');
-        $command->insert($index, 'test', ['name' => 'Jane Doe'], '2');
+        $command->insert($index, ['name' => 'John Doe'], '1');
+        $command->insert($index, ['name' => 'Jane Doe'], '2');
 
-        $result = $command->mget($index, 'test', ['1', '2']);
+        $result = $command->mget($index, ['1', '2']);
 
         $this->assertCount(2, $result['docs']);
+        $this->assertSame(
+            [
+                'docs' => [
+                    0 => [
+                        '_index' => 'multiple_get_test',
+                        '_id' => '1',
+                        '_version' => 1,
+                        '_seq_no' => 0,
+                        '_primary_term' => 1,
+                        'found' => true,
+                        '_source' => [
+                            'name' => 'John Doe',
+                        ],
+                    ],
+                    1 => [
+                        '_index' => 'multiple_get_test',
+                        '_id' => '2',
+                        '_version' => 1,
+                        '_seq_no' => 1,
+                        '_primary_term' => 1,
+                        'found' => true,
+                        '_source' => [
+                            'name' => 'Jane Doe',
+                        ],
+                    ]
+                ],
+            ],
+            $result,
+        );
         $this->assertArrayHasKey('0', $result['docs']);
         $this->assertArrayHasKey('1', $result['docs']);
 
@@ -664,6 +993,183 @@ final class CommandTest extends TestCase
         $command->deleteIndex($index);
 
         $this->assertTrue($actualResult);
+
+        $db->close();
+    }
+
+    public function testScroll(): void
+    {
+        $db = $this->getConnection();
+        $command = $db->createCommand();
+
+        $index = 'scroll_test';
+
+        if ($command->indexExists($index)) {
+            $command->deleteIndex($index);
+        }
+
+        $command->createIndex($index);
+        $command->insert($index, ['name' => 'John Doe'], '1');
+        $command->insert($index, ['name' => 'Jane Doe'], '2');
+
+        $command->refreshIndex($index);
+
+        $result = $command->search($index, ['query' => ['match_all' => new \stdClass()]], options: ['scroll' => '1m']);
+
+        $this->assertArrayHasKey('_scroll_id', $result);
+
+        $this->assertArrayHasKey('hits', $result);
+        $this->assertArrayHasKey('hits', $result['hits']);
+        $this->assertCount(2, $result['hits']['hits']);
+
+        $result = $command->scroll(['scroll_id' => $result['_scroll_id']]);
+
+        $this->assertArrayHasKey('hits', $result);
+        $this->assertArrayHasKey('hits', $result['hits']);
+        $this->assertSame(2, $result['hits']['total']['value']);
+
+        $command->deleteIndex($index);
+    }
+
+    public function testSuggesters(): void
+    {
+        $db = $this->getConnection();
+        $command = $db->createCommand();
+
+        $index = 'suggest_test';
+
+        if ($command->indexExists($index)) {
+            $command->deleteIndex($index);
+        }
+
+        $command->createIndex($index);
+        $command->insert($index, ['name' => 'John Doe'], '1');
+        $command->insert($index, ['name' => 'Jane Doe'], '2');
+
+        $result = $command->suggesters(
+            $index,
+            [
+                'my-suggest-1' => [
+                    'text' => 'John',
+                    'term' => [
+                        'field' => 'name',
+                    ],
+                ],
+                'my-suggest-2' => [
+                    'text' => 'Jane',
+                    'term' => [
+                        'field' => 'name',
+                    ],
+                ],
+            ],
+        );
+
+        $this->assertSame(
+            [
+                'my-suggest-1' => [
+                    0 => [
+                        'text' => 'john',
+                        'offset' => 0,
+                        'length' => 4,
+                        'options' => [],
+                    ],
+                ],
+                'my-suggest-2' => [
+                    0 => [
+                        'text' => 'jane',
+                        'offset' => 0,
+                        'length' => 4,
+                        'options' => [],
+                    ]
+                ]
+            ],
+            $result,
+        );
+
+        $command->deleteIndex($index);
+
+        $db->close();
+    }
+
+    public function testUpdate(): void
+    {
+        $db = $this->getConnection();
+        $command = $db->createCommand();
+
+        $index = 'update_test';
+
+        if ($command->indexExists($index)) {
+            $command->deleteIndex($index);
+        }
+
+        $command->createIndex($index);
+        $command->insert($index, ['name' => 'John Doe'], '1');
+        $command->insert($index, ['name' => 'Jane Doe'], '2');
+
+        $command->update($index, '1', ['name' => 'John Doe Jr.'], options: ['detect_noop' => true]);
+
+        $this->assertSame(['name' => 'John Doe Jr.'], $command->getSource($index, '1'));
+
+        $command->deleteIndex($index);
+
+        $db->close();
+    }
+
+    public function testUpdateAnalizers(): void
+    {
+        $db = $this->getConnection();
+        $command = $db->createCommand();
+
+        $index = 'update_analyzer_test';
+
+        if ($command->indexExists($index)) {
+            $command->deleteIndex($index);
+        }
+
+        $command->createIndex($index);
+        $command->closeIndex($index);
+        $command->updateAnalyzers(
+            $index,
+            [
+                'analysis' => [
+                    'analyzer' => [
+                        'content' => [
+                            'type' => 'custom',
+                            'tokenizer' => 'whitespace',
+                        ],
+                    ],
+                ],
+            ],
+        );
+        $command->openIndex($index);
+
+        $this->assertSame(
+            ['content' => ['type' => 'custom', 'tokenizer' => 'whitespace']],
+            $command->getSettings($index)[$index]['settings']['index']['analysis']['analyzer'],
+        );
+
+        $command->deleteIndex($index);
+
+        $db->close();
+    }
+
+    public function testUpdateSettings(): void
+    {
+        $db = $this->getConnection();
+        $command = $db->createCommand();
+
+        $index = 'update_settings_test';
+
+        if ($command->indexExists($index)) {
+            $command->deleteIndex($index);
+        }
+
+        $command->createIndex($index);
+        $command->updateSettings($index, ['index' => ['number_of_replicas' => 4]]);
+
+        $this->assertSame('4', $command->getSettings($index)[$index]['settings']['index']['number_of_replicas']);
+
+        $command->deleteIndex($index);
 
         $db->close();
     }

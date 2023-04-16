@@ -16,50 +16,32 @@ use Yiisoft\Arrays\ArrayHelper;
  */
 final class Command
 {
-    /**
-     * @var array|string|null the indexes to execute the query on. Defaults to null meaning all indexes
-     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/search-search.html#search-multi-index-type
-     */
-    public string|array|null $index = '';
-    /**
-     * @var array|string|null the types to execute the query on. Defaults to null meaning all types
-     */
-    public string|array|null $type = null;
-    /**
-     * @var array list of arrays or json strings that become parts of a query
-     */
-    public array $queryParts = [];
-    /**
-     * @var array options to be appended to the query URL, such as "search_type" for search or "timeout" for delete
-     */
-    public $options = [];
-
     public function __construct(private Connection $db)
     {
     }
 
     /**
-     * Add alias to index.
+     * An alias can also be added with the endpoint.
      *
-     * @param string $index Index That the document belongs to.
-     * @param string $alias Alias name.
-     * @param array $aliasParameters Alias parameters.
+     * @param string $index The index the alias refers to. Can be any of `*`, `_all`, `glob pattern`, `name1`, `name2`.
+     * @param string $name The name of the alias.
+     * @param array $options Additional options `routing` and `filter`.
      *
      * @link https://www.elastic.co/guide/en/elasticsearch/reference/2.0/indices-aliases.html#alias-adding
      */
-    public function addAlias($index, $alias, $aliasParameters = []): bool
+    public function addAlias($index, $name, $options = []): bool
     {
-        return (bool)$this->db->put([$index, '_alias', $alias], [], json_encode((object)$aliasParameters));
+        return (bool)$this->db->put([$index, '_alias', $name], [], json_encode((object) $options));
     }
 
     /**
      * Check if alias exists.
      *
-     * @param string $alias Alias name.
+     * @param string $name The name of the alias.
      */
-    public function aliasExists(string $alias): bool
+    public function aliasExists(string $name): bool
     {
-        return !empty($this->getIndexesByAlias($alias));
+        return !empty($this->getIndexesByAlias($name));
     }
 
     /**
@@ -84,11 +66,11 @@ final class Command
     }
 
     /**
-     * Clears the cache for index.
+     * Clear caches for all data streams and indices
      *
      * @param string $index Index that the document belongs to.
      *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-clearcache.html
+     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-clearcache.html#clear-cache-api-all-ex
      */
     public function clearIndexCache(string $index): mixed
     {
@@ -96,11 +78,11 @@ final class Command
     }
 
     /**
-     * Clears the scroll.
+     * Clears the search context and results for a scrolling search.
      *
-     * @param array $options URL options.
+     * @param array $options Additional options `scroll_id`.
      *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-scroll.html
+     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/clear-scroll-api.html
      */
     public function clearScroll(array $options = []): mixed
     {
@@ -122,7 +104,7 @@ final class Command
      *
      * @param string $index Index that the document belongs to.
      *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-open-close.html
+     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-close.html
      */
     public function closeIndex(string $index): mixed
     {
@@ -130,9 +112,9 @@ final class Command
     }
 
     /**
-     * Creates an index.
+     * Creates a new index.
      *
-     * @param string $index Index that the document belongs to.
+     * @param string $index Name of the index you wish to create.
      * @param array|null $configuration Index configuration.
      *
      * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-create-index.html
@@ -145,53 +127,85 @@ final class Command
     }
 
     /**
-     * Creates a template.
+     * Creates a index template.
      *
-     * @param string $name Template name.
-     * @param string $pattern Template pattern.
-     * @param array $settings Template settings.
-     * @param array $mappings Template mappings.
-     * @param int $order Template order.
+     * Index templates define settings, mappings, and aliases that can be applied automatically to new indices.
      *
-     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates.html
+     * @param string $name Name of the index template to create.
+     * @param array $pattern Array of wildcard `(*)` expressions used to match the names of data streams and indices
+     * during creation.
+     * @param array $settings Configuration options for the index.
+     * @param array $mappings Mapping for fields in the index.
+     * @param array $aliases The key is the alias name. Index alias names support date math.
+     * @param array $options Additional options `version`, `priority`.
+     *
+     * ```php
+     * [
+     *     'index_patterns' : ['t*],
+     *     'priority' : 0,
+     *     'template' => [
+     *         'settings' => [
+     *             'number_of_shards' => 1,
+     *             'number_of_replicas' => 0,
+     *         ],
+     *        'mappings' => [
+     *            '_source' => [
+     *                'enabled' => false
+     *           ],
+     *       ],
+     * ];
+     * ```
+     *
+     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-put-template.html
      */
-    public function createTemplate(
+    public function createIndexTemplate(
         string $name,
-        string $pattern,
+        array|string $pattern,
         array $settings,
         array $mappings,
-        int $order = 0
+        array $aliases = [],
+        array $options = [],
     ): mixed {
-        $body = Json::encode([
-            'template' => $pattern,
-            'order' => $order,
-            'settings' => (object) $settings,
-            'mappings' => (object) $mappings,
-        ]);
+        $body = Json::encode(
+            array_merge(
+                [
+                    'index_patterns' => $pattern,
+                    'template' => [
+                        'settings' => (object) $settings,
+                        'mappings' => (object) $mappings,
+                        'aliases' => (object) $aliases,
+                    ],
+                ],
+                $options,
+            ),
+        );
 
-        return $this->db->put(['_template', $name], [], $body);
+        return $this->db->put(['_index_template', $name], [], $body);
     }
 
     /**
-     * Deletes a document from the index.
+     * Removes a JSON document from the specified index.
      *
-     * @param string $index Index that the document belongs to.
+     * @param string $index Name of the target index.
+     * @param string $id Unique identifier for the document.
      * @param string|null $type Type that the document belongs to.
-     * @param string $id The documents id.
-     * @param array $options URL options.
+     * @param array $options Additional options.
      *
      * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-delete.html
      */
-    public function delete(string $index, string|null $type, string $id, array $options = []): mixed
+    public function delete(string $index, string $id, string $type = null, array $options = []): mixed
     {
         if ($this->db->getDslVersion() >= 7) {
             return $this->db->delete([$index, '_doc', $id], $options);
         }
+
         return $this->db->delete([$index, $type, $id], $options);
     }
 
     /**
-     * Deletes all indexes
+     * Deletes all indexes.
+     *
+     * To use this command set the action.destructive_requires_name cluster setting to `false`.
      *
      * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-delete-index.html
      */
@@ -201,34 +215,34 @@ final class Command
     }
 
     /**
-     * Sends a request to the delete by query.
+     * Deletes documents that match the specified query.
      *
-     * @param array $options URL options.
+     * @param string $index Name of the index.
+     * @param array $query Query to match documents.
+     * @param string|null $type Type that the document belongs to.
+     * @param array $options Additional options `conflicts`, `refresh`, `routing`, `timeout`, `wait_for_active_shards`,
+     * `wait_for_completion`, `requests_per_second`.
      *
      * @throws InvalidArgumentException If no query is given.
+     *
+     * @todo Review this method. It is not working.
      */
-    public function deleteByQuery(array $options = []): mixed
+    public function deleteByQuery(string $index, array $query, string $type = null, array $options = []): mixed
     {
-        if (!isset($this->queryParts['query'])) {
+        if (!isset($query['query'])) {
             throw new InvalidArgumentException('Can not call deleteByQuery when no query is given.');
         }
 
-        $query = ['query' => $this->queryParts['query']];
-
-        if (isset($this->queryParts['filter'])) {
-            $query['filter'] = $this->queryParts['filter'];
-        }
-
         $query = Json::encode($query);
-        $url = [$this->index !== null ? $this->index : '_all'];
+        $url = [$index];
 
-        if ($this->db->getDslVersion() < 7 && $this->type !== null) {
-            $url[] = $this->type;
+        if ($this->db->getDslVersion() < 7 && $type !== null) {
+            $url[] = $type;
         }
 
         $url[] = '_delete_by_query';
 
-        return $this->db->post($url, array_merge($this->options, $options), $query);
+        return $this->db->post($url, $options, $query);
     }
 
     /**
@@ -250,7 +264,7 @@ final class Command
      *
      * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates.html
      */
-    public function deleteTemplate(string $name): mixed
+    public function deleteIndexTemplate(string $name): mixed
     {
         return $this->db->delete(['_template', $name]);
     }
@@ -259,16 +273,17 @@ final class Command
      * Checks if a document exists.
      *
      * @param string $index Index that the document belongs to.
-     * @param string|null $type Type that the document belongs to.
      * @param string $id The documents id.
+     * @param string|null $type Type that the document belongs to.
      *
      * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-get.html
      */
-    public function exists(string $index, string|null $type, string $id): mixed
+    public function exists(string $index, string $id, string $type = null): mixed
     {
         if ($this->db->getDslVersion() >= 7) {
             return $this->db->head([$index, '_doc', $id]);
         }
+
         return $this->db->head([$index, $type, $id]);
     }
 
@@ -288,17 +303,18 @@ final class Command
      * Gets a document from the index.
      *
      * @param string $index Index that the document belongs to.
-     * @param string|null $type Type that the document belongs to.
      * @param string $id The documents id.
-     * @param array $options URL options.
+     * @param string|null $type Type that the document belongs to.
+     * @param array $options Additional options.
      *
      * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-get.html
      */
-    public function get($index, $type, $id, $options = []): mixed
+    public function get(string $index, string $id, string $type = null, array $options = []): mixed
     {
         if ($this->db->getDslVersion() >= 7) {
             return $this->db->get([$index, '_doc', $id], $options);
         }
+
         return $this->db->get([$index, $type, $id], $options);
     }
 
@@ -372,6 +388,18 @@ final class Command
     }
 
     /**
+     * Get a template.
+     *
+     * @param string $name Template name.
+     *
+     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates.html
+     */
+    public function getIndexTemplate(string $name): mixed
+    {
+        return $this->db->get(['_index_template', $name]);
+    }
+
+    /**
      * Gets the index by alias.
      *
      * @param string $alias Alias name.
@@ -379,6 +407,16 @@ final class Command
     public function getIndexesByAlias(string $alias): array
     {
         return array_keys($this->getIndexInfoByAlias($alias));
+    }
+
+    /**
+     * Gets the index settings.
+     *
+     * @param string $index Index that the document belongs to.
+     */
+    public function getSettings(string $index = '_all'): mixed
+    {
+        return $this->db->get([$index, '_settings']);
     }
 
     /**
@@ -402,29 +440,17 @@ final class Command
      * Gets a documents _source from the index (>=v0.90.1).
      *
      * @param string $index Index that the document belongs to.
-     * @param string|null $type Type that the document belongs to.
      * @param string $id The documents id.
+     * @param string|null $type Type that the document belongs to.
      *
      * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-get.html#_source
      */
-    public function getSource(string $index, string|null $type, string $id): mixed
+    public function getSource(string $index, string $id, string $type = null): mixed
     {
         if ($this->db->getDslVersion() >= 7) {
             return $this->db->get([$index, '_source', $id]);
         }
         return $this->db->get([$index, $type, $id]);
-    }
-
-    /**
-     * Get a template.
-     *
-     * @param string $name Template name.
-     *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates.html
-     */
-    public function getTemplate(string $name): mixed
-    {
-        return $this->db->get(['_template', $name]);
     }
 
     /**
@@ -443,18 +469,18 @@ final class Command
      * Inserts a document into an index.
      *
      * @param string $index Index that the document belongs to.
-     * @param string|null $type Type that the document belongs to.
      * @param array|string $data Json string or array of data to store.
-     * @param string|null $id The documents id. If not specified Id will be automatically chosen
+     * @param string|null $id The documents id. If not specified Id will be automatically chosen.
+     * @param string|null $type Type that the document belongs to.
      * @param array $options URL options.
      *
      * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-index_.html
      */
     public function insert(
         string $index,
-        string|null $type,
         string|array $data,
         string $id = null,
+        string $type = null,
         array $options = [],
     ): mixed {
         if (empty($data)) {
@@ -469,9 +495,11 @@ final class Command
             }
             return $this->db->put([$index, $type, $id], $options, $body);
         }
+
         if ($this->db->getDslVersion() >= 7) {
             return $this->db->post([$index, '_doc'], $options, $body);
         }
+
         return $this->db->post([$index, $type], $options, $body);
     }
 
@@ -479,13 +507,13 @@ final class Command
      * Gets multiple documents from the index.
      *
      * @param string $index Index that the document belongs to.
-     * @param string|null $type Type that the document belongs to.
      * @param string[] $ids the documents ids as values in array.
+     * @param string|null $type Type that the document belongs to.
      * @param array $options URL options.
 
      * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-multi-get.html
      */
-    public function mget(string $index, string|null $type, array $ids, array $options = []): mixed
+    public function mget(string $index, array $ids, string $type = null, array $options = []): mixed
     {
         $body = Json::encode(['ids' => array_values($ids)]);
 
@@ -558,12 +586,17 @@ final class Command
     /**
      * Sends a request to the _search API and returns the result.
      *
+     * @param string $index Index that the document belongs to.
+     * @param array|string $query Query to send.
+     * @param string|null $type Type that the document belongs to.
      * @param array $options URL options.
      */
-    public function search(array $options = []): mixed
-    {
-        $query = $this->queryParts;
-
+    public function search(
+        string $index,
+        array|string $query = [],
+        string $type = null,
+        array $options = []
+    ): mixed {
         if (empty($query)) {
             $query = '{}';
         }
@@ -572,29 +605,33 @@ final class Command
             $query = Json::encode($query);
         }
 
-        $url = [$this->index !== null ? $this->index : '_all'];
+        $url = [$index];
 
-        if ($this->db->getDslVersion() < 7 && $this->type !== null) {
-            $url[] = $this->type;
+        if ($this->db->getDslVersion() < 7 && $type !== null) {
+            $url[] = $type;
         }
 
         $url[] = '_search';
 
-        return $this->db->get($url, array_merge($this->options, $options), $query);
+        return $this->db->get($url, $options, $query);
     }
 
     /**
      * Sets the mapping for an index.
      *
      * @param string $index Index that the document belongs to.
-     * @param string|null $type Type that the document belongs to.
      * @param array|string|null $mapping Json string or array of mapping to store.
+     * @param string|null $type Type that the document belongs to.
      * @param array $options URL options.
      *
      * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-put-mapping.html
      */
-    public function setMapping(string $index, string|null $type, string|array|null $mapping, array $options = []): mixed
-    {
+    public function setMapping(
+        string $index,
+        string|array|null $mapping,
+        string $type = null,
+        array $options = []
+    ): mixed {
         $body = $mapping !== null ? (is_string($mapping) ? $mapping : Json::encode($mapping)) : null;
 
         if ($this->db->getDslVersion() >= 7) {
@@ -609,59 +646,47 @@ final class Command
     /**
      * Sends a suggest request to the _search API and returns the result.
      *
+     * @param string $index Index that the document belongs to.
      * @param array|string $suggester The suggester body.
-     * @param array $options URL options.
+     * @param array $options Additional options.
      *
      * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/search-suggesters.html
      */
-    public function suggest(string|array $suggester, array $options = []): mixed
+    public function suggesters(string $index = '_all', string|array $suggester = [], array $options = []): mixed
     {
         if (empty($suggester)) {
             $suggester = '{}';
         }
+
         if (is_array($suggester)) {
             $suggester = Json::encode($suggester);
         }
-        $body = '{"suggest":' . $suggester . ',"size":0}';
-        $url = [
-            $this->index !== null ? $this->index : '_all',
-            '_search',
-        ];
 
-        $result = $this->db->post($url, array_merge($this->options, $options), $body);
+        $body = '{"suggest":' . $suggester . ',"size":0}';
+        $url = [$index, '_search'];
+        $result = $this->db->post($url, $options, $body);
 
         return $result['suggest'];
-    }
-
-    /**
-     * Checks whether a type exists.
-     *
-     * @param string $index Index that the document belongs to.
-     * @param string|null $type Type that the document belongs to.
-     *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-types-exists.html
-     */
-    public function typeExists(string $index, string|null $type): mixed
-    {
-        if ($this->db->getDslVersion() >= 7) {
-            return $this->db->head([$index, '_doc']);
-        }
-        return $this->db->head([$index, $type]);
     }
 
     /**
      * Updates a document
      *
      * @param string $index Index that the document belongs to.
-     * @param string|null $type Type that the document belongs to.
      * @param string $id The documents id.
      * @param array|string $data Json string or array of data to store.
+     * @param string|null $type Type that the document belongs to.
      * @param array $options URL options.
      *
      * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html
      */
-    public function update(string $index, string|null $type, string $id, string|array $data, array $options = []): mixed
-    {
+    public function update(
+        string $index,
+        string $id,
+        string|array $data,
+        string $type = null,
+        array $options = []
+    ): mixed {
         $body = [
             'doc' => empty($data) ? new \stdClass() : $data,
         ];
@@ -674,11 +699,13 @@ final class Command
         if ($this->db->getDslVersion() >= 7) {
             return $this->db->post([$index, '_update', $id], $options, Json::encode($body));
         }
+
         return $this->db->post([$index, $type, $id, '_update'], $options, Json::encode($body));
     }
 
     /**
      * Define new analyzers for the index.
+     *
      * For example if content analyzer hasn’t been defined on "myindex" yet you can use the following commands to add
      * it:
      *
@@ -713,23 +740,20 @@ final class Command
     public function updateAnalyzers(string $index, string|array $setting, array $options = []): mixed
     {
         $this->closeIndex($index);
-
         $result = $this->updateSettings($index, $setting, $options);
-
         $this->openIndex($index);
-
         return $result;
     }
 
     /**
-     * Change specific index level settings in real time.
+     * Changes a dynamic index setting in real time.
      *
      * Note that update analyzers required to {@see close()} the index first and {@see open()} it after the changes are
      * made, use {@see updateAnalyzers()} for it.
      *
      * @param string $index Index that the document belongs to.
      * @param array|string|null $setting Json string or array of data to store.
-     * @param array $options URL options.
+     * @param array $options Additional options.
      *
      * @link http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/indices-update-settings.html
      */
