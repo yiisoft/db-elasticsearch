@@ -6,7 +6,7 @@ Extension requires at least elasticsearch version 5.0.
 
 ## Getting Composer package
 
-The preferred way to install this extension is through [composer](http://getcomposer.org/download/).
+The preferred way to install this extension is through [composer](https://getcomposer.org/download/).
 
 ```
 composer require --prefer-dist yiisoft/yii-elasticsearch

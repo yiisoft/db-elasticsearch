@@ -6,9 +6,9 @@ For general information on how to use yii's ActiveRecord please refer to the [gu
 For defining an elasticsearch ActiveRecord class your record class needs to extend from [[Yiisoft\Db\ElasticSearch\ActiveRecord]] and
 implement at least the [[Yiisoft\Db\ElasticSearch\ActiveRecord::attributes()|attributes()]] method to define the attributes of the record.
 The handling of primary keys is different in elasticsearch as the primary key (the `_id` field in elasticsearch terms)
-is not part of the attributes by default. However it is possible to define a [path mapping](http://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-id-field.html)
+is not part of the attributes by default. However it is possible to define a [path mapping](https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-id-field.html)
 for the `_id` field to be part of the attributes.
-See [elasticsearch docs](http://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-id-field.html) on how to define it.
+See [elasticsearch docs](https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-id-field.html) on how to define it.
 The `_id` field of a document/record can be accessed using [[Yiisoft\Db\ElasticSearch\ActiveRecord::getPrimaryKey()|getPrimaryKey()]] and
 [[Yiisoft\Db\ElasticSearch\ActiveRecord::setPrimaryKey()|setPrimaryKey()]].
 When path mapping is defined, the attribute name can be defined using the [[Yiisoft\Db\ElasticSearch\ActiveRecord::primaryKey()|primaryKey()]] method.
@@ -55,8 +55,8 @@ It supports the same interface and features except the following limitations and
 - As elasticsearch does not support SQL, the query API does not support `join()`, `groupBy()`, `having()` and `union()`.
   Sorting, limit, offset and conditional where are all supported.
 - [[Yiisoft\Db\ElasticSearch\ActiveQuery::from()|from()]] does not select the tables, but the
-  [index](http://www.elastic.co/guide/en/elasticsearch/reference/current/glossary.html#glossary-index)
-  and [type](http://www.elastic.co/guide/en/elasticsearch/reference/current/glossary.html#glossary-type) to query against.
+  [index](https://www.elastic.co/guide/en/elasticsearch/reference/current/glossary.html#glossary-index)
+  and [type](https://www.elastic.co/guide/en/elasticsearch/reference/current/glossary.html#glossary-type) to query against.
 - `select()` has been replaced with [[Yiisoft\Db\ElasticSearch\ActiveQuery::fields()|fields()]] which basically does the same but
   `fields` is more elasticsearch terminology.
   It defines the fields to retrieve from a document.
@@ -66,7 +66,7 @@ It supports the same interface and features except the following limitations and
   [[Yiisoft\Db\ElasticSearch\ActiveQuery::query()|query()]],
   [[Yiisoft\Db\ElasticSearch\ActiveQuery::filter()|filter()]] and
   [[Yiisoft\Db\ElasticSearch\ActiveQuery::addFacet()|addFacet()]] methods that allows to compose an elasticsearch query.
-  See the usage example below on how they work and check out the [Query DSL](http://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html)
+  See the usage example below on how they work and check out the [Query DSL](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html)
   on how to compose `query` and `filter` parts.
 - It is also possible to define relations from elasticsearch ActiveRecords to normal ActiveRecord classes and vice versa.
 
@@ -89,10 +89,10 @@ $customers = Customer::mget([1,2,3]); // get multiple records by pk
 $customer = Customer::find()->where(['name' => 'test'])->one(); // find by query, note that you need to configure mapping for this field in order to find records properly
 $customers = Customer::find()->active()->all(); // find all by query (using the `active` scope)
 
-// http://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-match-query.html
+// https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-match-query.html
 $result = Article::find()->query(["match" => ["title" => "yii"]])->all(); // articles whose title contains "yii"
 
-// http://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-flt-query.html
+// https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-flt-query.html
 $query = Article::find()->query([
     "fuzzy_like_this" => [
         "fields" => ["title", "description"],
