@@ -6,8 +6,8 @@ Yii のアクティブレコードの使用方法に関する一般的な情報�
 Elasticsearch のアクティブレコードを定義するためには、あなたのレコードクラスを [[Yiisoft\Db\ElasticSearch\ActiveRecord]] から拡張して、最低限、レコードの属性を定義するための [[Yiisoft\Db\ElasticSearch\ActiveRecord::attributes()|attributes()]] メソッドを実装する必要があります。
 Elasticsearch ではプライマリキーの扱いが通常と異なります。
 というのは、プライマリキー (elasticsearch の用語では `_id` フィールド) が、デフォルトでは属性のうちに入らないからです。
-ただし、`_id` フィールドを属性に含めるための [パスマッピング](http://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-id-field.html) を定義することは出来ます。
-パスマッピングの定義の仕方については、[elasticsearch のドキュメント](http://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-id-field.html) を参照してください。
+ただし、`_id` フィールドを属性に含めるための [パスマッピング](https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-id-field.html) を定義することは出来ます。
+パスマッピングの定義の仕方については、[elasticsearch のドキュメント](https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-id-field.html) を参照してください。
 document または record の `_id` フィールドは、[[Yiisoft\Db\ElasticSearch\ActiveRecord::getPrimaryKey()|getPrimaryKey()]] および [[Yiisoft\Db\ElasticSearch\ActiveRecord::setPrimaryKey()|setPrimaryKey()]] を使ってアクセスすることが出来ます。
 パスマッピングが定義されている場合は、[[Yiisoft\Db\ElasticSearch\ActiveRecord::primaryKey()|primaryKey()]] メソッドを使って属性の名前を定義することが出来ます。
 
@@ -52,7 +52,7 @@ elasticsearch のアクティブレコードの一般的な使用方法は、[�
 - elasticsearch は SQL をサポートしていないため、クエリの API は `join()`、`groupBy()`、`having()` および `union()` をサポートしません。
   並べ替え、リミット、オフセット、条件付き WHERE は、すべてサポートされています。
 - [[Yiisoft\Db\ElasticSearch\ActiveQuery::from()|from()]] はテーブルを選択しません。
-  そうではなく、クエリ対象の [インデックス](http://www.elastic.co/guide/en/elasticsearch/reference/current/glossary.html#glossary-index) と [タイプ](http://www.elastic.co/guide/en/elasticsearch/reference/current/glossary.html#glossary-type) を選択します。
+  そうではなく、クエリ対象の [インデックス](https://www.elastic.co/guide/en/elasticsearch/reference/current/glossary.html#glossary-index) と [タイプ](https://www.elastic.co/guide/en/elasticsearch/reference/current/glossary.html#glossary-type) を選択します。
 - `select()` は [[Yiisoft\Db\ElasticSearch\ActiveQuery::fields()|fields()]] に置き換えられています。
   基本的には同じことをするものですが、`fields` の方が elasticsearch の用語として相応しいでしょう。
   ドキュメントから取得するフィールドを定義します。
@@ -60,7 +60,7 @@ elasticsearch のアクティブレコードの一般的な使用方法は、[�
 - Elasticsearch はデータストレージであると同時に検索エンジンでもありますので、当然ながら、レコードの検索に対するサポートが追加されています。
   Elasticsearch のクエリを構成するための [[Yiisoft\Db\ElasticSearch\ActiveQuery::query()|query()]]、[[Yiisoft\Db\ElasticSearch\ActiveQuery::filter()|filter()]] そして [[Yiisoft\Db\ElasticSearch\ActiveQuery::addFacet()|addFacet()]] というメソッドがあります。
   これらがどのように働くかについて、下の使用例を見てください。
-  また、`query` と `filter` の部分を構成する方法については、[クエリ DSL](http://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html) を参照してください。
+  また、`query` と `filter` の部分を構成する方法については、[クエリ DSL](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html) を参照してください。
 - Elasticsearch のアクティブレコードから通常のアクティブレコードクラスへのリレーションを定義することも可能です。また、その逆も可能です。
 
 > Note: デフォルトでは、elasticsearch は、どんなクエリでも、返されるレコードの数を 10 に限定しています。
@@ -82,10 +82,10 @@ $customers = Customer::mget([1,2,3]); // PK によって複数のレコードを
 $customer = Customer::find()->where(['name' => 'test'])->one(); // クエリによる取得。レコードを正しく取得するためにはこのフィールドにマッピングを構成する必要があることに注意。
 $customers = Customer::find()->active()->all(); // クエリによって全てを取得 (`active` スコープを使って)
 
-// http://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-match-query.html
+// https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-match-query.html
 $result = Article::find()->query(["match" => ["title" => "yii"]])->all(); // articles whose title contains "yii"
 
-// http://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-flt-query.html
+// https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-flt-query.html
 $query = Article::find()->query([
     "fuzzy_like_this" => [
         "fields" => ["title", "description"],
