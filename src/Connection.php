@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 namespace Yiisoft\Db\ElasticSearch;
@@ -55,7 +55,7 @@ class Connection extends Component
      *
      *  - `protocol`: explicitly sets the protocol for the current node (useful when manually defining a HTTPS cluster)
      *
-     * @see http://www.elastic.co/guide/en/elasticsearch/reference/current/cluster-nodes-info.html#cluster-nodes-info
+     * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/cluster-nodes-info.html#cluster-nodes-info
      */
     public $nodes = [
         ['http_address' => 'inet[/127.0.0.1:9200]'],
@@ -73,7 +73,7 @@ class Connection extends Component
      *  - `password`: the password for authentication.
      *
      * Array either MUST contain both username and password on not contain any authentication credentials.
-     * @see http://www.elasticsearch.org/guide/en/elasticsearch/client/php-api/current/_configuration.html#_example_configuring_http_basic_auth
+     * @see https://www.elasticsearch.org/guide/en/elasticsearch/client/php-api/current/_configuration.html#_example_configuring_http_basic_auth
      */
     public $auth = [];
     /**
@@ -99,7 +99,7 @@ class Connection extends Component
     public $dataTimeout = null;
 
     /**
-     * @var resource the curl instance returned by [curl_init()](http://php.net/manual/en/function.curl-init.php).
+     * @var resource the curl instance returned by [curl_init()](https://php.net/manual/en/function.curl-init.php).
      */
     private $_curl;
 
@@ -420,7 +420,7 @@ class Connection extends Component
             CURLOPT_USERAGENT => 'Yii Framework ' . Yii::getVersion() . ' ' . __CLASS__,
             CURLOPT_RETURNTRANSFER => false,
             CURLOPT_HEADER => false,
-            // http://www.php.net/manual/en/function.curl-setopt.php#82418
+            // https://www.php.net/manual/en/function.curl-setopt.php#82418
             CURLOPT_HTTPHEADER => [
                 'Expect:',
                 'Content-Type: application/json',
