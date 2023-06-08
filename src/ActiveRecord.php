@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 namespace Yiisoft\Db\ElasticSearch;
@@ -137,7 +137,7 @@ class ActiveRecord extends BaseActiveRecord
      * @param mixed $primaryKey the primaryKey value
      * @param array $options options given in this parameter are passed to elasticsearch
      * as request URI parameters.
-     * Please refer to the [elasticsearch documentation](http://www.elastic.co/guide/en/elasticsearch/reference/current/docs-get.html)
+     * Please refer to the [elasticsearch documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-get.html)
      * for more details on these options.
      * @return static|null The record instance or null if it was not found.
      */
@@ -166,7 +166,7 @@ class ActiveRecord extends BaseActiveRecord
      * @param array $options options given in this parameter are passed to elasticsearch
      * as request URI parameters.
      *
-     * Please refer to the [elasticsearch documentation](http://www.elastic.co/guide/en/elasticsearch/reference/current/docs-get.html)
+     * Please refer to the [elasticsearch documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-get.html)
      * for more details on these options.
      * @return array The record instances, or empty array if nothing was found
      */
@@ -195,9 +195,9 @@ class ActiveRecord extends BaseActiveRecord
         return $models;
     }
 
-    // TODO add more like this feature http://www.elastic.co/guide/en/elasticsearch/reference/current/search-more-like-this.html
+    // TODO add more like this feature https://www.elastic.co/guide/en/elasticsearch/reference/current/search-more-like-this.html
 
-    // TODO add percolate functionality http://www.elastic.co/guide/en/elasticsearch/reference/current/search-percolate.html
+    // TODO add percolate functionality https://www.elastic.co/guide/en/elasticsearch/reference/current/search-percolate.html
 
     // TODO implement copy and move as pk change is not possible
 
@@ -279,7 +279,7 @@ class ActiveRecord extends BaseActiveRecord
      * ActiveRecord attributes so you should never add `_id` to the list of [[attributes()|attributes]].
      *
      * You may override this method to define the primary key name when you have defined
-     * [path mapping](http://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-id-field.html)
+     * [path mapping](https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-id-field.html)
      * for the `_id` field so that it is part of the `_source` and thus part of the [[attributes()|attributes]].
      *
      * Note that elasticsearch only supports _one_ attribute to be the primary key. However to match the signature
@@ -300,7 +300,7 @@ class ActiveRecord extends BaseActiveRecord
      *
      * Attributes are names of fields of the corresponding elasticsearch document.
      * The primaryKey for elasticsearch documents is the `_id` field by default which is not part of the attributes.
-     * You may define [path mapping](http://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-id-field.html)
+     * You may define [path mapping](https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-id-field.html)
      * for the `_id` field so that it is part of the `_source` fields and thus becomes part of the attributes.
      *
      * @throws \yii\base\InvalidConfigException if not overridden in a child class.
@@ -419,7 +419,7 @@ class ActiveRecord extends BaseActiveRecord
      *
      * If the [[primaryKey|primary key]] is not set (null) during insertion,
      * it will be populated with a
-     * [randomly generated value](http://www.elastic.co/guide/en/elasticsearch/reference/current/docs-index_.html#_automatic_id_generation)
+     * [randomly generated value](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-index_.html#_automatic_id_generation)
      * after insertion.
      *
      * For example, to insert a customer record:
@@ -441,7 +441,7 @@ class ActiveRecord extends BaseActiveRecord
      * - `routing` define shard placement of this record.
      * - `parent` by giving the primaryKey of another record this defines a parent-child relation
      *
-     * Please refer to the [elasticsearch documentation](http://www.elastic.co/guide/en/elasticsearch/reference/current/docs-index_.html)
+     * Please refer to the [elasticsearch documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-index_.html)
      * for more details on these options.
      *
      * By default the `op_type` is set to `create` if model primary key is present.
@@ -502,14 +502,14 @@ class ActiveRecord extends BaseActiveRecord
      * - `refresh` refresh the relevant primary and replica shards (not the whole index) immediately after the operation occurs, so that the updated document appears in search results immediately.
      * - `detect_noop` this parameter will become part of the request body and will prevent the index from getting updated when nothing has changed.
      *
-     * Please refer to the [elasticsearch documentation](http://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html#_parameters_3)
+     * Please refer to the [elasticsearch documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html#_parameters_3)
      * for more details on these options.
      *
      * The following parameters are Yii specific:
      *
      * - `optimistic_locking` set this to `true` to enable optimistic locking, avoid updating when the record has changed since it
      *   has been loaded from the database. Yii will set the `version` parameter to the value stored in [[version]].
-     *   See the [elasticsearch documentation](http://www.elastic.co/guide/en/elasticsearch/guide/current/optimistic-concurrency-control.html) for details.
+     *   See the [elasticsearch documentation](https://www.elastic.co/guide/en/elasticsearch/guide/current/optimistic-concurrency-control.html) for details.
      *
      *   Make sure the record has been fetched with a [[version]] before. This is only the case
      *   for records fetched via [[get()]] and [[mget()]] by default. For normal queries, the `_version` field has to be fetched explicitly.
@@ -567,7 +567,7 @@ class ActiveRecord extends BaseActiveRecord
             );
         } catch (Exception $e) {
             // HTTP 409 is the response in case of failed optimistic locking
-            // http://www.elastic.co/guide/en/elasticsearch/guide/current/optimistic-concurrency-control.html
+            // https://www.elastic.co/guide/en/elasticsearch/guide/current/optimistic-concurrency-control.html
             if (isset($e->errorInfo['responseCode']) && $e->errorInfo['responseCode'] == 409) {
                 throw new StaleObjectException('The object being updated is outdated.', $e->errorInfo, $e->getCode(), $e);
             }
@@ -736,14 +736,14 @@ class ActiveRecord extends BaseActiveRecord
      * - `consistency` the write consistency of the index/delete operation.
      * - `refresh` refresh the relevant primary and replica shards (not the whole index) immediately after the operation occurs, so that the updated document appears in search results immediately.
      *
-     * Please refer to the [elasticsearch documentation](http://www.elastic.co/guide/en/elasticsearch/reference/current/docs-delete.html)
+     * Please refer to the [elasticsearch documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-delete.html)
      * for more details on these options.
      *
      * The following parameters are Yii specific:
      *
      * - `optimistic_locking` set this to `true` to enable optimistic locking, avoid updating when the record has changed since it
      *   has been loaded from the database. Yii will set the `version` parameter to the value stored in [[version]].
-     *   See the [elasticsearch documentation](http://www.elastic.co/guide/en/elasticsearch/reference/current/docs-delete.html#delete-versioning) for details.
+     *   See the [elasticsearch documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-delete.html#delete-versioning) for details.
      *
      *   Make sure the record has been fetched with a [[version]] before. This is only the case
      *   for records fetched via [[get()]] and [[mget()]] by default. For normal queries, the `_version` field has to be fetched explicitly.
@@ -775,7 +775,7 @@ class ActiveRecord extends BaseActiveRecord
             );
         } catch (Exception $e) {
             // HTTP 409 is the response in case of failed optimistic locking
-            // http://www.elastic.co/guide/en/elasticsearch/guide/current/optimistic-concurrency-control.html
+            // https://www.elastic.co/guide/en/elasticsearch/guide/current/optimistic-concurrency-control.html
             if (isset($e->errorInfo['responseCode']) && $e->errorInfo['responseCode'] == 409) {
                 throw new StaleObjectException('The object being deleted is outdated.', $e->errorInfo, $e->getCode(), $e);
             }
@@ -845,7 +845,7 @@ class ActiveRecord extends BaseActiveRecord
     /**
      * This method has no effect in Elasticsearch ActiveRecord.
      *
-     * Elasticsearch ActiveRecord uses [native Optimistic locking](http://www.elastic.co/guide/en/elasticsearch/guide/current/optimistic-concurrency-control.html).
+     * Elasticsearch ActiveRecord uses [native Optimistic locking](https://www.elastic.co/guide/en/elasticsearch/guide/current/optimistic-concurrency-control.html).
      * See [[update()]] for more details.
      */
     public function optimisticLock()

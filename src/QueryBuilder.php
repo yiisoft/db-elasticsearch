@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 namespace Yiisoft\Db\ElasticSearch;
@@ -131,7 +131,7 @@ class QueryBuilder extends BaseObject
                 $column = '_uid';
             }
 
-            // allow elasticsearch extended syntax as described in http://www.elastic.co/guide/en/elasticsearch/guide/master/_sorting.html
+            // allow elasticsearch extended syntax as described in https://www.elastic.co/guide/en/elasticsearch/guide/master/_sorting.html
             if (is_array($direction)) {
                 $orders[] = [$column => $direction];
             } else {
