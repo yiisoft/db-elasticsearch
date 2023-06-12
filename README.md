@@ -6,7 +6,7 @@
     <br>
 </p>
 
-This extension provides the [elasticsearch](https://www.elastic.co/products/elasticsearch) integration for the [Yii framework](http://www.yiiframework.com).
+This extension provides the [elasticsearch](https://www.elastic.co/products/elasticsearch) integration for the [Yii framework](https://www.yiiframework.com).
 It includes basic querying/search support and also implements the `ActiveRecord` pattern that allows you to store active
 records in elasticsearch.
 
@@ -26,7 +26,7 @@ Extension requires at least elasticsearch version 5.0.
 Installation
 ------------
 
-The preferred way to install this extension is through [composer](http://getcomposer.org/download/).
+The preferred way to install this extension is through [composer](https://getcomposer.org/download/).
 
 ```
 composer require --prefer-dist yiisoft/yii-elasticsearch
