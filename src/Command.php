@@ -3,7 +3,7 @@
 declare(strict_types=1);
 /**
  * @link https://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
+ * @copyright Copyright © 2008 by Yii Software (https://www.yiiframework.com/)
  * @license https://www.yiiframework.com/license/
  */
 
@@ -495,11 +495,11 @@ class Command extends Component
      * @return mixed
      * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-get-field-mapping.html
      */
-//    public function getFieldMapping($index, $type = '_all')
-//    {
+    //    public function getFieldMapping($index, $type = '_all')
+    //    {
     //		// TODO implement
-//        return $this->db->put([$index, $type, '_mapping']);
-//    }
+    //        return $this->db->put([$index, $type, '_mapping']);
+    //    }
 
     /**
      * @param $options
