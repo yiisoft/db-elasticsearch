@@ -3,7 +3,7 @@
 declare(strict_types=1);
 /**
  * @link https://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
+ * @copyright Copyright © 2008 by Yii Software (https://www.yiiframework.com/)
  * @license https://www.yiiframework.com/license/
  */
 
@@ -63,15 +63,20 @@ class DebugAction extends Action
         $db = \Yii::$app->get($this->db);
         $time = microtime(true);
         switch ($method) {
-            case 'GET': $result = $db->get($url, $options, $body, true);
+            case 'GET':
+                $result = $db->get($url, $options, $body, true);
                 break;
-            case 'POST': $result = $db->post($url, $options, $body, true);
+            case 'POST':
+                $result = $db->post($url, $options, $body, true);
                 break;
-            case 'PUT': $result = $db->put($url, $options, $body, true);
+            case 'PUT':
+                $result = $db->put($url, $options, $body, true);
                 break;
-            case 'DELETE': $result = $db->delete($url, $options, $body, true);
+            case 'DELETE':
+                $result = $db->delete($url, $options, $body, true);
                 break;
-            case 'HEAD': $result = $db->head($url, $options, $body);
+            case 'HEAD':
+                $result = $db->head($url, $options, $body);
                 break;
             default:
                 throw new NotSupportedException("Request method '$method' is not supported by elasticsearch.");

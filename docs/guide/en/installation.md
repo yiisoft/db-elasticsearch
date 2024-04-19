@@ -8,7 +8,7 @@ Extension requires at least elasticsearch version 5.0.
 
 The preferred way to install this extension is through [composer](https://getcomposer.org/download/).
 
-```
+```shell
 composer require --prefer-dist yiisoft/yii-elasticsearch
 ```
 

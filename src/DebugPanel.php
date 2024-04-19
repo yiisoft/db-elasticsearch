@@ -3,7 +3,7 @@
 declare(strict_types=1);
 /**
  * @link https://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
+ * @copyright Copyright © 2008 by Yii Software (https://www.yiiframework.com/)
  * @license https://www.yiiframework.com/license/
  */
 
@@ -97,7 +97,8 @@ EOD;
                 ]);
             }
             $ajaxUrl = Url::to(['elasticsearch-query', 'logId' => $logId, 'tag' => $this->tag]);
-            \Yii::$app->view->registerJs(<<<JS
+            \Yii::$app->view->registerJs(
+                <<<JS
 $('#elastic-link-$i').on('click', function () {
     var result = $('#elastic-result-$i');
     result.html('Sending request...');
@@ -118,8 +119,9 @@ $('#elastic-link-$i').on('click', function () {
 
     return false;
 });
-JS
-                , View::POS_READY);
+JS,
+                View::POS_READY
+            );
             $runLink = Html::a('run query', '#', ['id' => "elastic-link-$i"]) . '<br/>';
             $rows[] = <<<HTML
 <tr>

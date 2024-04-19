@@ -3,7 +3,7 @@
 declare(strict_types=1);
 /**
  * @link https://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
+ * @copyright Copyright © 2008 by Yii Software (https://www.yiiframework.com/)
  * @license https://www.yiiframework.com/license/
  */
 
@@ -366,7 +366,7 @@ class ActiveRecord extends BaseActiveRecord
 
         parent::populateRecord($record, $attributes);
 
-        $pk = static::primaryKey()[0];//TODO should always set ID in case of fields are not returned
+        $pk = static::primaryKey()[0]; //TODO should always set ID in case of fields are not returned
         if ($pk === '_id') {
             $record->_id = $row['_id'];
         }
@@ -447,7 +447,7 @@ class ActiveRecord extends BaseActiveRecord
      * By default the `op_type` is set to `create` if model primary key is present.
      * @return bool whether the attributes are valid and the record is inserted successfully.
      */
-    public function insert($runValidation = true, $attributes = null, $options = [ ])
+    public function insert($runValidation = true, $attributes = null, $options = [])
     {
         if ($runValidation && !$this->validate($attributes)) {
             return false;

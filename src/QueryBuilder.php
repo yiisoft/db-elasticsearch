@@ -3,7 +3,7 @@
 declare(strict_types=1);
 /**
  * @link https://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
+ * @copyright Copyright © 2008 by Yii Software (https://www.yiiframework.com/)
  * @license https://www.yiiframework.com/license/
  */
 
@@ -222,7 +222,7 @@ class QueryBuilder extends BaseObject
                     $parts[] = ['terms' => [$attribute => $value]];
                 } else {
                     if ($value === null) {
-                        $emptyFields[] = [ 'exists' => [ 'field' => $attribute ] ];
+                        $emptyFields[] = ['exists' => ['field' => $attribute]];
                     } else {
                         $parts[] = ['term' => [$attribute => $value]];
                     }
@@ -230,11 +230,11 @@ class QueryBuilder extends BaseObject
             }
         }
 
-        $query = [ 'must' => $parts ];
+        $query = ['must' => $parts];
         if ($emptyFields) {
             $query['must_not'] = $emptyFields;
         }
-        return [ 'bool' => $query ];
+        return ['bool' => $query];
     }
 
     private function buildNotCondition($operator, $operands)
@@ -353,12 +353,12 @@ class QueryBuilder extends BaseObject
                 $filter = [
                     'bool' => [
                         'must_not' => [
-                            'exists' => [ 'field' => $column ],
+                            'exists' => ['field' => $column],
                         ],
                     ],
                 ];
             } else {
-                $filter = [ 'terms' => [$column => array_values($values)] ];
+                $filter = ['terms' => [$column => array_values($values)]];
                 if ($canBeNull) {
                     $filter = [
                         'bool' => [
