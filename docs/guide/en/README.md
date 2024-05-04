@@ -4,10 +4,6 @@ This extension provides the [elasticsearch](https://www.elastic.co/products/elas
 It includes basic querying/search support and also implements the `ActiveRecord` pattern that allows you to store active
 records in elasticsearch.
 
-## Getting Started
-
-* [Installation](installation.md)
-
 ## Usage
 
 * [Data Mapping & Indexing](mapping-indexing.md)
