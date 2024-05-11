@@ -1,5 +1,4 @@
-Mapping & Indexing
-==================
+# Mapping & Indexing
 
 ## Creating index and mapping
 

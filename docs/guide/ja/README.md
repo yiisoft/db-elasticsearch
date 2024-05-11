@@ -6,14 +6,14 @@ Yii 2.0 elasticsearch エクステンション
 
 使用方法
 --------
-* [データのマッピングとインデクシング](mapping-indexing.md)
-* [クエリを使う](usage-query.md)
-* [アクティブレコードを使う](usage-ar.md)
-* [データプロバイダと連携する](usage-data-providers.md)
+- [データのマッピングとインデクシング](mapping-indexing.md)
+- [クエリを使う](usage-query.md)
+- [アクティブレコードを使う](usage-ar.md)
+- [データプロバイダと連携する](usage-data-providers.md)
 
 追加のトピック
 --------------
 
-* [Elasticsearch DebugPanel を使う](topics-debug.md)
-* プライマリキーが属性に含まれていないレコードとのリレーションの定義
-* さまざまな index/type からレコードを取得する
+- [Elasticsearch DebugPanel を使う](topics-debug.md)
+- プライマリキーが属性に含まれていないレコードとのリレーションの定義
+- さまざまな index/type からレコードを取得する

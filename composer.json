@@ -13,18 +13,12 @@
     "type": "library",
     "support": {
         "issues": "https://github.com/yiisoft/db-elasticsearch/issues?state=open",
+        "source": "https://github.com/yiisoft/db-elasticsearch",
         "forum": "https://www.yiiframework.com/forum/",
         "wiki": "https://www.yiiframework.com/wiki/",
         "irc": "ircs://irc.libera.chat:6697/yii",
-        "chat": "https://t.me/yii3en",
-        "source": "https://github.com/yiisoft/db-elasticsearch"
+        "chat": "https://t.me/yii3en"
     },
-    "authors": [
-        {
-            "name": "Carsten Brandt",
-            "email": "mail@cebe.cc"
-        }
-    ],
     "funding": [
         {
             "type": "opencollective",
@@ -33,6 +27,12 @@
         {
             "type": "github",
             "url": "https://github.com/sponsors/yiisoft"
+        }
+    ],
+    "authors": [
+        {
+            "name": "Carsten Brandt",
+            "email": "mail@cebe.cc"
         }
     ],
     "minimum-stability": "dev",
