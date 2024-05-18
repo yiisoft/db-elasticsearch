@@ -3,7 +3,7 @@
         <img src="https://yiisoft.github.io/docs/images/yii_logo.svg" height="100px" alt="Yii">
     </a>
     <a href="https://www.elastic.co/products/elasticsearch" target="_blank">
-        <img src="https://avatars.githubusercontent.com/u/6764390?s=200&v=4" height="80px" alt="Elasticsearch">
+        <img src="https://avatars.githubusercontent.com/u/6764390?s=200&v=4" height="100px" alt="Elasticsearch">
     </a>
     <h1 align="center">Yii Database Elasticsearch Query and ActiveRecord</h1>
     <br>
