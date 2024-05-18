@@ -1,16 +1,34 @@
 {
     "name": "yiisoft/db-elasticsearch",
     "description": "Yii Framework Elasticsearch Query and ActiveRecord",
-    "keywords": ["yii", "elasticsearch", "active-record", "search", "fulltext"],
-    "type": "library",
+    "keywords": [
+        "yii",
+        "elasticsearch",
+        "active-record",
+        "search",
+        "fulltext"
+    ],
+    "homepage": "https://www.yiiframework.com/",
     "license": "BSD-3-Clause",
+    "type": "library",
     "support": {
-        "issues": "https://github.com/yiisoft/yii-elasticsearch/issues",
+        "issues": "https://github.com/yiisoft/db-elasticsearch/issues?state=open",
+        "source": "https://github.com/yiisoft/db-elasticsearch",
         "forum": "https://www.yiiframework.com/forum/",
         "wiki": "https://www.yiiframework.com/wiki/",
         "irc": "ircs://irc.libera.chat:6697/yii",
-        "source": "https://github.com/yiisoft/yii-elasticsearch"
+        "chat": "https://t.me/yii3en"
     },
+    "funding": [
+        {
+            "type": "opencollective",
+            "url": "https://opencollective.com/yiisoft"
+        },
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/yiisoft"
+        }
+    ],
     "authors": [
         {
             "name": "Carsten Brandt",
@@ -34,10 +52,14 @@
         "hiqdev/composer-config-plugin": "^1.0@dev"
     },
     "autoload": {
-        "psr-4": { "Yiisoft\\Db\\ElasticSearch\\": "src" }
+        "psr-4": {
+            "Yiisoft\\Db\\ElasticSearch\\": "src"
+        }
     },
     "autoload-dev": {
-        "psr-4": {"Yiisoft\\Db\\ElasticSearch\\Tests\\": "tests"}
+        "psr-4": {
+            "Yiisoft\\Db\\ElasticSearch\\Tests\\": "tests"
+        }
     },
     "extra": {
         "branch-alias": {

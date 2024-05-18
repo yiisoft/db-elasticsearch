@@ -1,17 +1,16 @@
-Using the ActiveRecord
-======================
+# Using the ActiveRecord
 
-For general information on how to use yii's ActiveRecord please refer to the [guide](https://github.com/yiisoft/yii2/blob/master/docs/guide/db-active-record.md).
+For general information on how to use Yii ActiveRecord please refer to the [guide](https://github.com/yiisoft/yii2/blob/master/docs/guide/db-active-record.md).
 
-For defining an elasticsearch ActiveRecord class your record class needs to extend from [[Yiisoft\Db\ElasticSearch\ActiveRecord]] and
-implement at least the [[Yiisoft\Db\ElasticSearch\ActiveRecord::attributes()|attributes()]] method to define the attributes of the record.
+For defining an elasticsearch ActiveRecord class your record class needs to extend from `Yiisoft\Db\ElasticSearch\ActiveRecord` and
+implement at least the `Yiisoft\Db\ElasticSearch\ActiveRecord::attributes()|attributes()` method to define the attributes of the record.
 The handling of primary keys is different in elasticsearch as the primary key (the `_id` field in elasticsearch terms)
 is not part of the attributes by default. However it is possible to define a [path mapping](https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-id-field.html)
 for the `_id` field to be part of the attributes.
 See [elasticsearch docs](https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-id-field.html) on how to define it.
-The `_id` field of a document/record can be accessed using [[Yiisoft\Db\ElasticSearch\ActiveRecord::getPrimaryKey()|getPrimaryKey()]] and
-[[Yiisoft\Db\ElasticSearch\ActiveRecord::setPrimaryKey()|setPrimaryKey()]].
-When path mapping is defined, the attribute name can be defined using the [[Yiisoft\Db\ElasticSearch\ActiveRecord::primaryKey()|primaryKey()]] method.
+The `_id` field of a document/record can be accessed using `Yiisoft\Db\ElasticSearch\ActiveRecord::getPrimaryKey()|getPrimaryKey()` and
+`Yiisoft\Db\ElasticSearch\ActiveRecord::setPrimaryKey()|setPrimaryKey()`.
+When path mapping is defined, the attribute name can be defined using the `Yiisoft\Db\ElasticSearch\ActiveRecord::primaryKey()|primaryKey()` method.
 
 The following is an example model called `Customer`:
 
@@ -45,7 +44,7 @@ class Customer extends \Yiisoft\Db\ElasticSearch\ActiveRecord
 }
 ```
 
-You may override [[Yiisoft\Db\ElasticSearch\ActiveRecord::index()|index()]] and [[Yiisoft\Db\ElasticSearch\ActiveRecord::type()|type()]]
+You may override `Yiisoft\Db\ElasticSearch\ActiveRecord::index()|index()` and `Yiisoft\Db\ElasticSearch\ActiveRecord::type()|type()`
 to define the index and type this record represents.
 
 The general usage of elasticsearch ActiveRecord is very similar to the database ActiveRecord as described in the
@@ -54,18 +53,18 @@ It supports the same interface and features except the following limitations and
 
 - As elasticsearch does not support SQL, the query API does not support `join()`, `groupBy()`, `having()` and `union()`.
   Sorting, limit, offset and conditional where are all supported.
-- [[Yiisoft\Db\ElasticSearch\ActiveQuery::from()|from()]] does not select the tables, but the
+- `Yiisoft\Db\ElasticSearch\ActiveQuery::from()|from()` does not select the tables, but the
   [index](https://www.elastic.co/guide/en/elasticsearch/reference/current/glossary.html#glossary-index)
   and [type](https://www.elastic.co/guide/en/elasticsearch/reference/current/glossary.html#glossary-type) to query against.
-- `select()` has been replaced with [[Yiisoft\Db\ElasticSearch\ActiveQuery::fields()|fields()]] which basically does the same but
+- `select()` has been replaced with `Yiisoft\Db\ElasticSearch\ActiveQuery::fields()|fields()` which basically does the same but
   `fields` is more elasticsearch terminology.
   It defines the fields to retrieve from a document.
-- [[Yiisoft\Db\ElasticSearch\ActiveQuery::via()|via]]-relations can not be defined via a table as there are no tables in elasticsearch. You can only define relations via other records.
+- `Yiisoft\Db\ElasticSearch\ActiveQuery::via()|via`-relations can not be defined via a table as there are no tables in elasticsearch. You can only define relations via other records.
 - As elasticsearch is not only a data storage but also a search engine there is of course support added for searching your records.
   There are
-  [[Yiisoft\Db\ElasticSearch\ActiveQuery::query()|query()]],
-  [[Yiisoft\Db\ElasticSearch\ActiveQuery::filter()|filter()]] and
-  [[Yiisoft\Db\ElasticSearch\ActiveQuery::addFacet()|addFacet()]] methods that allows to compose an elasticsearch query.
+  `Yiisoft\Db\ElasticSearch\ActiveQuery::query()|query()`,
+  `Yiisoft\Db\ElasticSearch\ActiveQuery::filter()|filter()` and
+  `Yiisoft\Db\ElasticSearch\ActiveQuery::addFacet()|addFacet()` methods that allows to compose an elasticsearch query.
   See the usage example below on how they work and check out the [Query DSL](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html)
   on how to compose `query` and `filter` parts.
 - It is also possible to define relations from elasticsearch ActiveRecords to normal ActiveRecord classes and vice versa.
