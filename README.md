@@ -24,7 +24,7 @@ records in elasticsearch.
 
 ## Requirements
 
-- Extension requires at least elasticsearch version 5.0.
+- Elasticsearch version 5.0 or higher.
 
 ## Installation
 
