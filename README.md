@@ -55,7 +55,7 @@ return [
 
 ## Documentation
 
-- Guide: [English](docs/guide/en/README.md), [Français](docs/guide/fr/README.md), [Português - Brasil](docs/guide/pt-BR/README.md), [日本語](docs/guide/ja/README.md)
+- Guide: [English](docs/guide/en/README.md), [Français](docs/guide/fr/README.md), [日本語](docs/guide/ja/README.md)
 - [Internals](docs/internals.md)
 
 If you need help or have a question, the [Yii Forum](https://forum.yiiframework.com/c/yii-3-0/63) is a good place for that.
