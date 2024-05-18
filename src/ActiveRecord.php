@@ -70,7 +70,7 @@ class ActiveRecord extends BaseActiveRecord
      */
     public static function getDb()
     {
-        return \Yii::$app->get('elasticsearch');
+        return Yii::$app->get('elasticsearch');
     }
 
     /**
