@@ -46,7 +46,7 @@ class Customer extends \Yiisoft\Db\ElasticSearch\ActiveRecord
 Vous pouvez surcharger [[Yiisoft\Db\ElasticSearch\ActiveRecord::index()|index()]] et [[Yiisoft\Db\ElasticSearch\ActiveRecord::type()|type()]] pour définir l'index et type que cet enregistrement représente.
 
 L'utilisation des ActiveRecord elasticsearch est très similaire à celle d'ActiveRecord pour les bases de données, et qui est décrite dans le 
-[guide](https://github.com/yiisoft/yii2/blob/master/docs/guide/active-record.md).
+[guide](https://github.com/yiisoft/yii2/blob/master/docs/guide/db-active-record.md).
 Elle supporte la même interface et les mêmes fonctionnalités, exceptions faite des limitations et additions suivantes (*!*) :
 
 - Etant donné que elasticsearch ne supporte pas SQL, l'API de requêtes ne supporte pas `join()`, `groupBy()`, `having()` and `union()`.

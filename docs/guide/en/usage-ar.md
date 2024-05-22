@@ -48,7 +48,7 @@ You may override `Yiisoft\Db\ElasticSearch\ActiveRecord::index()|index()` and `Y
 to define the index and type this record represents.
 
 The general usage of elasticsearch ActiveRecord is very similar to the database ActiveRecord as described in the
-[guide](https://github.com/yiisoft/yii2/blob/master/docs/guide/active-record.md).
+[guide](https://github.com/yiisoft/yii2/blob/master/docs/guide/db-active-record.md).
 It supports the same interface and features except the following limitations and additions(*!*):
 
 - As elasticsearch does not support SQL, the query API does not support `join()`, `groupBy()`, `having()` and `union()`.
