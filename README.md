@@ -1,3 +1,7 @@
+> [!WARNING]
+> There is no official ElasticSearch support planned for Yii3 DB. [Use official PHP client](https://www.elastic.co/docs/reference/elasticsearch/clients/php) or [SEAL](https://github.com/PHP-CMSIG/search) instead.
+
+
 <p align="center">
     <a href="https://github.com/yiisoft" target="_blank">
         <img src="https://yiisoft.github.io/docs/images/yii_logo.svg" height="100px" alt="Yii">
