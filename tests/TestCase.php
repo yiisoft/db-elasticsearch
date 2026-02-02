@@ -11,7 +11,7 @@ use Yii;
 /**
  * This is the base class for all yii framework unit tests.
  */
-abstract class TestCase extends \yii\tests\TestCase
+abstract class TestCase extends Yii\tests\TestCase
 {
     public static $params;
 
